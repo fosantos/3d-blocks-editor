@@ -13,7 +13,7 @@ Recursos principais:
 - **Edição inline**: Duplo clique para editar o texto de qualquer bloco
 - **Descrições detalhadas**: Cada bloco tem uma área de descrição expandida
 - **Conexões visuais**: Conecte blocos relacionados com linhas para criar relacionamentos
-- **Persistência automática**: Seu trabalho é salvo automaticamente no navegador
+- **Persistência manual**: Use o botão "Salvar" para guardar seu trabalho no navegador
 - **Interface minimalista**: Foco total no conteúdo, sem distrações
 
 ## Como usar
