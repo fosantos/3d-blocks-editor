@@ -24,8 +24,6 @@
 #desc-textarea { display: none; width: 100%; background: #000; border: 0.5px solid rgba(255,255,255,0.3); border-radius: 5px; color: #fff; font-size: 12px; font-family: sans-serif; padding: 6px 8px; outline: none; resize: none; line-height: 1.5; min-height: 70px; }
 #desc-textarea:focus { border-color: rgba(255,255,255,0.6); }
 #desc-save-btn { display: none; margin-top: 8px; width: 100%; background: transparent; border: 0.5px solid rgba(255,255,255,0.5); color: #fff; font-size: 13px; font-weight: 500; padding: 8px; border-radius: 6px; cursor: pointer; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; letter-spacing: 0.02em; }
-#desc-close { position: absolute; top: 8px; right: 10px; background: none; border: none; color: #444; font-size: 14px; cursor: pointer; line-height: 1; }
-#desc-close:hover { color: #fff; }
 #toast { display: none; position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); background: rgba(255,255,255,0.08); border: 0.5px solid rgba(255,255,255,0.2); border-radius: 20px; padding: 4px 14px; font-size: 11px; color: #aaa; pointer-events: none; z-index: 80; white-space: nowrap; }
 #toolbar-v {
   position: absolute;
@@ -81,7 +79,6 @@
     <canvas id="canvas"></canvas>
     <input id="inline-editor" type="text" maxlength="20" />
     <div id="desc-panel">
-      <button id="desc-close" onclick="closeDescPanel()">×</button>
       <div id="desc-panel-title"><span id="desc-block-name"></span><button id="desc-edit-btn" onclick="toggleDescEdit()">editar</button></div>
       <div id="desc-text" class="empty">sem descrição</div>
       <textarea id="desc-textarea" rows="4" maxlength="300" placeholder="Escreve uma descrição…"></textarea>
@@ -474,6 +471,17 @@ canvas.addEventListener('wheel',e=>{
   if(descBlock&&descBlock.id===b.id) repositionDesc();
   draw();
 },{passive:false});
+
+// Close desc panel when clicking outside of it (but not on icon)
+canvas.addEventListener('mousedown',e=>{
+  if(descBlock) {
+    const r=canvas.getBoundingClientRect(), mx=e.clientX-r.left, my=e.clientY-r.top;
+    const ib=hitIcon(mx,my);
+    if(!ib && !e.target.closest('#desc-panel')) {
+      closeDescPanel();
+    }
+  }
+});
 
 document.addEventListener('keydown',e=>{
   if(editingBlock||document.activeElement===document.getElementById('desc-textarea')) return;
