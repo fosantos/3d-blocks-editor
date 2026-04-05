@@ -13,7 +13,8 @@
   display: none; position: absolute;
   background: rgba(0,0,0,0.9); border: 1px solid rgba(255,255,255,0.8);
   border-radius: 5px; color: #fff; font-family: sans-serif;
-  text-align: center; padding: 3px 8px; outline: none; z-index: 50; min-width: 60px;
+  text-align: center; padding: 6px 10px; outline: none; z-index: 50; min-width: 60px;
+  resize: none; line-height: 1.5; overflow: hidden;
 }
 #desc-panel {
   display: none; position: absolute; z-index: 60; width: 200px;
@@ -82,7 +83,7 @@
 <div id="root">
   <div id="canvas-wrap">
     <canvas id="canvas"></canvas>
-    <input id="inline-editor" type="text" maxlength="20" />
+    <textarea id="inline-editor" maxlength="100"></textarea>
     <div id="desc-panel">
       <div id="desc-panel-title"><span id="desc-block-name"></span><button id="desc-edit-btn" onclick="toggleDescEdit()">editar</button></div>
       <div id="desc-text" class="empty">sem descrição</div>
@@ -113,7 +114,7 @@
       <button class="tb-btn" onclick="clearSavedState()" title="Eliminar estado guardado">Redefinir</button>
     </div>
     <div class="info-group">
-      <span id="status">0/10</span>
+      <span id="status">0/15</span>
     </div>
   </div>
   <div id="status-bar">
@@ -137,9 +138,9 @@ function resize() {
 const ro = new ResizeObserver(resize);
 ro.observe(wrap);
 
-const MAX   = 10;
+const MAX   = 15;
 const PERSP = 600;
-const ZOOM  = 2.0;
+const ZOOM  = 1.7;
 const Z_MAX = 400;
 
 let blocks = [], connections = [];
@@ -323,13 +324,20 @@ function drawBlock(b) {
 
   const {cx,cy,sc}=fInfo(b);
   if(!isEdit) {
-    ctx.fillStyle=`rgba(255,255,255,${alpha*.92})`;
-    ctx.font=`500 ${Math.round(13*sc)}px sans-serif`;
+    const fontSize = Math.round(13*sc);
+    ctx.fillStyle=`rgba(255,255,255,${alpha*1.0})`;
+    ctx.font=`600 ${fontSize}px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`;
     ctx.textAlign='center'; ctx.textBaseline='middle';
-    ctx.fillText(b.label,cx,cy);
-    ctx.fillStyle=`rgba(255,255,255,${alpha*.35})`;
-    ctx.font=`${Math.round(10*sc)}px sans-serif`;
-    ctx.fillText(`z${Math.round((1-b.z/Z_MAX)*10)}`,cx,cy+15*sc);
+    const lines = b.label.split('\n');
+    const lineHeight = fontSize * 1.3;
+    const startY = cy - ((lines.length-1) * lineHeight)/2;
+    lines.forEach((line, i) => {
+      ctx.fillText(line, cx, startY + i * lineHeight);
+    });
+    ctx.fillStyle=`rgba(255,255,255,${alpha*.4})`;
+    ctx.font=`${Math.round(10*sc)}px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`;
+    const baselineOffset = lines.length * lineHeight/2 + 12;
+    ctx.fillText(`z${Math.round((1-b.z/Z_MAX)*10)}`, cx, cy + baselineOffset);
   }
 
   const {x:ix,y:iy,r:ir}=iconPos(b);
@@ -457,8 +465,10 @@ canvas.addEventListener('wheel',e=>{
   const r=canvas.getBoundingClientRect();
   const b=hitTest(e.clientX-r.left,e.clientY-r.top)||selected;
   if(!b) return;
-  
-  b.z=Math.max(0,Math.min(Z_MAX,b.z+e.deltaY*0.4));
+
+  // zoom in (deltaY < 0) mais sensível: 0.6; zoom out (deltaY > 0) menos sensível: 0.25
+  const factor = e.deltaY < 0 ? 0.6 : 0.25;
+  b.z=Math.max(0,Math.min(Z_MAX,b.z+e.deltaY*factor));
   if(descBlock&&descBlock.id===b.id) repositionDesc();
   draw();
 },{passive:false});
@@ -478,24 +488,41 @@ document.addEventListener('keydown',e=>{
 function openEditor(b){
   editingBlock=b; selected=b;
   const {minX,maxX,minY,maxY,cx,cy,sc}=fInfo(b);
-  const ew=Math.max(60,(maxX-minX)*.82), eh=Math.max(22,(maxY-minY)*.42);
-  editor.style.cssText=['display:block',`left:${cx-ew/2}px`,`top:${cy-eh/2}px`,`width:${ew}px`,`height:${eh}px`,`font-size:${Math.max(11,Math.round(13*sc))}px`,`line-height:${eh}px`].join(';');
-  editor.value=b.label; draw();
+  const fontSize = Math.max(12, Math.round(13*sc));
+  const lineHeight = Math.round(fontSize * 1.4);
+  const lines = b.label.split('\n').length;
+  const baseW = Math.max(100, (maxX-minX)*1.2);
+  const baseH = Math.max(40, (maxY-minY)*0.8);
+  const neededH = Math.max(baseH, lines * lineHeight + 12);
+  editor.style.cssText = [
+    'display:block',
+    `left:${cx-baseW/2}px`,
+    `top:${cy-neededH/2}px`,
+    `width:${baseW}px`,
+    `height:${neededH}px`,
+    `font-size:${fontSize}px`
+  ].join(';');
+  editor.value = b.label;
+  draw();
   setTimeout(()=>{editor.focus();editor.select();},20);
 }
 function closeEditor(save){
   if(!editingBlock) return;
   if(save){const v=editor.value.trim();if(v.length>0)editingBlock.label=v;}
   editingBlock=null; editor.style.display='none'; draw();
-  if(descBlock) document.getElementById('desc-block-name').textContent=descBlock.label;
+  if(descBlock) document.getElementById('desc-block-name').textContent=descBlock.label.replace(/\n/g, ' ');
 }
-editor.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();closeEditor(true);}if(e.key==='Escape')closeEditor(false);e.stopPropagation();});
+editor.addEventListener('keydown',e=>{
+  if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); closeEditor(true); }
+  if(e.key==='Escape'){ e.preventDefault(); closeEditor(false); }
+  e.stopPropagation();
+});
 editor.addEventListener('blur',()=>closeEditor(true));
 
 // ── Description panel ─────────────────────────────────────────
 function openDescPanel(b){
   descBlock=b;
-  document.getElementById('desc-block-name').textContent=b.label;
+  document.getElementById('desc-block-name').textContent=b.label.replace(/\n/g, ' ');
   setDescRead(b); repositionDesc(); descPanel.style.display='block'; draw();
 }
 function repositionDesc(){
@@ -530,7 +557,7 @@ function startAdd()   {closeEditor(true);closeDescPanel();if(blocks.length>=MAX)
 function startDelete(){closeEditor(true);closeDescPanel();mode='delete';setActiveBtn('btn-delete');updateStatus();}
 function resetMode()  {closeEditor(true);closeDescPanel();mode='none';selected=null;pendingConn=null;setActiveBtn(null);draw();updateStatus();}
 function setActiveBtn(id){['btn-add','btn-delete'].forEach(b=>{document.getElementById(b)?.classList.remove('active')});if(id)document.getElementById(id)?.classList.add('active');}
-function updateStatus(){document.getElementById('status').textContent=`${blocks.length}/10${mode!=='none'?' · '+mode:''}`;}
+function updateStatus(){document.getElementById('status').textContent=`${blocks.length}/${MAX}${mode!=='none'?' · '+mode:''}`;}
 function saveStateWithFeedback() {
   saveState();
   showToast('Estado guardado ✓');

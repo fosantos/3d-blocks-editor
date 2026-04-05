@@ -74,11 +74,11 @@ A aplicação é um único arquivo HTML sem dependências externas - basta abrir
 
 ## Limitantes
 
-- Máximo de 10 blocos por cenário (design decision para manter performance e simplicidade)
-- Título do bloco: máximo 20 caracteres
+- Máximo de 15 blocos por cenário (design decision para manter performance e simplicidade)
+- Título do bloco: máximo 100 caracteres (suporta múltiplas linhas)
 - Descrição: máximo 300 caracteres
 - As coordenadas X/Y são limitadas ao tamanho da canvas
-- Profundidade (Z) entre 0 e 360 unidades
+- Profundidade (Z) entre 0 e 400 unidades
 
 ---
 
