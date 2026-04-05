@@ -595,10 +595,10 @@ setTimeout(()=>{
 
   // Try to load saved state first
   if (!loadState()) {
-    // No saved state — create defaults
-    [{x:W*.28,y:H*.42,z:0,  label:'API',   desc:'Gateway de entrada. Gere autenticação e rate limiting.'},
-     {x:W*.65,y:H*.38,z:80,  label:'Cache', desc:'Redis. TTL de 5 min para respostas frequentes.'},
-     {x:W*.48,y:H*.65,z:160, label:'DB',    desc:'PostgreSQL. Base de dados principal da aplicação.'}]
+    // No saved state — create defaults for a second brain
+    [{x:W*.35,y:H*.40,z:0,   label:'Ideias',  desc:'Brainstormings, pensamentos e insights para explorar.'},
+     {x:W*.60,y:H*.50,z:80,  label:'Tarefas', 'Ações concretas a realizar, organizadas por prioridade.'},
+     {x:W*.45,y:H*.70,z:160, label:'Metas',   desc:'Objetivos de longo prazo e visão de futuro.'}]
     .forEach(d=>{idCounter++;blocks.push({id:idCounter,label:d.label,desc:d.desc,x:d.x,y:d.y,z:d.z,w:90,h:56,zScale:1});});
     connections.push({from:1,to:2},{from:2,to:3});
   }
