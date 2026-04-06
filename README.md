@@ -13,6 +13,7 @@ Editor interativo de blocos em perspectiva 3D para organizar ideias, tarefas e m
 - **Ajustar Z:** Teclas `+` e `-`
 - **Desfazer conexão/remoção:** `Esc`
 - **Remover bloco:** Tecla `Delete` ou `Backspace`
+- **Realinhar blocos:** Clique no botão "Realinhar" na toolbar para centralizar todos os blocos na tela
 
 **Nota:** O número máximo de blocos é 15.
 
@@ -31,6 +32,7 @@ O formato exportado inclui:
 - Blocos em perspectiva 3D com profundidade ajustável
 - Conexões visuais entre blocos
 - Painel de descrição por bloco
+- Botão de realinhamento para centralizar todos os blocos
 - Layout responsivo que ocupa a tela inteira
 - Zero dependências — HTML/CSS/JS puro
 - Estado persistente no localStorage
