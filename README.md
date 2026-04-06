@@ -1,85 +1,46 @@
 # 3D Blocks Editor
 
-Um editor visual de lembretes em pseudo-3D onde você pode organizar suas ideias e notas em um espaço tridimensional.
-
-## Sobre
-
-O 3D Blocks Editor é uma aplicação single-page que permite criar e organizar blocos de texto em um ambiente 3D interativo. Cada bloco representa um lembrete, nota ou ideia que pode ser posicionado livremente no espaço, criando uma visualização panorâmica de todas as suas anotações.
-
-Recursos principais:
-
-- **Visualização 3D total**: Navegue pelos seus lembretes em um espaço com profundidade
-- **Posicionamento livre**: Arraste blocos pela canvas e ajuste sua profundidade com o scroll
-- **Edição inline**: Duplo clique para editar o texto de qualquer bloco
-- **Descrições detalhadas**: Cada bloco tem uma área de descrição expandida
-- **Conexões visuais**: Conecte blocos relacionados com linhas para criar relacionamentos
-- **Persistência manual**: Use o botão "Salvar" para guardar seu trabalho no navegador
-- **Interface minimalista**: Foco total no conteúdo, sem distrações
+Editor interativo de blocos em perspectiva 3D para organizar ideias, tarefas e metas — inspirado no "Second Brain".
 
 ## Como usar
 
-1. **Adicionar lembrete**: Clique no botão "+ Bloco" e clique na canvas
-2. **Mover lembrete**: Arraste o bloco pela canvas
-3. **Conectar lembretes**:
-   - Clique em um bloco (fica destacado)
-   - Clique em outro bloco para criar a conexão
-   - Clique novamente no mesmo bloco para cancelar
-4. **Editar texto**: Duplo clique no bloco para editar o título
-5. **Ajustar profundidade**: Use o scroll do mouse sobre o bloco para afastar ou aproximar
-6. **Adicionar descrição**: Clique no ícone ⓘ no bloco para abrir o painel de notas
-7. **Deletar lembrete**: Clique no botão "Deletar" e depois no bloco
+- **Adicionar bloco:** Clique no botão "Novo bloco" e clique no canvas para posicionar
+- **Conectar blocos:** Clique num bloco (fica selecionado), depois clique noutro para conectar
+- **Editar nome:** Duplo clique no bloco
+- **Mover:** Arraste os blocos
+- **Profundidade (Z):** Use a roda do mouse sobre um bloco selecionado
+- **Mover com teclado:** Setas direcionais (← ↑ → ↓)
+- **Ajustar Z:** Teclas `+` e `-`
+- **Desfazer conexão/remoção:** `Esc`
+- **Remover bloco:** Tecla `Delete` ou `Backspace`
 
-## Atalhos de teclado
+**Nota:** O número máximo de blocos é 15.
 
-- `← ↑ → ↓`: Mover bloco selecionado
-- `+` / `=`: Aproximar (zoom in)
-- `-`: Afastar (zoom out)
-- `Delete` / `Backspace`: Remover bloco selecionado
-- `Escape`: Cancelar conexão pendente
+## Importar / Exportar
 
-## Conceito
+- **Exportar:** Clique em "Exportar" no painel lateral para gerar um JSON com todos os blocos e conexões. Copie o texto ou descarregue o ficheiro.
+- **Importar:** Clique em "Importar" e cole um JSON válido ou abra um ficheiro previamente exportado. O estado atual será substituído.
 
-Ao invés de listas planas ou arquivos de texto, o 3D Blocks Editor permite que você **veja todas as suas ideias em um único espaço**. Ao posicionar lembretes em diferentes profundidades (Z), você pode:
+O formato exportado inclui:
+- Lista de blocos (posição, rótulo, descrição)
+- Conexões entre blocos
+- Metadados (versão, data de exportação)
 
-- Organizar por prioridade (mais perto = mais importante)
-- Agrupar por temas (posicionar próximos visualmente)
-- Criar fluxos de trabalho (conectando blocos relacionados)
-- Manter uma visão geral de todos os seus lembretes simultaneamente
+## Funcionalidades
 
-A renderização 3D proporciona uma sensação de amplitude, permitindo que você "viaje" pelo seu espaço de notas e descubra conexões que seriam perdidas em uma lista linear.
+- Blocos em perspectiva 3D com profundidade ajustável
+- Conexões visuais entre blocos
+- Painel de descrição por bloco
+- Layout responsivo que ocupa a tela inteira
+- Zero dependências — HTML/CSS/JS puro
+- Estado persistente no localStorage
 
-## Estrutura do projeto
+## Arquivo
 
-```
-3d-blocks-editor/
-└── docs/
-    └── index.html  # Aplicação completa (HTML + CSS + JS)
-```
+Tudo está em um único arquivo: `docs/index.html`
 
-A aplicação é um único arquivo HTML sem dependências externas - basta abrir no navegador.
+Abra diretamente no browser — não precisa de servidor.
 
-## Tecnologias
+## Breve descrição
 
-- HTML5 Canvas para renderização
-- CSS3 (Flexbox, positioning absoluto)
-- JavaScript ES6+ (vanilla, sem frameworks)
-
-## Características técnicas
-
-- Projeção em pseudo-3D com perspectiva fixa (f=600px)
-- Ordenação automática por profundidade para correto occlusion
-- Blocos com faces frontal, laterais e traseiras renderizadas
-- Indicadores visuais: conexões tracejadas, glow em selecionados
-- Escala dos blocos varia com a profundidade (quanto mais perto, maior)
-
-## Limitantes
-
-- Máximo de 15 blocos por cenário (design decision para manter performance e simplicidade)
-- Título do bloco: máximo 100 caracteres (suporta múltiplas linhas)
-- Descrição: máximo 300 caracteres
-- As coordenadas X/Y são limitadas ao tamanho da canvas
-- Profundidade (Z) entre 0 e 400 unidades
-
----
-
-Desenvolvido como ferramenta de organização visual pessoal.
+Este editor foi criado como ferramenta visual para organizar pensamentos (Ideias), compromissos (Tarefas) e objetivos (Metas) de forma espacial e conectada, usando uma metáfora de blocos tridimensionais flutuando num espaço virtual.
