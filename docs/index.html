@@ -230,6 +230,14 @@ html, body { height: 100%; }
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="1" y1="1" x2="11" y2="11"/><line x1="11" y1="1" x2="1" y2="11"/></svg>
         Cancelar
       </button>
+      <button class="tb-btn" onclick="realignBlocks()">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="8" height="8" rx="1"/>
+          <line x1="4" y1="4" x2="8" y2="8"/>
+          <line x1="8" y1="4" x2="4" y2="8"/>
+        </svg>
+        Realinhar
+      </button>
 
       <div class="tb-divider"></div>
       <span class="tb-label">dados</span>
@@ -720,6 +728,47 @@ document.getElementById('desc-textarea').addEventListener('keydown',e=>{if(e.key
 function startAdd(){ closeEditor(true);closeDescPanel();if(blocks.length>=MAX){updateStatus();return;}mode='add';setActiveBtn('btn-add');updateStatus(); }
 function startDelete(){ closeEditor(true);closeDescPanel();mode='delete';setActiveBtn('btn-delete');updateStatus(); }
 function resetMode(){ closeEditor(true);closeDescPanel();mode='none';selected=null;pendingConn=null;setActiveBtn(null);draw();updateStatus(); }
+function realignBlocks(){
+  if(blocks.length === 0) return;
+
+  // Calcular bounding box de todos os blocos
+  let minX = Infinity, maxX = -Infinity;
+  let minY = Infinity, maxY = -Infinity;
+
+  for(const b of blocks){
+    const left = b.x - b.w/2;
+    const right = b.x + b.w/2;
+    const top = b.y - b.h/2;
+    const bottom = b.y + b.h/2;
+
+    minX = Math.min(minX, left);
+    maxX = Math.max(maxX, right);
+    minY = Math.min(minY, top);
+    maxY = Math.max(maxY, bottom);
+  }
+
+  // Centro atual da coleção
+  const collectionCenterX = (minX + maxX) / 2;
+  const collectionCenterY = (minY + maxY) / 2;
+
+  // Centro do canvas
+  const targetCenterX = W / 2;
+  const targetCenterY = H / 2;
+
+  // Translação necessária
+  const offsetX = targetCenterX - collectionCenterX;
+  const offsetY = targetCenterY - collectionCenterY;
+
+  // Aplicar translação a todos os blocos
+  for(const b of blocks){
+    b.x += offsetX;
+    b.y += offsetY;
+  }
+
+  saveState();
+  draw();
+  showToast('blocos realinhados ✓');
+}
 function setActiveBtn(id){ ['btn-add','btn-delete'].forEach(b=>document.getElementById(b)?.classList.remove('active'));if(id)document.getElementById(id)?.classList.add('active'); }
 function updateStatus(){ document.getElementById('status').textContent=`${blocks.length} / ${MAX}${mode!=='none'?' · '+mode:''}`; }
 
