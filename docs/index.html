@@ -42,354 +42,155 @@
 
 #canvas { position: absolute; top: 0; left: 0; display: block; }
 
-/* ── Inline editor ─────────────────────────────────────────── */
 #inline-editor {
-  display: none;
-  position: absolute;
+  display: none; position: absolute;
   background: rgba(4, 8, 20, 0.97);
   border: 1px solid rgba(91, 143, 255, 0.75);
-  border-radius: 6px;
-  color: #e8f0ff;
-  font-family: var(--font);
-  font-weight: 600;
-  text-align: center;
-  padding: 6px 10px;
-  outline: none;
-  z-index: 50;
-  min-width: 60px;
-  resize: none;
-  line-height: 1.5;
-  overflow: hidden;
-  box-shadow: 0 0 24px rgba(91, 143, 255, 0.25),
-              inset 0 1px 0 rgba(255,255,255,0.04);
+  border-radius: 6px; color: #e8f0ff;
+  font-family: var(--font); font-weight: 600;
+  text-align: center; padding: 6px 10px; outline: none;
+  z-index: 50; min-width: 60px; resize: none; line-height: 1.5; overflow: hidden;
+  box-shadow: 0 0 24px rgba(91,143,255,0.25), inset 0 1px 0 rgba(255,255,255,0.04);
 }
 
-/* ── Description panel ─────────────────────────────────────── */
 #desc-panel {
-  display: none;
-  position: absolute;
-  z-index: 60;
-  width: 215px;
-  background: rgba(7, 11, 25, 0.97);
-  border: 0.5px solid var(--border);
-  border-radius: 11px;
-  padding: 14px;
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.55),
-              0 0 0 0.5px rgba(80, 120, 240, 0.08);
-  animation: panelIn 0.18s cubic-bezier(0.34, 1.4, 0.64, 1);
+  display: none; position: absolute; z-index: 60; width: 215px;
+  background: rgba(7, 11, 25, 0.97); border: 0.5px solid var(--border);
+  border-radius: 11px; padding: 14px;
+  backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.55), 0 0 0 0.5px rgba(80,120,240,0.08);
+  animation: panelIn 0.18s cubic-bezier(0.34,1.4,0.64,1);
 }
 @keyframes panelIn {
-  from { opacity: 0; transform: scale(0.94) translateY(-6px); }
-  to   { opacity: 1; transform: scale(1)    translateY(0);    }
+  from { opacity:0; transform:scale(0.94) translateY(-6px); }
+  to   { opacity:1; transform:scale(1)    translateY(0);    }
 }
+#desc-panel-title { font-size:10px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; letter-spacing:0.08em; text-transform:uppercase; }
+#desc-block-name  { color:var(--text-dim); max-width:120px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+#desc-edit-btn    { background:transparent; border:0.5px solid rgba(80,120,240,0.28); color:var(--text-dim); font-size:10px; font-weight:500; padding:3px 8px; border-radius:4px; cursor:pointer; font-family:var(--font); letter-spacing:0.05em; transition:all .15s; }
+#desc-edit-btn:hover { border-color:var(--accent); color:var(--accent); background:rgba(91,143,255,0.08); }
+#desc-text        { font-size:12px; color:var(--text); line-height:1.75; min-height:40px; word-break:break-word; white-space:pre-wrap; font-family:var(--font); }
+#desc-text.empty  { color:rgba(130,155,210,0.25); font-style:italic; }
+#desc-textarea    { display:none; width:100%; background:rgba(0,4,18,0.9); border:0.5px solid rgba(80,120,240,0.35); border-radius:7px; color:var(--text); font-size:12px; font-family:var(--font); padding:8px 10px; outline:none; resize:none; line-height:1.75; min-height:72px; transition:border-color .15s, box-shadow .15s; }
+#desc-textarea:focus { border-color:var(--accent); box-shadow:0 0 0 2px rgba(91,143,255,0.12); }
+#desc-save-btn    { display:none; margin-top:8px; width:100%; background:rgba(91,143,255,0.1); border:0.5px solid rgba(91,143,255,0.4); color:var(--accent); font-size:12px; font-weight:600; padding:8px; border-radius:7px; cursor:pointer; font-family:var(--font); letter-spacing:0.05em; transition:all .15s; }
+#desc-save-btn:hover { background:rgba(91,143,255,0.2); border-color:var(--accent); }
 
-#desc-panel-title {
-  font-size: 10px;
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-#desc-block-name { color: var(--text-dim); max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
-#desc-edit-btn {
-  background: transparent;
-  border: 0.5px solid rgba(80,120,240,0.28);
-  color: var(--text-dim);
-  font-size: 10px;
-  font-weight: 500;
-  padding: 3px 8px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-family: var(--font);
-  letter-spacing: 0.05em;
-  transition: all 0.15s;
-}
-#desc-edit-btn:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-  background: rgba(91,143,255,0.08);
-}
-
-#desc-text {
-  font-size: 12px;
-  color: var(--text);
-  line-height: 1.75;
-  min-height: 40px;
-  word-break: break-word;
-  white-space: pre-wrap;
-  font-family: var(--font);
-}
-#desc-text.empty { color: rgba(130, 155, 210, 0.25); font-style: italic; }
-
-#desc-textarea {
-  display: none;
-  width: 100%;
-  background: rgba(0, 4, 18, 0.9);
-  border: 0.5px solid rgba(80,120,240,0.35);
-  border-radius: 7px;
-  color: var(--text);
-  font-size: 12px;
-  font-family: var(--font);
-  padding: 8px 10px;
-  outline: none;
-  resize: none;
-  line-height: 1.75;
-  min-height: 72px;
-  transition: border-color 0.15s, box-shadow 0.15s;
-}
-#desc-textarea:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 2px rgba(91,143,255,0.12);
-}
-
-#desc-save-btn {
-  display: none;
-  margin-top: 8px;
-  width: 100%;
-  background: rgba(91, 143, 255, 0.1);
-  border: 0.5px solid rgba(91,143,255,0.4);
-  color: var(--accent);
-  font-size: 12px;
-  font-weight: 600;
-  padding: 8px;
-  border-radius: 7px;
-  cursor: pointer;
-  font-family: var(--font);
-  letter-spacing: 0.05em;
-  transition: all 0.15s;
-}
-#desc-save-btn:hover {
-  background: rgba(91, 143, 255, 0.2);
-  border-color: var(--accent);
-}
-
-/* ── Toast ─────────────────────────────────────────────────── */
 #toast {
-  display: none;
-  position: absolute;
-  bottom: 18px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(7, 11, 25, 0.97);
-  border: 0.5px solid var(--border);
-  border-radius: 20px;
-  padding: 5px 16px;
-  font-size: 11px;
-  color: var(--text-dim);
-  pointer-events: none;
-  z-index: 80;
-  white-space: nowrap;
-  backdrop-filter: blur(10px);
-  letter-spacing: 0.05em;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  display:none; position:absolute; bottom:18px; left:50%; transform:translateX(-50%);
+  background:rgba(7,11,25,0.97); border:0.5px solid var(--border); border-radius:20px;
+  padding:5px 16px; font-size:11px; color:var(--text-dim); pointer-events:none;
+  z-index:80; white-space:nowrap; backdrop-filter:blur(10px); letter-spacing:0.05em;
+  box-shadow:0 4px 16px rgba(0,0,0,0.3);
 }
 
-/* ── Toolbar ───────────────────────────────────────────────── */
+/* ── Toolbar ─────────────────────────────────────────────────── */
 #toolbar-v {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 12px;
-  background: var(--surface);
-  border: 0.5px solid var(--border);
-  border-radius: var(--radius);
-  z-index: 20;
-  width: 152px;
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.45),
-              0 0 0 0.5px rgba(80,120,240,0.06);
+  position:absolute; top:12px; left:12px; display:flex; flex-direction:column;
+  gap:6px; padding:12px; background:var(--surface); border:0.5px solid var(--border);
+  border-radius:var(--radius); z-index:20; width:152px;
+  backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+  box-shadow:0 8px 32px rgba(0,0,0,0.45), 0 0 0 0.5px rgba(80,120,240,0.06);
 }
-
-.tb-brand {
-  font-size: 10px;
-  font-weight: 600;
-  color: var(--text-dim);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  border-bottom: 0.5px solid var(--border);
-}
-.tb-brand-dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 6px var(--accent);
-  flex-shrink: 0;
-}
-
-.tb-divider { height: 0.5px; background: var(--border); margin: 2px 0; }
-
-.tb-status {
-  font-size: 10px;
-  color: rgba(91, 143, 255, 0.55);
-  letter-spacing: 0.05em;
-  padding: 2px 0;
-}
-
+.tb-brand { font-size:10px; font-weight:600; color:var(--text-dim); letter-spacing:0.1em; text-transform:uppercase; padding-bottom:8px; display:flex; align-items:center; gap:7px; border-bottom:0.5px solid var(--border); }
+.tb-brand-dot { width:6px; height:6px; border-radius:50%; background:var(--accent); box-shadow:0 0 6px var(--accent); flex-shrink:0; }
+.tb-divider   { height:0.5px; background:var(--border); margin:2px 0; }
+.tb-label     { font-size:9px; color:rgba(91,143,255,0.3); letter-spacing:0.12em; text-transform:uppercase; padding:4px 0 2px; }
+.tb-status    { font-size:10px; color:rgba(91,143,255,0.55); letter-spacing:0.05em; padding:2px 0; }
 .tb-btn {
-  background: transparent;
-  border: 0.5px solid rgba(80, 120, 240, 0.18);
-  color: var(--text-dim);
-  font-size: 12px;
-  font-weight: 500;
-  padding: 7px 10px;
-  border-radius: 7px;
-  cursor: pointer;
-  font-family: var(--font);
-  white-space: nowrap;
-  letter-spacing: 0.04em;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: all 0.15s;
+  background:transparent; border:0.5px solid rgba(80,120,240,0.18); color:var(--text-dim);
+  font-size:12px; font-weight:500; padding:7px 10px; border-radius:7px; cursor:pointer;
+  font-family:var(--font); white-space:nowrap; letter-spacing:0.04em; width:100%;
+  display:flex; align-items:center; gap:8px; transition:all .15s;
 }
-.tb-btn:hover {
-  border-color: rgba(91,143,255,0.45);
-  color: #e0ecff;
-  background: rgba(91,143,255,0.07);
-}
-.tb-btn.active {
-  border-color: var(--accent);
-  color: var(--accent);
-  background: rgba(91,143,255,0.1);
-}
-.tb-btn.danger:hover {
-  border-color: rgba(255, 90, 110, 0.55);
-  color: var(--danger);
-  background: rgba(255,90,110,0.06);
-}
-.tb-btn svg { flex-shrink: 0; }
+.tb-btn:hover    { border-color:rgba(91,143,255,0.45); color:#e0ecff; background:rgba(91,143,255,0.07); }
+.tb-btn.active   { border-color:var(--accent); color:var(--accent); background:rgba(91,143,255,0.1); }
+.tb-btn.danger:hover { border-color:rgba(255,90,110,0.55); color:var(--danger); background:rgba(255,90,110,0.06); }
+.tb-btn.success:hover { border-color:rgba(80,220,170,0.55); color:rgba(80,220,170,0.9); background:rgba(80,220,170,0.06); }
+.tb-btn svg { flex-shrink:0; }
 
-/* ── Status bar ────────────────────────────────────────────── */
-#status-bar {
-  position: absolute;
-  bottom: 12px;
-  left: 12px;
-  right: 12px;
-  font-size: 10px;
-  color: var(--text-dim);
-  pointer-events: none;
-  z-index: 20;
-  letter-spacing: 0.04em;
-  line-height: 1.6;
-}
+#status-bar { position:absolute; bottom:12px; left:12px; right:12px; font-size:10px; color:var(--text-dim); pointer-events:none; z-index:20; letter-spacing:0.04em; line-height:1.6; }
 
-/* ── Modal ─────────────────────────────────────────────────── */
+/* ── Import/Export modal ────────────────────────────────────── */
 #modal-overlay {
-  display: none;
-  position: absolute;
-  inset: 0;
-  background: rgba(3, 5, 15, 0.82);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  z-index: 100;
-  align-items: center;
-  justify-content: center;
+  display:none; position:absolute; inset:0; background:rgba(3,5,15,0.82);
+  backdrop-filter:blur(5px); -webkit-backdrop-filter:blur(5px);
+  z-index:100; align-items:center; justify-content:center;
 }
-#modal-overlay.show { display: flex; }
+#modal-overlay.show { display:flex; }
 
 #modal {
-  background: rgba(7, 11, 25, 0.99);
-  border: 0.5px solid var(--border);
-  border-radius: 13px;
-  padding: 22px;
-  width: 295px;
-  color: var(--text);
-  box-shadow: 0 24px 64px rgba(0,0,0,0.7),
-              0 0 0 0.5px rgba(80,120,240,0.1);
-  animation: modalIn 0.2s cubic-bezier(0.34, 1.4, 0.64, 1);
+  background:rgba(7,11,25,0.99); border:0.5px solid var(--border);
+  border-radius:13px; padding:22px; width:295px; color:var(--text);
+  box-shadow:0 24px 64px rgba(0,0,0,0.7), 0 0 0 0.5px rgba(80,120,240,0.1);
+  animation:modalIn 0.2s cubic-bezier(0.34,1.4,0.64,1);
 }
 @keyframes modalIn {
-  from { opacity: 0; transform: scale(0.9) translateY(10px); }
-  to   { opacity: 1; transform: scale(1)   translateY(0);    }
+  from { opacity:0; transform:scale(0.9) translateY(10px); }
+  to   { opacity:1; transform:scale(1)   translateY(0);    }
 }
+#modal h3  { font-size:12px; font-weight:600; color:var(--accent); margin-bottom:18px; letter-spacing:0.08em; text-transform:uppercase; }
+#modal label { font-size:10px; color:var(--text-dim); display:block; margin-bottom:5px; margin-top:13px; letter-spacing:0.08em; text-transform:uppercase; }
+#modal select, #modal input[type=text] { width:100%; background:rgba(0,4,18,0.9); border:0.5px solid rgba(80,120,240,0.28); color:var(--text); font-size:12px; padding:8px 10px; border-radius:7px; font-family:var(--font); outline:none; transition:border-color .15s, box-shadow .15s; }
+#modal input[type=text]:focus, #modal select:focus { border-color:var(--accent); box-shadow:0 0 0 2px rgba(91,143,255,0.12); }
+.modal-row { display:flex; gap:8px; margin-top:20px; }
+.modal-btn { flex:1; background:transparent; border:0.5px solid rgba(80,120,240,0.25); color:var(--text-dim); font-size:12px; font-weight:500; padding:9px; border-radius:7px; cursor:pointer; font-family:var(--font); letter-spacing:0.04em; transition:all .15s; }
+.modal-btn:hover  { background:rgba(255,255,255,0.04); border-color:rgba(150,170,220,0.4); color:var(--text); }
+.modal-btn.confirm { border-color:rgba(91,143,255,0.5); color:var(--accent); font-weight:600; background:rgba(91,143,255,0.08); }
+.modal-btn.confirm:hover { background:rgba(91,143,255,0.18); border-color:var(--accent); }
 
-#modal h3 {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--accent);
-  margin-bottom: 18px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+/* ── Import/Export modal especial ──────────────────────────── */
+#io-modal-overlay {
+  display:none; position:absolute; inset:0; background:rgba(3,5,15,0.82);
+  backdrop-filter:blur(5px); -webkit-backdrop-filter:blur(5px);
+  z-index:100; align-items:center; justify-content:center;
 }
+#io-modal-overlay.show { display:flex; }
 
-#modal label {
-  font-size: 10px;
-  color: var(--text-dim);
-  display: block;
-  margin-bottom: 5px;
-  margin-top: 13px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+#io-modal {
+  background:rgba(7,11,25,0.99); border:0.5px solid var(--border);
+  border-radius:13px; padding:22px; width:340px; color:var(--text);
+  box-shadow:0 24px 64px rgba(0,0,0,0.7), 0 0 0 0.5px rgba(80,120,240,0.1);
+  animation:modalIn 0.2s cubic-bezier(0.34,1.4,0.64,1);
 }
+#io-modal h3 { font-size:12px; font-weight:600; color:var(--accent); margin-bottom:6px; letter-spacing:0.08em; text-transform:uppercase; display:flex; align-items:center; gap:8px; }
+#io-modal-subtitle { font-size:10px; color:var(--text-dim); margin-bottom:16px; letter-spacing:0.04em; }
 
-#modal select,
-#modal input[type=text] {
-  width: 100%;
-  background: rgba(0, 4, 18, 0.9);
-  border: 0.5px solid rgba(80,120,240,0.28);
-  color: var(--text);
-  font-size: 12px;
-  padding: 8px 10px;
-  border-radius: 7px;
-  font-family: var(--font);
-  outline: none;
-  transition: border-color 0.15s, box-shadow 0.15s;
-}
-#modal input[type=text]:focus,
-#modal select:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 2px rgba(91,143,255,0.12);
-}
+#io-tabs { display:flex; gap:6px; margin-bottom:14px; }
+.io-tab { flex:1; background:transparent; border:0.5px solid rgba(80,120,240,0.2); color:var(--text-dim); font-size:11px; font-weight:500; padding:7px; border-radius:7px; cursor:pointer; font-family:var(--font); letter-spacing:0.05em; transition:all .15s; }
+.io-tab:hover  { border-color:rgba(91,143,255,0.4); color:var(--text); }
+.io-tab.active { border-color:var(--accent); color:var(--accent); background:rgba(91,143,255,0.1); }
 
-.modal-row {
-  display: flex;
-  gap: 8px;
-  margin-top: 20px;
-}
+#io-export-pane, #io-import-pane { display:none; flex-direction:column; gap:10px; }
+#io-export-pane.visible, #io-import-pane.visible { display:flex; }
 
-.modal-btn {
-  flex: 1;
-  background: transparent;
-  border: 0.5px solid rgba(80,120,240,0.25);
-  color: var(--text-dim);
-  font-size: 12px;
-  font-weight: 500;
-  padding: 9px;
-  border-radius: 7px;
-  cursor: pointer;
-  font-family: var(--font);
-  letter-spacing: 0.04em;
-  transition: all 0.15s;
+.io-json-box {
+  width:100%; height:120px; background:rgba(0,4,18,0.9);
+  border:0.5px solid rgba(80,120,240,0.28); border-radius:7px;
+  color:rgba(130,200,255,0.8); font-size:10px; font-family:var(--font);
+  padding:10px; outline:none; resize:none; line-height:1.6; letter-spacing:0.02em;
+  transition:border-color .15s, box-shadow .15s;
 }
-.modal-btn:hover {
-  background: rgba(255,255,255,0.04);
-  border-color: rgba(150,170,220,0.4);
-  color: var(--text);
+.io-json-box:focus { border-color:var(--accent); box-shadow:0 0 0 2px rgba(91,143,255,0.12); }
+.io-json-box.error { border-color:rgba(255,90,110,0.6); box-shadow:0 0 0 2px rgba(255,90,110,0.1); }
+
+.io-meta { font-size:10px; color:var(--text-dim); letter-spacing:0.04em; line-height:1.5; }
+.io-meta strong { color:rgba(91,143,255,0.7); }
+
+.io-btn-row { display:flex; gap:8px; }
+.io-btn {
+  flex:1; background:transparent; border:0.5px solid rgba(80,120,240,0.25);
+  color:var(--text-dim); font-size:11px; font-weight:500; padding:8px;
+  border-radius:7px; cursor:pointer; font-family:var(--font); letter-spacing:0.04em;
+  display:flex; align-items:center; justify-content:center; gap:6px; transition:all .15s;
 }
-.modal-btn.confirm {
-  border-color: rgba(91,143,255,0.5);
-  color: var(--accent);
-  font-weight: 600;
-  background: rgba(91,143,255,0.08);
-}
-.modal-btn.confirm:hover {
-  background: rgba(91,143,255,0.18);
-  border-color: var(--accent);
-}
+.io-btn:hover   { background:rgba(255,255,255,0.04); border-color:rgba(150,170,220,0.4); color:var(--text); }
+.io-btn.primary { border-color:rgba(91,143,255,0.5); color:var(--accent); font-weight:600; background:rgba(91,143,255,0.08); }
+.io-btn.primary:hover { background:rgba(91,143,255,0.18); border-color:var(--accent); }
+.io-btn.green   { border-color:rgba(80,220,170,0.4); color:rgba(80,220,170,0.85); background:rgba(80,220,170,0.06); }
+.io-btn.green:hover { background:rgba(80,220,170,0.14); border-color:rgba(80,220,170,0.7); }
+
+#io-import-error { font-size:10px; color:rgba(255,100,120,0.85); letter-spacing:0.04em; min-height:14px; }
 </style>
 </head>
 <body>
@@ -410,38 +211,48 @@
 
     <div id="toast"></div>
 
+    <!-- Main toolbar -->
     <div id="toolbar-v">
-      <div class="tb-brand">
-        <div class="tb-brand-dot"></div>
-        3D BLOCKS
-      </div>
+      <div class="tb-brand"><div class="tb-brand-dot"></div>3D BLOCKS</div>
+
+      <span class="tb-label">blocos</span>
       <button class="tb-btn active" id="btn-add" onclick="startAdd()">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
-          <line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/>
-        </svg>
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
         Novo bloco
       </button>
       <button class="tb-btn danger" id="btn-delete" onclick="startDelete()">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="1.5,2.5 10.5,2.5"/><path d="M3.5,2.5v-.75h5v.75"/>
-          <path d="M3.5,2.5l.5,7.5h4l.5-7.5"/>
-        </svg>
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,2.5 10.5,2.5"/><path d="M3.5,2.5v-.75h5v.75"/><path d="M3.5,2.5l.5,7.5h4l.5-7.5"/></svg>
         Deletar
       </button>
-      <div class="tb-divider"></div>
       <button class="tb-btn" onclick="resetMode()">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
-          <line x1="1" y1="1" x2="11" y2="11"/><line x1="11" y1="1" x2="1" y2="11"/>
-        </svg>
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="1" y1="1" x2="11" y2="11"/><line x1="11" y1="1" x2="1" y2="11"/></svg>
         Cancelar
       </button>
-      <button class="tb-btn" onclick="clearSavedState()">
+
+      <div class="tb-divider"></div>
+      <span class="tb-label">dados</span>
+
+      <button class="tb-btn success" onclick="openIOModal('export')">
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="1,3.5 4.5,3.5 4.5,1"/>
-          <path d="M2,6A4.5,4.5,0,1,0,4.5,2.5L1,3.5"/>
+          <path d="M6 1v7M3.5 5.5L6 8l2.5-2.5"/>
+          <path d="M1.5 9.5v1h9v-1"/>
         </svg>
+        Exportar
+      </button>
+      <button class="tb-btn" onclick="openIOModal('import')">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 8V1M3.5 3.5L6 1l2.5 2.5"/>
+          <path d="M1.5 9.5v1h9v-1"/>
+        </svg>
+        Importar
+      </button>
+
+      <div class="tb-divider"></div>
+      <button class="tb-btn" onclick="clearSavedState()">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,3.5 4.5,3.5 4.5,1"/><path d="M2,6A4.5,4.5,0,1,0,4.5,2.5L1,3.5"/></svg>
         Redefinir
       </button>
+
       <div class="tb-divider"></div>
       <span class="tb-status" id="status">0 / 15</span>
     </div>
@@ -450,11 +261,12 @@
       <span id="hint">clica num bloco, depois noutro para conectar · duplo clique: editar nome</span>
     </div>
 
+    <!-- Novo bloco modal -->
     <div id="modal-overlay">
       <div id="modal">
         <h3>// novo bloco</h3>
         <label>Nome do bloco</label>
-        <input type="text" id="new-label" placeholder="ex: API, DB, Cache…" maxlength="20" />
+        <input type="text" id="new-label" placeholder="ex: Ideias, Tarefas, Metas…" maxlength="20" />
         <label>Conectar a (opcional)</label>
         <select id="connect-select"><option value="">— sem conexão —</option></select>
         <div class="modal-row">
@@ -463,575 +275,491 @@
         </div>
       </div>
     </div>
+
+    <!-- Export / Import modal -->
+    <div id="io-modal-overlay">
+      <div id="io-modal">
+        <h3>
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" id="io-modal-icon">
+            <path d="M6.5 1v8M3.5 6L6.5 9l3-3"/><path d="M1.5 11h10"/>
+          </svg>
+          <span id="io-modal-title">exportar</span>
+        </h3>
+        <div id="io-modal-subtitle">Partilha ou faz backup do teu espaço de blocos</div>
+
+        <div id="io-tabs">
+          <button class="io-tab active" id="tab-export" onclick="switchIOTab('export')">↓ Exportar</button>
+          <button class="io-tab"        id="tab-import" onclick="switchIOTab('import')">↑ Importar</button>
+        </div>
+
+        <!-- Export pane -->
+        <div id="io-export-pane" class="visible">
+          <div class="io-meta" id="io-export-meta"></div>
+          <textarea class="io-json-box" id="io-export-box" readonly></textarea>
+          <div class="io-btn-row">
+            <button class="io-btn primary" onclick="copyExportJSON()">
+              <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="7" height="7" rx="1.5"/><path d="M3 3V2a1 1 0 011-1h5a1 1 0 011 1v5a1 1 0 01-1 1h-1"/></svg>
+              Copiar JSON
+            </button>
+            <button class="io-btn" onclick="downloadExportJSON()">
+              <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 1v6M3 5l2.5 2.5L8 5"/><path d="M1 9.5h9"/></svg>
+              Download
+            </button>
+          </div>
+          <button class="io-btn" style="width:100%" onclick="closeIOModal()">fechar</button>
+        </div>
+
+        <!-- Import pane -->
+        <div id="io-import-pane">
+          <div class="io-meta">Cola o JSON exportado abaixo. O estado atual será <strong>substituído</strong>.</div>
+          <textarea class="io-json-box" id="io-import-box" placeholder='{"blocks":[...],"connections":[...]}'></textarea>
+          <div id="io-import-error"></div>
+          <div class="io-btn-row">
+            <button class="io-btn" onclick="triggerFileImport()">
+              <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 7v2a1 1 0 01-1 1h-6a1 1 0 01-1-1V7"/><path d="M5.5 1v6M3 4l2.5-2.5L8 4"/></svg>
+              Abrir ficheiro
+            </button>
+            <button class="io-btn green" onclick="confirmImport()">
+              <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><polyline points="1.5,5.5 4.5,8.5 9.5,2.5"/></svg>
+              Carregar
+            </button>
+          </div>
+          <button class="io-btn" style="width:100%;margin-top:2px" onclick="closeIOModal()">fechar</button>
+        </div>
+
+        <!-- Hidden file input -->
+        <input type="file" id="file-input" accept=".json,application/json" style="display:none" onchange="handleFileImport(event)" />
+      </div>
+    </div>
+
   </div>
 </div>
 
 <script>
-const canvas = document.getElementById('canvas');
-const wrap   = document.getElementById('canvas-wrap');
-const ctx    = canvas.getContext('2d');
-const editor = document.getElementById('inline-editor');
+const canvas  = document.getElementById('canvas');
+const wrap    = document.getElementById('canvas-wrap');
+const ctx     = canvas.getContext('2d');
+const editor  = document.getElementById('inline-editor');
 const descPanel = document.getElementById('desc-panel');
 const toastEl   = document.getElementById('toast');
 
 let W, H;
-function resize() {
-  W = wrap.clientWidth; H = wrap.clientHeight;
-  canvas.width = W; canvas.height = H; draw();
-}
-const ro = new ResizeObserver(resize);
-ro.observe(wrap);
+function resize() { W=wrap.clientWidth; H=wrap.clientHeight; canvas.width=W; canvas.height=H; draw(); }
+const ro = new ResizeObserver(resize); ro.observe(wrap);
 
-const MAX   = 15;
-const PERSP = 600;
-const ZOOM  = 1.7;
-const Z_MAX = 400;
+const MAX=15, PERSP=600, ZOOM=1.7, Z_MAX=400;
 
-// ── Block colour palette ──────────────────────────────────────
-const PALETTE = [
-  [91,  143, 255],  // blue
-  [80,  220, 170],  // teal
-  [180, 120, 255],  // violet
-  [255, 185, 70],   // amber
-  [255, 100, 145],  // rose
-  [60,  220, 240],  // cyan
-  [130, 255, 160],  // mint
+const PALETTE=[
+  [91,143,255],[80,220,170],[180,120,255],
+  [255,185,70],[255,100,145],[60,220,240],[130,255,160],
 ];
-function blockRGB(b) { return PALETTE[(b.id - 1) % PALETTE.length]; }
-function blockColor(b, alpha) { const [r,g,bl]=blockRGB(b); return `rgba(${r},${g},${bl},${alpha})`; }
+function blockRGB(b){ return PALETTE[(b.id-1)%PALETTE.length]; }
 
-// ── Spawn animation ───────────────────────────────────────────
-let spawnAnims = {}; // blockId → startTime
-function triggerSpawn(id) { spawnAnims[id] = Date.now(); scheduleAnim(); }
-let animScheduled = false;
-function scheduleAnim() {
-  if(animScheduled) return;
-  animScheduled = true;
-  requestAnimationFrame(function loop() {
-    const now = Date.now();
-    const alive = Object.keys(spawnAnims).filter(k => now - spawnAnims[k] < 380);
-    if(alive.length > 0) { draw(); requestAnimationFrame(loop); }
-    else { animScheduled = false; spawnAnims = {}; draw(); }
+// ── Spawn anim ────────────────────────────────────────────────
+let spawnAnims={}, animScheduled=false;
+function triggerSpawn(id){ spawnAnims[id]=Date.now(); scheduleAnim(); }
+function scheduleAnim(){
+  if(animScheduled) return; animScheduled=true;
+  requestAnimationFrame(function loop(){
+    const now=Date.now(), alive=Object.keys(spawnAnims).filter(k=>now-spawnAnims[k]<380);
+    if(alive.length>0){draw();requestAnimationFrame(loop);}
+    else{animScheduled=false;spawnAnims={};draw();}
   });
 }
-function spawnScale(b) {
-  const t = spawnAnims[b.id];
-  if(!t) return 1;
-  const p = Math.min(1, (Date.now() - t) / 380);
-  return p < 0.5 ? 4*p*p*p : 1 - Math.pow(-2*p+2, 3)/2; // ease in-out cubic
+function spawnScale(b){
+  const t=spawnAnims[b.id]; if(!t) return 1;
+  const p=Math.min(1,(Date.now()-t)/380);
+  return p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;
 }
 
-let blocks = [], connections = [];
-let selected      = null;
-let pendingConn   = null;
-let mode          = 'none';
-let dragBlock     = null;
-let dragOX = 0, dragOY = 0, dragMoved = false;
-let hovered       = null;
-let editingBlock  = null;
-let descBlock     = null;
-let idCounter     = 0;
-let toastTimer    = null;
+let blocks=[], connections=[];
+let selected=null, pendingConn=null, mode='none';
+let dragBlock=null, dragOX=0, dragOY=0, dragMoved=false;
+let hovered=null, editingBlock=null, descBlock=null;
+let idCounter=0, toastTimer=null;
 
-// ── Persistence ──────────────────────────────────────────────
-const STORAGE_KEY = '3d-blocks-editor-state';
-function saveState() {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({
-      blocks: blocks.map(b => ({...b})),
-      connections: [...connections],
-      idCounter
-    }));
-  } catch(e) {}
+// ── Persistence ───────────────────────────────────────────────
+const STORAGE_KEY='3d-blocks-editor-state';
+function saveState(){
+  try{ localStorage.setItem(STORAGE_KEY,JSON.stringify({blocks:blocks.map(b=>({...b})),connections:[...connections],idCounter})); }catch(e){}
 }
-function loadState() {
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if(!saved) return false;
-    const state = JSON.parse(saved);
-    if(!state.blocks || !Array.isArray(state.blocks)) return false;
-    blocks = state.blocks;
-    connections = state.connections || [];
-    idCounter = state.idCounter || blocks.reduce((m,b)=>Math.max(m,b.id||0),0);
-    return true;
-  } catch(e) { return false; }
+function loadState(){
+  try{
+    const s=localStorage.getItem(STORAGE_KEY); if(!s) return false;
+    const st=JSON.parse(s); if(!st.blocks||!Array.isArray(st.blocks)) return false;
+    blocks=st.blocks; connections=st.connections||[];
+    idCounter=st.idCounter||blocks.reduce((m,b)=>Math.max(m,b.id||0),0); return true;
+  }catch(e){ return false; }
 }
-function clearSavedState() {
-  closeEditor(true); closeDescPanel(); closeModal();
-  blocks = []; connections = [];
-  selected = null; pendingConn = null; mode = 'none'; descBlock = null; idCounter = 0;
+function clearSavedState(){
+  closeEditor(true); closeDescPanel(); closeModal(); closeIOModal();
+  blocks=[]; connections=[]; selected=null; pendingConn=null; mode='none'; descBlock=null; idCounter=0;
   localStorage.removeItem(STORAGE_KEY);
-  const cW = wrap.clientWidth, cH = wrap.clientHeight;
-  [{x:cW*.35,y:cH*.40,z:0,   label:'Ideias',  desc:'Brainstorming e pensamentos criativos a explorar.'},
-   {x:cW*.60,y:cH*.50,z:80,  label:'Tarefas', desc:'Ações concretas e compromissos a realizar.'},
-   {x:cW*.45,y:cH*.70,z:160, label:'Metas',   desc:'Objetivos de longo prazo e visão de futuro.'}]
-  .forEach(d => { idCounter++; blocks.push({id:idCounter,label:d.label,desc:d.desc,x:d.x,y:d.y,z:d.z,w:90,h:56,zScale:1}); });
+  const cW=wrap.clientWidth, cH=wrap.clientHeight;
+  [{x:cW*.50,y:cH*.375,z:0,label:'Ideias',desc:'Brainstorming e pensamentos criativos a explorar.'},
+   {x:cW*.375,y:cH*.625,z:80,label:'Tarefas',desc:'Ações concretas e compromissos a realizar.'},
+   {x:cW*.625,y:cH*.625,z:160,label:'Metas',desc:'Objetivos de longo prazo e visão de futuro.'}]
+  .forEach(d=>{ idCounter++; blocks.push({id:idCounter,label:d.label,desc:d.desc,x:d.x,y:d.y,z:d.z,w:90,h:56,zScale:1}); });
   connections.push({from:1,to:2},{from:2,to:3});
-  setActiveBtn(null); updateStatus(); draw();
-  showToast('estado redefinido ✓');
+  setActiveBtn(null); updateStatus(); draw(); showToast('estado redefinido ✓');
+}
+
+// ── Export / Import ───────────────────────────────────────────
+function buildExportPayload(){
+  return {
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    blocks: blocks.map(b=>({...b})),
+    connections: [...connections],
+    idCounter
+  };
+}
+
+function openIOModal(tab){
+  closeEditor(true); closeDescPanel(); closeModal();
+  document.getElementById('io-modal-overlay').classList.add('show');
+  switchIOTab(tab||'export');
+}
+function closeIOModal(){
+  document.getElementById('io-modal-overlay').classList.remove('show');
+  document.getElementById('io-import-box').value='';
+  document.getElementById('io-import-box').classList.remove('error');
+  document.getElementById('io-import-error').textContent='';
+}
+
+function switchIOTab(tab){
+  document.getElementById('tab-export').classList.toggle('active', tab==='export');
+  document.getElementById('tab-import').classList.toggle('active', tab==='import');
+  document.getElementById('io-export-pane').classList.toggle('visible', tab==='export');
+  document.getElementById('io-import-pane').classList.toggle('visible', tab==='import');
+  document.getElementById('io-modal-title').textContent = tab==='export' ? 'exportar' : 'importar';
+  if(tab==='export') refreshExportPane();
+}
+
+function refreshExportPane(){
+  const payload = buildExportPayload();
+  const json = JSON.stringify(payload, null, 2);
+  document.getElementById('io-export-box').value = json;
+  document.getElementById('io-export-meta').innerHTML =
+    `<strong>${blocks.length}</strong> bloco${blocks.length!==1?'s':''} · <strong>${connections.length}</strong> ligaç${connections.length!==1?'ões':'ão'} · ${(new Blob([json]).size/1024).toFixed(1)} KB`;
+}
+
+function copyExportJSON(){
+  const box = document.getElementById('io-export-box');
+  navigator.clipboard.writeText(box.value).then(()=>{
+    showToast('JSON copiado ✓');
+    const btn = document.querySelector('#io-export-pane .io-btn.primary');
+    const orig = btn.innerHTML;
+    btn.innerHTML = '<svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><polyline points="1.5,5.5 4.5,8.5 9.5,2.5"/></svg> Copiado!';
+    setTimeout(()=>btn.innerHTML=orig, 1600);
+  }).catch(()=>{
+    box.select(); document.execCommand('copy'); showToast('JSON copiado ✓');
+  });
+}
+
+function downloadExportJSON(){
+  const payload = buildExportPayload();
+  const json = JSON.stringify(payload, null, 2);
+  const date = new Date().toISOString().slice(0,10);
+  const blob = new Blob([json], {type:'application/json'});
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = `3d-blocks-${date}.json`;
+  a.click(); URL.revokeObjectURL(url);
+  showToast('ficheiro descarregado ✓');
+}
+
+function triggerFileImport(){
+  document.getElementById('file-input').value='';
+  document.getElementById('file-input').click();
+}
+
+function handleFileImport(e){
+  const file = e.target.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    document.getElementById('io-import-box').value = ev.target.result;
+    document.getElementById('io-import-box').classList.remove('error');
+    document.getElementById('io-import-error').textContent='';
+  };
+  reader.readAsText(file);
+}
+
+function confirmImport(){
+  const raw = document.getElementById('io-import-box').value.trim();
+  const errEl = document.getElementById('io-import-error');
+  const box   = document.getElementById('io-import-box');
+  errEl.textContent=''; box.classList.remove('error');
+
+  if(!raw){ errEl.textContent='Cole um JSON válido acima.'; box.classList.add('error'); return; }
+
+  let payload;
+  try{ payload = JSON.parse(raw); }
+  catch(e){ errEl.textContent='JSON inválido — verifica a sintaxe.'; box.classList.add('error'); return; }
+
+  if(!Array.isArray(payload.blocks)){
+    errEl.textContent='Formato inválido — campo "blocks" em falta.'; box.classList.add('error'); return;
+  }
+
+  // Apply
+  closeEditor(true); closeDescPanel();
+  blocks      = payload.blocks.map(b=>({w:90,h:56,zScale:1,...b}));
+  connections = Array.isArray(payload.connections) ? payload.connections : [];
+  idCounter   = payload.idCounter || blocks.reduce((m,b)=>Math.max(m,b.id||0),0);
+  selected=null; pendingConn=null; mode='none'; descBlock=null;
+  saveState(); setActiveBtn(null); updateStatus(); draw();
+  closeIOModal();
+  showToast(`${blocks.length} bloco${blocks.length!==1?'s':''} importado${blocks.length!==1?'s':''} ✓`);
 }
 
 // ── Projection ────────────────────────────────────────────────
-function project(x, y, z) {
-  const s = PERSP / (PERSP + z);
-  const sc = s * ZOOM;
-  return { px: W/2 + (x-W/2)*sc, py: H/2 + (y-H/2)*sc, scale: sc };
-}
-function corners(b) {
-  const hw=b.w/2, hh=b.h/2;
-  const f=[{x:b.x-hw,y:b.y-hh,z:b.z},{x:b.x+hw,y:b.y-hh,z:b.z},{x:b.x+hw,y:b.y+hh,z:b.z},{x:b.x-hw,y:b.y+hh,z:b.z}];
-  return { f, bk: f.map(p=>({...p,z:p.z+40})) };
-}
-function fInfo(b) {
-  const {f}=corners(b), pf=f.map(p=>project(p.x,p.y,p.z));
-  const cx=pf.reduce((s,p)=>s+p.px,0)/4, cy=pf.reduce((s,p)=>s+p.py,0)/4;
-  return { pf, cx, cy, sc:pf[0].scale,
-    minX:Math.min(...pf.map(p=>p.px)), maxX:Math.max(...pf.map(p=>p.px)),
-    minY:Math.min(...pf.map(p=>p.py)), maxY:Math.max(...pf.map(p=>p.py)) };
-}
-function iconPos(b) {
-  const {maxX,minY,sc}=fInfo(b), r=Math.max(7,8*sc);
-  return {x:maxX-r-2, y:minY+r+2, r};
-}
+function project(x,y,z){ const s=PERSP/(PERSP+z),sc=s*ZOOM; return{px:W/2+(x-W/2)*sc,py:H/2+(y-H/2)*sc,scale:sc}; }
+function corners(b){ const hw=b.w/2,hh=b.h/2; const f=[{x:b.x-hw,y:b.y-hh,z:b.z},{x:b.x+hw,y:b.y-hh,z:b.z},{x:b.x+hw,y:b.y+hh,z:b.z},{x:b.x-hw,y:b.y+hh,z:b.z}]; return{f,bk:f.map(p=>({...p,z:p.z+40}))}; }
+function fInfo(b){ const {f}=corners(b),pf=f.map(p=>project(p.x,p.y,p.z)); const cx=pf.reduce((s,p)=>s+p.px,0)/4,cy=pf.reduce((s,p)=>s+p.py,0)/4; return{pf,cx,cy,sc:pf[0].scale,minX:Math.min(...pf.map(p=>p.px)),maxX:Math.max(...pf.map(p=>p.px)),minY:Math.min(...pf.map(p=>p.py)),maxY:Math.max(...pf.map(p=>p.py))}; }
+function iconPos(b){ const{maxX,minY,sc}=fInfo(b),r=Math.max(7,8*sc); return{x:maxX-r-2,y:minY+r+2,r}; }
 
 // ── Toast ─────────────────────────────────────────────────────
-function showToast(msg) {
-  toastEl.textContent = msg; toastEl.style.display = 'block';
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(()=>toastEl.style.display='none', 1900);
-}
+function showToast(msg){ toastEl.textContent=msg; toastEl.style.display='block'; clearTimeout(toastTimer); toastTimer=setTimeout(()=>toastEl.style.display='none',1900); }
 
 // ── Draw ──────────────────────────────────────────────────────
-function draw() {
+function draw(){
   ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='rgba(50,80,180,0.13)';
+  for(let x=0;x<W;x+=32) for(let y=0;y<H;y+=32){ ctx.beginPath();ctx.arc(x,y,.9,0,Math.PI*2);ctx.fill(); }
 
-  // Dot grid background
-  ctx.fillStyle = 'rgba(50, 80, 180, 0.13)';
-  const step = 32;
-  for(let x=0; x<W; x+=step) {
-    for(let y=0; y<H; y+=step) {
-      ctx.beginPath(); ctx.arc(x, y, 0.9, 0, Math.PI*2); ctx.fill();
-    }
+  for(const c of connections){
+    const a=blocks.find(b=>b.id===c.from),b2=blocks.find(b=>b.id===c.to); if(!a||!b2) continue;
+    const pa=project(a.x,a.y,a.z+20),pb=project(b2.x,b2.y,b2.z+20);
+    const grad=ctx.createLinearGradient(pa.px,pa.py,pb.px,pb.py);
+    const[ra,ga,ba]=blockRGB(a),[rb,gb,bb]=blockRGB(b2);
+    grad.addColorStop(0,`rgba(${ra},${ga},${ba},0.65)`); grad.addColorStop(1,`rgba(${rb},${gb},${bb},0.65)`);
+    ctx.beginPath();ctx.moveTo(pa.px,pa.py);ctx.lineTo(pb.px,pb.py);ctx.strokeStyle=grad;ctx.lineWidth=1.25;ctx.setLineDash([]);ctx.stroke();
+    const mx=(pa.px+pb.px)/2,my=(pa.py+pb.py)/2;
+    ctx.beginPath();ctx.arc(mx,my,2.5,0,Math.PI*2);
+    const dg=ctx.createLinearGradient(pa.px,pa.py,pb.px,pb.py);
+    dg.addColorStop(0,`rgba(${ra},${ga},${ba},0.7)`);dg.addColorStop(1,`rgba(${rb},${gb},${bb},0.7)`);
+    ctx.fillStyle=dg;ctx.fill();
   }
-
-  // Connections
-  for(const c of connections) {
-    const a = blocks.find(b=>b.id===c.from), b2 = blocks.find(b=>b.id===c.to);
-    if(!a||!b2) continue;
-    const pa = project(a.x, a.y, a.z+20), pb = project(b2.x, b2.y, b2.z+20);
-    const grad = ctx.createLinearGradient(pa.px, pa.py, pb.px, pb.py);
-    const [ra,ga,ba] = blockRGB(a);
-    const [rb,gb,bb] = blockRGB(b2);
-    grad.addColorStop(0, `rgba(${ra},${ga},${ba},0.65)`);
-    grad.addColorStop(1, `rgba(${rb},${gb},${bb},0.65)`);
-    ctx.beginPath(); ctx.moveTo(pa.px, pa.py); ctx.lineTo(pb.px, pb.py);
-    ctx.strokeStyle = grad; ctx.lineWidth = 1.25; ctx.setLineDash([]); ctx.stroke();
-    // midpoint dot
-    const mx=(pa.px+pb.px)/2, my=(pa.py+pb.py)/2;
-    ctx.beginPath(); ctx.arc(mx, my, 2.5, 0, Math.PI*2);
-    const dotGrad = ctx.createLinearGradient(pa.px,pa.py,pb.px,pb.py);
-    dotGrad.addColorStop(0,`rgba(${ra},${ga},${ba},0.7)`);
-    dotGrad.addColorStop(1,`rgba(${rb},${gb},${bb},0.7)`);
-    ctx.fillStyle = dotGrad; ctx.fill();
+  if(pendingConn&&hovered&&hovered.id!==pendingConn.id&&mode==='none'){
+    const pa=project(pendingConn.x,pendingConn.y,pendingConn.z+20),pb=project(hovered.x,hovered.y,hovered.z+20);
+    ctx.beginPath();ctx.moveTo(pa.px,pa.py);ctx.lineTo(pb.px,pb.py);ctx.strokeStyle='rgba(120,170,255,0.25)';ctx.lineWidth=1;ctx.setLineDash([4,8]);ctx.stroke();ctx.setLineDash([]);
   }
-
-  // Pending connection preview
-  if(pendingConn && hovered && hovered.id!==pendingConn.id && mode==='none') {
-    const pa = project(pendingConn.x, pendingConn.y, pendingConn.z+20);
-    const pb = project(hovered.x, hovered.y, hovered.z+20);
-    ctx.beginPath(); ctx.moveTo(pa.px, pa.py); ctx.lineTo(pb.px, pb.py);
-    ctx.strokeStyle = 'rgba(120,170,255,0.25)';
-    ctx.lineWidth = 1; ctx.setLineDash([4,8]); ctx.stroke(); ctx.setLineDash([]);
-  }
-
-  // Blocks (back to front)
-  const sorted = [...blocks].sort((a,b)=>(b.z+20)-(a.z+20));
+  const sorted=[...blocks].sort((a,b)=>(b.z+20)-(a.z+20));
   for(const b of sorted) drawBlock(b);
 
-  // Depth ruler (right side)
-  const rh = H-80, rx = W-20;
-  const rulerGrad = ctx.createLinearGradient(0, 40, 0, 40+rh);
-  rulerGrad.addColorStop(0, 'rgba(91,143,255,0.45)');
-  rulerGrad.addColorStop(1, 'rgba(91,143,255,0.08)');
-  ctx.strokeStyle = rulerGrad; ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(rx, 40); ctx.lineTo(rx, 40+rh); ctx.stroke();
-  // Ticks
-  for(let i=0; i<=10; i++) {
-    const ry = 40+(i/10)*rh;
-    ctx.beginPath(); ctx.moveTo(rx-3,ry); ctx.lineTo(rx+3,ry);
-    ctx.strokeStyle = `rgba(91,143,255,${i===0||i===10?0.5:0.18})`; ctx.stroke();
+  const rh=H-80,rx=W-20;
+  const rg=ctx.createLinearGradient(0,40,0,40+rh);
+  rg.addColorStop(0,'rgba(91,143,255,0.45)'); rg.addColorStop(1,'rgba(91,143,255,0.08)');
+  ctx.strokeStyle=rg;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(rx,40);ctx.lineTo(rx,40+rh);ctx.stroke();
+  for(let i=0;i<=10;i++){ const ry=40+(i/10)*rh;ctx.beginPath();ctx.moveTo(rx-3,ry);ctx.lineTo(rx+3,ry);ctx.strokeStyle=`rgba(91,143,255,${i===0||i===10?.5:.18})`;ctx.stroke(); }
+  for(const b of blocks){
+    const ry=40+(b.z/Z_MAX)*rh,[r,g,bl]=blockRGB(b),isSel=selected&&selected.id===b.id;
+    ctx.beginPath();ctx.arc(rx,ry,isSel?5:3.5,0,Math.PI*2);
+    ctx.fillStyle=isSel?`rgba(${r},${g},${bl},1)`:`rgba(${r},${g},${bl},0.5)`;
+    if(isSel){ctx.shadowColor=`rgba(${r},${g},${bl},0.7)`;ctx.shadowBlur=8;}
+    ctx.fill();ctx.shadowBlur=0;
   }
-  // Block dots on ruler
-  for(const b of blocks) {
-    const ry = 40+(b.z/Z_MAX)*rh;
-    const [r,g,bl] = blockRGB(b);
-    const isSel = selected && selected.id===b.id;
-    ctx.beginPath(); ctx.arc(rx, ry, isSel?5:3.5, 0, Math.PI*2);
-    ctx.fillStyle = isSel ? `rgba(${r},${g},${bl},1)` : `rgba(${r},${g},${bl},0.5)`;
-    if(isSel) { ctx.shadowColor = `rgba(${r},${g},${bl},0.7)`; ctx.shadowBlur = 8; }
-    ctx.fill(); ctx.shadowBlur = 0;
-  }
-  // Ruler labels
-  ctx.fillStyle = 'rgba(91,143,255,0.35)';
-  ctx.font = `500 10px 'IBM Plex Mono', monospace`;
-  ctx.textAlign = 'right';
-  ctx.fillText('próximo', rx-8, 36);
-  ctx.fillText('fundo',   rx-8, 40+rh+13);
-
-  // Vignette
-  const vig = ctx.createRadialGradient(W/2,H/2,H*0.3, W/2,H/2,H*0.9);
-  vig.addColorStop(0, 'rgba(6,8,16,0)');
-  vig.addColorStop(1, 'rgba(6,8,16,0.35)');
-  ctx.fillStyle = vig; ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='rgba(91,143,255,0.35)';ctx.font=`500 10px 'IBM Plex Mono',monospace`;ctx.textAlign='right';
+  ctx.fillText('próximo',rx-8,36);ctx.fillText('fundo',rx-8,40+rh+13);
+  const vig=ctx.createRadialGradient(W/2,H/2,H*.3,W/2,H/2,H*.9);
+  vig.addColorStop(0,'rgba(6,8,16,0)');vig.addColorStop(1,'rgba(6,8,16,0.35)');
+  ctx.fillStyle=vig;ctx.fillRect(0,0,W,H);
 }
 
-function drawBlock(b) {
-  const ss = spawnScale(b);
-  const cx0 = b.x, cy0 = b.y;
-  const [r,g,bl] = blockRGB(b);
-
-  const {f,bk} = corners(b);
-  const pf = f.map(p => {
-    const proj = project(p.x, p.y, p.z);
-    return { px: cx0 + (proj.px - cx0)*ss, py: cy0 + (proj.py - cy0)*ss, scale: proj.scale };
+function drawBlock(b){
+  const ss=spawnScale(b),cx0=b.x,cy0=b.y,[r,g,bl]=blockRGB(b);
+  const {f,bk}=corners(b);
+  const pf=f.map(p=>{ const pj=project(p.x,p.y,p.z); return{px:cx0+(pj.px-cx0)*ss,py:cy0+(pj.py-cy0)*ss,scale:pj.scale}; });
+  const pb=bk.map(p=>{ const pj=project(p.x,p.y,p.z); return{px:cx0+(pj.px-cx0)*ss,py:cy0+(pj.py-cy0)*ss}; });
+  const isSel=selected&&selected.id===b.id,isPend=pendingConn&&pendingConn.id===b.id;
+  const isEdit=editingBlock&&editingBlock.id===b.id,isDesc=descBlock&&descBlock.id===b.id;
+  const isHov=hovered&&hovered.id===b.id;
+  const isConn=selected&&selected.id!==b.id&&connections.find(c=>(c.from===selected.id&&c.to===b.id)||(c.from===b.id&&c.to===selected.id));
+  const alpha=isSel||isEdit||isDesc||isPend?1:isHov?.85:.55, sw=isSel||isEdit||isDesc||isPend?1.4:.8;
+  [[pf[0],pf[3],pb[3],pb[0]],[pf[1],pf[2],pb[2],pb[1]],[pf[0],pf[1],pb[1],pb[0]],[pf[3],pf[2],pb[2],pb[3]]].forEach(s=>{
+    ctx.beginPath();ctx.moveTo(s[0].px,s[0].py);for(let i=1;i<s.length;i++)ctx.lineTo(s[i].px,s[i].py);ctx.closePath();
+    ctx.fillStyle=`rgba(${r},${g},${bl},0.03)`;ctx.fill();
+    ctx.strokeStyle=`rgba(${r},${g},${bl},${alpha*.28})`;ctx.lineWidth=sw*.6;ctx.stroke();
   });
-  const pb = bk.map(p => {
-    const proj = project(p.x, p.y, p.z);
-    return { px: cx0 + (proj.px - cx0)*ss, py: cy0 + (proj.py - cy0)*ss };
-  });
-
-  const isSel  = selected     && selected.id     === b.id;
-  const isPend = pendingConn  && pendingConn.id   === b.id;
-  const isEdit = editingBlock && editingBlock.id  === b.id;
-  const isDesc = descBlock    && descBlock.id     === b.id;
-  const isHov  = hovered      && hovered.id       === b.id;
-  const isConn = selected && selected.id!==b.id &&
-    connections.find(c=>(c.from===selected.id&&c.to===b.id)||(c.from===b.id&&c.to===selected.id));
-
-  const alpha = isSel||isEdit||isDesc||isPend ? 1 : isHov ? 0.85 : 0.55;
-  const sw    = isSel||isEdit||isDesc||isPend ? 1.4 : 0.8;
-
-  const sideAlpha = alpha * 0.28;
-  const sideColor = `rgba(${r},${g},${bl},${sideAlpha})`;
-
-  // Side faces
-  [[pf[0],pf[3],pb[3],pb[0]],[pf[1],pf[2],pb[2],pb[1]],
-   [pf[0],pf[1],pb[1],pb[0]],[pf[3],pf[2],pb[2],pb[3]]].forEach(s => {
-    ctx.beginPath(); ctx.moveTo(s[0].px,s[0].py);
-    for(let i=1;i<s.length;i++) ctx.lineTo(s[i].px,s[i].py);
-    ctx.closePath();
-    ctx.fillStyle = `rgba(${r},${g},${bl},0.03)`; ctx.fill();
-    ctx.strokeStyle = sideColor; ctx.lineWidth = sw*0.6; ctx.stroke();
-  });
-
-  // Back face
-  ctx.beginPath(); ctx.moveTo(pb[0].px, pb[0].py);
-  pb.forEach((p,i)=>{ if(i>0) ctx.lineTo(p.px, p.py); }); ctx.closePath();
-  ctx.fillStyle = `rgba(${r},${g},${bl},0.01)`; ctx.fill();
-  ctx.strokeStyle = `rgba(${r},${g},${bl},${alpha*0.2})`; ctx.lineWidth = sw*0.6; ctx.stroke();
-
-  // Front face fill
-  ctx.beginPath(); ctx.moveTo(pf[0].px, pf[0].py);
-  pf.forEach((p,i)=>{ if(i>0) ctx.lineTo(p.px, p.py); }); ctx.closePath();
-  const depth01 = Math.max(0, 1-b.z/Z_MAX);
-  ctx.fillStyle = `rgba(${r},${g},${bl},${0.04+depth01*0.04})`; ctx.fill();
-
-  // Front face border
-  if(isPend || isSel) {
-    ctx.shadowColor = `rgba(${r},${g},${bl},${isPend?0.8:0.5})`;
-    ctx.shadowBlur  = isPend ? 22 : 16;
+  ctx.beginPath();ctx.moveTo(pb[0].px,pb[0].py);pb.forEach((p,i)=>{if(i>0)ctx.lineTo(p.px,p.py);});ctx.closePath();
+  ctx.fillStyle=`rgba(${r},${g},${bl},0.01)`;ctx.fill();ctx.strokeStyle=`rgba(${r},${g},${bl},${alpha*.2})`;ctx.lineWidth=sw*.6;ctx.stroke();
+  ctx.beginPath();ctx.moveTo(pf[0].px,pf[0].py);pf.forEach((p,i)=>{if(i>0)ctx.lineTo(p.px,p.py);});ctx.closePath();
+  ctx.fillStyle=`rgba(${r},${g},${bl},${.04+Math.max(0,1-b.z/Z_MAX)*.04})`;ctx.fill();
+  if(isPend||isSel){ctx.shadowColor=`rgba(${r},${g},${bl},${isPend?.8:.5})`;ctx.shadowBlur=isPend?22:16;}
+  ctx.strokeStyle=isSel||isPend?`rgba(${r},${g},${bl},1)`:isConn?`rgba(${r},${g},${bl},0.6)`:`rgba(${r},${g},${bl},${alpha})`;
+  ctx.lineWidth=sw;ctx.stroke();ctx.shadowBlur=0;
+  if(!isEdit){
+    const{cx,cy,sc}=fInfo(b),fs=Math.round(13*sc*ss),lh=fs*1.3;
+    ctx.fillStyle=`rgba(255,255,255,${alpha})`;ctx.font=`600 ${fs}px 'IBM Plex Mono',monospace`;ctx.textAlign='center';ctx.textBaseline='middle';
+    const lines=b.label.split('\n'),sy=cy-((lines.length-1)*lh)/2;
+    lines.forEach((l,i)=>ctx.fillText(l,cx,sy+i*lh));
+    ctx.fillStyle=`rgba(${r},${g},${bl},${alpha*.5})`;ctx.font=`${Math.round(10*sc*ss)}px 'IBM Plex Mono',monospace`;
+    ctx.fillText(`z${Math.round((1-b.z/Z_MAX)*10)}`,cx,cy+lines.length*lh/2+12);
   }
-  if(isSel||isPend)       ctx.strokeStyle = `rgba(${r},${g},${bl},1)`;
-  else if(isConn)         ctx.strokeStyle = `rgba(${r},${g},${bl},0.6)`;
-  else                    ctx.strokeStyle = `rgba(${r},${g},${bl},${alpha})`;
-  ctx.lineWidth = sw; ctx.stroke(); ctx.shadowBlur = 0;
-
-  // Label
-  if(!isEdit) {
-    const {cx, cy, sc} = fInfo(b);
-    const fontSize = Math.round(13*sc*ss);
-    ctx.fillStyle = `rgba(255,255,255,${alpha})`;
-    ctx.font = `600 ${fontSize}px 'IBM Plex Mono', monospace`;
-    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    const lines = b.label.split('\n');
-    const lh = fontSize * 1.3;
-    const startY = cy - ((lines.length-1)*lh)/2;
-    lines.forEach((line, i) => ctx.fillText(line, cx, startY + i*lh));
-    // depth badge
-    ctx.fillStyle = `rgba(${r},${g},${bl},${alpha*0.5})`;
-    ctx.font = `${Math.round(10*sc*ss)}px 'IBM Plex Mono', monospace`;
-    const baselineOff = lines.length*lh/2 + 12;
-    ctx.fillText(`z${Math.round((1-b.z/Z_MAX)*10)}`, cx, cy+baselineOff);
-  }
-
-  // Info icon
-  const {x:ix, y:iy, r:ir} = iconPos(b);
-  // (recompute with scale)
-  const {maxX,minY,sc:scI} = fInfo(b);
-  const irS = Math.max(7,8*scI*ss);
-  const ixS = maxX-irS-2, iyS = minY+irS+2;
-  const hasDesc = b.desc && b.desc.trim().length > 0;
-  const isDescOpen = descBlock && descBlock.id === b.id;
-  ctx.beginPath(); ctx.arc(ixS, iyS, irS, 0, Math.PI*2);
-  ctx.fillStyle = isDescOpen ? `rgba(${r},${g},${bl},0.9)` :
-                  hasDesc    ? `rgba(${r},${g},${bl},0.22)` :
-                               `rgba(${r},${g},${bl},0.06)`;
-  ctx.fill();
-  ctx.strokeStyle = `rgba(${r},${g},${bl},${alpha*0.5})`; ctx.lineWidth=0.5; ctx.stroke();
-  ctx.fillStyle   = isDescOpen ? '#000' : `rgba(255,255,255,${alpha*0.75})`;
-  ctx.font = `500 ${Math.round(irS*1.1)}px 'IBM Plex Mono', monospace`;
-  ctx.textAlign='center'; ctx.textBaseline='middle';
-  ctx.fillText('i', ixS, iyS+0.5);
-
-  // Delete mode marker
-  if(mode==='delete') {
-    const {cx,cy,sc} = fInfo(b);
-    ctx.fillStyle = 'rgba(255,80,100,0.85)';
-    ctx.font = `${Math.round(13*sc)}px sans-serif`;
-    ctx.textAlign='center';
-    ctx.fillText('×', cx-32*sc, cy-15*sc);
-  }
+  const{maxX,minY,sc:scI}=fInfo(b),irS=Math.max(7,8*scI*ss),ixS=maxX-irS-2,iyS=minY+irS+2;
+  const hasDesc=b.desc&&b.desc.trim().length>0,isDescOpen=descBlock&&descBlock.id===b.id;
+  ctx.beginPath();ctx.arc(ixS,iyS,irS,0,Math.PI*2);
+  ctx.fillStyle=isDescOpen?`rgba(${r},${g},${bl},0.9)`:hasDesc?`rgba(${r},${g},${bl},0.22)`:`rgba(${r},${g},${bl},0.06)`;
+  ctx.fill();ctx.strokeStyle=`rgba(${r},${g},${bl},${alpha*.5})`;ctx.lineWidth=.5;ctx.stroke();
+  ctx.fillStyle=isDescOpen?'#000':`rgba(255,255,255,${alpha*.75})`;
+  ctx.font=`500 ${Math.round(irS*1.1)}px 'IBM Plex Mono',monospace`;ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText('i',ixS,iyS+.5);
+  if(mode==='delete'){const{cx,cy,sc}=fInfo(b);ctx.fillStyle='rgba(255,80,100,0.85)';ctx.font=`${Math.round(13*sc)}px sans-serif`;ctx.textAlign='center';ctx.fillText('×',cx-32*sc,cy-15*sc);}
 }
 
 // ── Connection toggle ─────────────────────────────────────────
-function toggleConn(a, b2) {
-  const from=a.id, to=b2.id;
-  const ex = connections.find(c=>(c.from===from&&c.to===to)||(c.from===to&&c.to===from));
-  if(ex) { connections=connections.filter(c=>!((c.from===from&&c.to===to)||(c.from===to&&c.to===from))); showToast(`${a.label} ↔ ${b2.label} desligados`); }
-  else   { connections.push({from,to}); showToast(`${a.label} ↔ ${b2.label} ligados`); }
+function toggleConn(a,b2){
+  const from=a.id,to=b2.id,ex=connections.find(c=>(c.from===from&&c.to===to)||(c.from===to&&c.to===from));
+  if(ex){connections=connections.filter(c=>!((c.from===from&&c.to===to)||(c.from===to&&c.to===from)));showToast(`${a.label} ↔ ${b2.label} desligados`);}
+  else{connections.push({from,to});showToast(`${a.label} ↔ ${b2.label} ligados`);}
   saveState();
 }
 
 // ── Hit tests ─────────────────────────────────────────────────
-function hitTest(mx, my) {
-  const sorted = [...blocks].sort((a,b)=>a.z-b.z);
-  for(const b of sorted) {
-    const {f}=corners(b), pf=f.map(p=>project(p.x,p.y,p.z));
-    if(pip(mx,my,pf.map(p=>({x:p.px,y:p.py})))) return b;
-  }
-  return null;
-}
-function hitIcon(mx, my) {
-  for(const b of blocks) {
-    const {maxX,minY,sc}=fInfo(b), r=Math.max(7,8*sc);
-    if(Math.hypot(mx-(maxX-r-2), my-(minY+r+2)) <= r+4) return b;
-  }
-  return null;
-}
-function pip(px,py,poly) {
-  let inside=false;
-  for(let i=0,j=poly.length-1;i<poly.length;j=i++){
-    const xi=poly[i].x,yi=poly[i].y,xj=poly[j].x,yj=poly[j].y;
-    if(((yi>py)!==(yj>py))&&(px<(xj-xi)*(py-yi)/(yj-yi)+xi)) inside=!inside;
-  }
-  return inside;
-}
+function hitTest(mx,my){ const sorted=[...blocks].sort((a,b)=>a.z-b.z); for(const b of sorted){const{f}=corners(b),pf=f.map(p=>project(p.x,p.y,p.z));if(pip(mx,my,pf.map(p=>({x:p.px,y:p.py})))) return b;} return null; }
+function hitIcon(mx,my){ for(const b of blocks){const{maxX,minY,sc}=fInfo(b),r=Math.max(7,8*sc);if(Math.hypot(mx-(maxX-r-2),my-(minY+r+2))<=r+4) return b;} return null; }
+function pip(px,py,poly){ let inside=false; for(let i=0,j=poly.length-1;i<poly.length;j=i++){const xi=poly[i].x,yi=poly[i].y,xj=poly[j].x,yj=poly[j].y;if(((yi>py)!==(yj>py))&&(px<(xj-xi)*(py-yi)/(yj-yi)+xi))inside=!inside;} return inside; }
 
 // ── Mouse events ──────────────────────────────────────────────
-let mouseDownBlock=null, mouseDownX=0, mouseDownY=0;
-
-canvas.addEventListener('mousemove', e => {
-  const r=canvas.getBoundingClientRect(), mx=e.clientX-r.left, my=e.clientY-r.top;
-  hovered=hitTest(mx,my);
-  canvas.style.cursor = dragBlock ? 'grabbing' : (hitIcon(mx,my)||hovered) ? 'pointer' : 'default';
-  if(dragBlock){ dragBlock.x=mx-dragOX; dragBlock.y=my-dragOY; dragMoved=true; if(descBlock) repositionDesc(); }
+let mouseDownBlock=null,mouseDownX=0,mouseDownY=0;
+canvas.addEventListener('mousemove',e=>{
+  const rc=canvas.getBoundingClientRect(),mx=e.clientX-rc.left,my=e.clientY-rc.top;
+  hovered=hitTest(mx,my);canvas.style.cursor=dragBlock?'grabbing':(hitIcon(mx,my)||hovered)?'pointer':'default';
+  if(dragBlock){dragBlock.x=mx-dragOX;dragBlock.y=my-dragOY;dragMoved=true;if(descBlock)repositionDesc();}
   draw();
 });
-
-canvas.addEventListener('mousedown', e => {
+canvas.addEventListener('mousedown',e=>{
   if(editingBlock) return;
-  const r=canvas.getBoundingClientRect(), mx=e.clientX-r.left, my=e.clientY-r.top;
-  mouseDownX=mx; mouseDownY=my; dragMoved=false;
+  const rc=canvas.getBoundingClientRect(),mx=e.clientX-rc.left,my=e.clientY-rc.top;
+  mouseDownX=mx;mouseDownY=my;dragMoved=false;
   const ib=hitIcon(mx,my);
-  if(descBlock && !ib) closeDescPanel();
-  if(ib && mode==='none'){
-    mouseDownBlock=null;
-    if(descBlock&&descBlock.id===ib.id) closeDescPanel(); else { closeDescPanel(); openDescPanel(ib); }
-    return;
-  }
-  const b=hitTest(mx,my);
-  mouseDownBlock=b;
-  if(mode==='add'){ if(blocks.length<MAX) openModal(mx,my); return; }
-  if(mode==='delete'&&b){ deleteBlock(b); mouseDownBlock=null; return; }
-  if(b){ selected=b; dragBlock=b; dragOX=mx-b.x; dragOY=my-b.y; canvas.style.cursor='grabbing'; }
-  else  { selected=null; pendingConn=null; }
+  if(descBlock&&!ib) closeDescPanel();
+  if(ib&&mode==='none'){mouseDownBlock=null;if(descBlock&&descBlock.id===ib.id)closeDescPanel();else{closeDescPanel();openDescPanel(ib);}return;}
+  const b=hitTest(mx,my);mouseDownBlock=b;
+  if(mode==='add'){if(blocks.length<MAX)openModal(mx,my);return;}
+  if(mode==='delete'&&b){deleteBlock(b);mouseDownBlock=null;return;}
+  if(b){selected=b;dragBlock=b;dragOX=mx-b.x;dragOY=my-b.y;canvas.style.cursor='grabbing';}
+  else{selected=null;pendingConn=null;}
   draw();
 });
-
-canvas.addEventListener('mouseup', e => {
-  const r=canvas.getBoundingClientRect(), mx=e.clientX-r.left, my=e.clientY-r.top;
-  const isClick = Math.hypot(mx-mouseDownX, my-mouseDownY) < 5;
-  if(isClick && mouseDownBlock && mode==='none') {
+canvas.addEventListener('mouseup',e=>{
+  const rc=canvas.getBoundingClientRect(),mx=e.clientX-rc.left,my=e.clientY-rc.top;
+  const isClick=Math.hypot(mx-mouseDownX,my-mouseDownY)<5;
+  if(isClick&&mouseDownBlock&&mode==='none'){
     const b=mouseDownBlock;
-    if(pendingConn){
-      if(pendingConn.id===b.id){ pendingConn=null; showToast('seleção de conexão cancelada'); }
-      else { toggleConn(pendingConn, b); pendingConn=null; selected=b; }
-    } else { pendingConn=b; selected=b; }
+    if(pendingConn){if(pendingConn.id===b.id){pendingConn=null;showToast('seleção de conexão cancelada');}else{toggleConn(pendingConn,b);pendingConn=null;selected=b;}}
+    else{pendingConn=b;selected=b;}
   }
-  if(!isClick || !mouseDownBlock) { if(!mouseDownBlock) pendingConn=null; }
+  if(!isClick||!mouseDownBlock){if(!mouseDownBlock)pendingConn=null;}
   if(dragMoved) saveState();
-  dragBlock=null; dragMoved=false; mouseDownBlock=null;
-  canvas.style.cursor=hovered?'pointer':'default';
-  draw();
+  dragBlock=null;dragMoved=false;mouseDownBlock=null;canvas.style.cursor=hovered?'pointer':'default';draw();
 });
-
-canvas.addEventListener('dblclick', e => {
-  const r=canvas.getBoundingClientRect();
-  const b=hitTest(e.clientX-r.left, e.clientY-r.top);
-  if(!b||mode!=='none') return;
-  e.preventDefault(); pendingConn=null; dragBlock=null; openEditor(b);
+canvas.addEventListener('dblclick',e=>{
+  const rc=canvas.getBoundingClientRect(),b=hitTest(e.clientX-rc.left,e.clientY-rc.top);
+  if(!b||mode!=='none') return; e.preventDefault();pendingConn=null;dragBlock=null;openEditor(b);
 });
-
-canvas.addEventListener('wheel', e => {
-  e.preventDefault();
-  const r=canvas.getBoundingClientRect();
-  const b=hitTest(e.clientX-r.left, e.clientY-r.top)||selected;
-  if(!b) return;
-  b.z = Math.max(0, Math.min(Z_MAX, b.z + e.deltaY*(e.deltaY<0?0.6:0.25)));
-  if(descBlock&&descBlock.id===b.id) repositionDesc();
-  draw();
-}, {passive:false});
-
-document.addEventListener('keydown', e => {
+canvas.addEventListener('wheel',e=>{
+  e.preventDefault();const rc=canvas.getBoundingClientRect(),b=hitTest(e.clientX-rc.left,e.clientY-rc.top)||selected;
+  if(!b) return; b.z=Math.max(0,Math.min(Z_MAX,b.z+e.deltaY*(e.deltaY<0?.6:.25)));
+  if(descBlock&&descBlock.id===b.id)repositionDesc();draw();
+},{passive:false});
+document.addEventListener('keydown',e=>{
   if(editingBlock||document.activeElement===document.getElementById('desc-textarea')) return;
-  if(e.key==='Escape'){ pendingConn=null; draw(); return; }
+  if(e.key==='Escape'){pendingConn=null;draw();return;}
   if(!selected) return;
   const m={'ArrowLeft':[-10,0],'ArrowRight':[10,0],'ArrowUp':[0,-10],'ArrowDown':[0,10]};
-  if(m[e.key]){ selected.x+=m[e.key][0]; selected.y+=m[e.key][1]; if(descBlock) repositionDesc(); draw(); return; }
-  if(e.key==='+'||e.key==='='){ selected.z=Math.max(0,selected.z-20); draw(); }
-  if(e.key==='-'){              selected.z=Math.min(Z_MAX,selected.z+20); draw(); }
-  if(e.key==='Delete'||e.key==='Backspace'){ deleteBlock(selected); selected=null; pendingConn=null; }
+  if(m[e.key]){selected.x+=m[e.key][0];selected.y+=m[e.key][1];if(descBlock)repositionDesc();draw();return;}
+  if(e.key==='+'||e.key==='='){selected.z=Math.max(0,selected.z-20);draw();}
+  if(e.key==='-'){selected.z=Math.min(Z_MAX,selected.z+20);draw();}
+  if(e.key==='Delete'||e.key==='Backspace'){deleteBlock(selected);selected=null;pendingConn=null;}
 });
 
 // ── Inline editor ─────────────────────────────────────────────
-function openEditor(b) {
-  editingBlock=b; selected=b;
-  const {minX,maxX,minY,maxY,cx,cy,sc}=fInfo(b);
-  const fontSize=Math.max(12,Math.round(13*sc));
-  const lh=Math.round(fontSize*1.4);
-  const lines=b.label.split('\n').length;
-  const baseW=Math.max(100,(maxX-minX)*1.2);
-  const baseH=Math.max(40,(maxY-minY)*0.8);
-  const neededH=Math.max(baseH,lines*lh+12);
-  editor.style.cssText=[
-    'display:block',`left:${cx-baseW/2}px`,`top:${cy-neededH/2}px`,
-    `width:${baseW}px`,`height:${neededH}px`,`font-size:${fontSize}px`
-  ].join(';');
-  editor.value=b.label; draw();
-  setTimeout(()=>{ editor.focus(); editor.select(); },20);
+function openEditor(b){
+  editingBlock=b;selected=b;
+  const{minX,maxX,minY,maxY,cx,cy,sc}=fInfo(b),fs=Math.max(12,Math.round(13*sc)),lh=Math.round(fs*1.4);
+  const lines=b.label.split('\n').length,bW=Math.max(100,(maxX-minX)*1.2),bH=Math.max(40,(maxY-minY)*.8),nH=Math.max(bH,lines*lh+12);
+  editor.style.cssText=['display:block',`left:${cx-bW/2}px`,`top:${cy-nH/2}px`,`width:${bW}px`,`height:${nH}px`,`font-size:${fs}px`].join(';');
+  editor.value=b.label;draw();setTimeout(()=>{editor.focus();editor.select();},20);
 }
-function closeEditor(save) {
+function closeEditor(save){
   if(!editingBlock) return;
-  if(save){ const v=editor.value.trim(); if(v.length>0) editingBlock.label=v; saveState(); }
-  editingBlock=null; editor.style.display='none'; draw();
-  if(descBlock) document.getElementById('desc-block-name').textContent=descBlock.label.replace(/\n/g,' ');
+  if(save){const v=editor.value.trim();if(v.length>0)editingBlock.label=v;saveState();}
+  editingBlock=null;editor.style.display='none';draw();
+  if(descBlock)document.getElementById('desc-block-name').textContent=descBlock.label.replace(/\n/g,' ');
 }
-editor.addEventListener('keydown', e => {
-  if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); closeEditor(true); }
-  if(e.key==='Escape'){ e.preventDefault(); closeEditor(false); }
-  e.stopPropagation();
-});
-editor.addEventListener('blur', ()=>closeEditor(true));
+editor.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();closeEditor(true);}if(e.key==='Escape'){e.preventDefault();closeEditor(false);}e.stopPropagation();});
+editor.addEventListener('blur',()=>closeEditor(true));
 
 // ── Description panel ─────────────────────────────────────────
-function openDescPanel(b) {
-  descBlock=b;
-  document.getElementById('desc-block-name').textContent=b.label.replace(/\n/g,' ');
-  setDescRead(b); repositionDesc(); descPanel.style.display='block'; draw();
-}
-function repositionDesc() {
+function openDescPanel(b){descBlock=b;document.getElementById('desc-block-name').textContent=b.label.replace(/\n/g,' ');setDescRead(b);repositionDesc();descPanel.style.display='block';draw();}
+function repositionDesc(){
   if(!descBlock) return;
-  const {maxX,minY,sc}=fInfo(descBlock), r=Math.max(7,8*sc);
-  const ix=maxX-r-2, iy=minY+r+2;
-  const pw=215, ph=140;
-  let l=ix+14, t=iy-22;
-  if(l+pw>W-10) l=ix-pw-14;
-  if(t+ph>H-10) t=H-ph-10;
-  if(t<4) t=4;
-  descPanel.style.left=l+'px'; descPanel.style.top=t+'px';
+  const{maxX,minY,sc}=fInfo(descBlock),r=Math.max(7,8*sc),ix=maxX-r-2,iy=minY+r+2,pw=215,ph=140;
+  let l=ix+14,t=iy-22;if(l+pw>W-10)l=ix-pw-14;if(t+ph>H-10)t=H-ph-10;if(t<4)t=4;
+  descPanel.style.left=l+'px';descPanel.style.top=t+'px';
 }
-function setDescRead(b) {
-  const dt=document.getElementById('desc-text'),ta=document.getElementById('desc-textarea');
-  const sb=document.getElementById('desc-save-btn'),eb=document.getElementById('desc-edit-btn');
-  const c=b&&b.desc&&b.desc.trim();
-  dt.textContent=c||'sem descrição'; dt.className=c?'':'empty';
-  dt.style.display='block'; ta.style.display='none'; sb.style.display='none'; eb.textContent='editar';
+function setDescRead(b){
+  const dt=document.getElementById('desc-text'),ta=document.getElementById('desc-textarea'),sb=document.getElementById('desc-save-btn'),eb=document.getElementById('desc-edit-btn');
+  const c=b&&b.desc&&b.desc.trim();dt.textContent=c||'sem descrição';dt.className=c?'':'empty';
+  dt.style.display='block';ta.style.display='none';sb.style.display='none';eb.textContent='editar';
 }
-function toggleDescEdit() {
+function toggleDescEdit(){
   if(!descBlock) return;
-  const dt=document.getElementById('desc-text'),ta=document.getElementById('desc-textarea');
-  const sb=document.getElementById('desc-save-btn'),eb=document.getElementById('desc-edit-btn');
-  if(ta.style.display==='none'){
-    ta.value=descBlock.desc||''; dt.style.display='none'; ta.style.display='block';
-    sb.style.display='block'; eb.textContent='cancelar'; ta.focus();
-  } else setDescRead(descBlock);
+  const dt=document.getElementById('desc-text'),ta=document.getElementById('desc-textarea'),sb=document.getElementById('desc-save-btn'),eb=document.getElementById('desc-edit-btn');
+  if(ta.style.display==='none'){ta.value=descBlock.desc||'';dt.style.display='none';ta.style.display='block';sb.style.display='block';eb.textContent='cancelar';ta.focus();}
+  else setDescRead(descBlock);
 }
-function saveDesc() {
-  if(!descBlock) return;
-  descBlock.desc=document.getElementById('desc-textarea').value.trim();
-  setDescRead(descBlock); draw(); saveState();
-}
-function closeDescPanel() { descBlock=null; descPanel.style.display='none'; draw(); }
-document.getElementById('desc-textarea').addEventListener('keydown', e=>{ if(e.key==='Escape') setDescRead(descBlock); e.stopPropagation(); });
+function saveDesc(){if(!descBlock) return;descBlock.desc=document.getElementById('desc-textarea').value.trim();setDescRead(descBlock);draw();saveState();}
+function closeDescPanel(){descBlock=null;descPanel.style.display='none';draw();}
+document.getElementById('desc-textarea').addEventListener('keydown',e=>{if(e.key==='Escape')setDescRead(descBlock);e.stopPropagation();});
 
 // ── Toolbar ───────────────────────────────────────────────────
-function startAdd()    { closeEditor(true); closeDescPanel(); if(blocks.length>=MAX){updateStatus();return;} mode='add'; setActiveBtn('btn-add'); updateStatus(); }
-function startDelete() { closeEditor(true); closeDescPanel(); mode='delete'; setActiveBtn('btn-delete'); updateStatus(); }
-function resetMode()   { closeEditor(true); closeDescPanel(); mode='none'; selected=null; pendingConn=null; setActiveBtn(null); draw(); updateStatus(); }
-function setActiveBtn(id) { ['btn-add','btn-delete'].forEach(b=>document.getElementById(b)?.classList.remove('active')); if(id) document.getElementById(id)?.classList.add('active'); }
-function updateStatus() { document.getElementById('status').textContent=`${blocks.length} / ${MAX}${mode!=='none'?' · '+mode:''}`; }
+function startAdd(){ closeEditor(true);closeDescPanel();if(blocks.length>=MAX){updateStatus();return;}mode='add';setActiveBtn('btn-add');updateStatus(); }
+function startDelete(){ closeEditor(true);closeDescPanel();mode='delete';setActiveBtn('btn-delete');updateStatus(); }
+function resetMode(){ closeEditor(true);closeDescPanel();mode='none';selected=null;pendingConn=null;setActiveBtn(null);draw();updateStatus(); }
+function setActiveBtn(id){ ['btn-add','btn-delete'].forEach(b=>document.getElementById(b)?.classList.remove('active'));if(id)document.getElementById(id)?.classList.add('active'); }
+function updateStatus(){ document.getElementById('status').textContent=`${blocks.length} / ${MAX}${mode!=='none'?' · '+mode:''}`; }
 
-// ── Modal ─────────────────────────────────────────────────────
-let pX, pY;
-function openModal(x,y) {
-  pX=x; pY=y;
-  const sel=document.getElementById('connect-select');
-  sel.innerHTML='<option value="">— sem conexão —</option>';
-  blocks.forEach(b=>{ const o=document.createElement('option'); o.value=b.id; o.textContent=b.label; sel.appendChild(o); });
+// ── New block modal ───────────────────────────────────────────
+let pX,pY;
+function openModal(x,y){
+  pX=x;pY=y;
+  const sel=document.getElementById('connect-select');sel.innerHTML='<option value="">— sem conexão —</option>';
+  blocks.forEach(b=>{const o=document.createElement('option');o.value=b.id;o.textContent=b.label;sel.appendChild(o);});
   document.getElementById('new-label').value='';
   document.getElementById('modal-overlay').classList.add('show');
   setTimeout(()=>document.getElementById('new-label').focus(),50);
 }
-function closeModal() { document.getElementById('modal-overlay').classList.remove('show'); mode='none'; setActiveBtn(null); updateStatus(); }
-function confirmCreate() { const raw=document.getElementById('new-label').value.trim(); const cid=document.getElementById('connect-select').value; createBlock(pX,pY,cid||null,raw); closeModal(); }
-document.getElementById('new-label').addEventListener('keydown', e=>{
-  if(e.key==='Enter') confirmCreate();
-  if(e.key==='Escape') closeModal();
-  e.stopPropagation();
-});
+function closeModal(){ document.getElementById('modal-overlay').classList.remove('show');mode='none';setActiveBtn(null);updateStatus(); }
+function confirmCreate(){ const raw=document.getElementById('new-label').value.trim(),cid=document.getElementById('connect-select').value;createBlock(pX,pY,cid||null,raw);closeModal(); }
+document.getElementById('new-label').addEventListener('keydown',e=>{if(e.key==='Enter')confirmCreate();if(e.key==='Escape')closeModal();e.stopPropagation();});
 
-function createBlock(_,__,cid,lbl) {
-  const centerX=W?W/2:300, centerY=H?H/2:300;
-  idCounter++;
+function createBlock(_,__,cid,lbl){
+  const centerX=W?W/2:300,centerY=H?H/2:300;idCounter++;
   const b={id:idCounter,label:lbl&&lbl.length?lbl:`B${idCounter}`,desc:'',x:centerX,y:centerY,z:0,w:90,h:56,zScale:1};
   blocks.push(b);
-  if(cid){ const to=parseInt(cid); if(!connections.find(c=>(c.from===b.id&&c.to===to)||(c.from===to&&c.to===b.id))) connections.push({from:b.id,to}); }
-  selected=b; mode='none'; setActiveBtn(null); updateStatus();
-  triggerSpawn(b.id);
-  saveState();
+  if(cid){const to=parseInt(cid);if(!connections.find(c=>(c.from===b.id&&c.to===to)||(c.from===to&&c.to===b.id)))connections.push({from:b.id,to});}
+  selected=b;mode='none';setActiveBtn(null);updateStatus();triggerSpawn(b.id);saveState();
 }
-
-function deleteBlock(b) {
-  connections=connections.filter(c=>c.from!==b.id&&c.to!==b.id);
-  blocks=blocks.filter(bl=>bl.id!==b.id);
-  if(selected&&selected.id===b.id)   selected=null;
-  if(pendingConn&&pendingConn.id===b.id) pendingConn=null;
-  if(descBlock&&descBlock.id===b.id)  closeDescPanel();
-  draw(); updateStatus(); saveState();
+function deleteBlock(b){
+  connections=connections.filter(c=>c.from!==b.id&&c.to!==b.id);blocks=blocks.filter(bl=>bl.id!==b.id);
+  if(selected&&selected.id===b.id)selected=null;if(pendingConn&&pendingConn.id===b.id)pendingConn=null;
+  if(descBlock&&descBlock.id===b.id)closeDescPanel();draw();updateStatus();saveState();
 }
 
 // ── Init ──────────────────────────────────────────────────────
 setTimeout(()=>{
-  W=wrap.clientWidth; H=wrap.clientHeight; canvas.width=W; canvas.height=H;
-  if(!loadState()) {
-    [{x:W*.35,y:H*.40,z:0,   label:'Ideias',  desc:'Brainstorming e pensamentos criativos a explorar.'},
-     {x:W*.60,y:H*.50,z:80,  label:'Tarefas', desc:'Ações concretas e compromissos a realizar.'},
-     {x:W*.45,y:H*.70,z:160, label:'Metas',   desc:'Objetivos de longo prazo e visão de futuro.'}]
-    .forEach(d=>{ idCounter++; blocks.push({id:idCounter,label:d.label,desc:d.desc,x:d.x,y:d.y,z:d.z,w:90,h:56,zScale:1}); });
+  W=wrap.clientWidth;H=wrap.clientHeight;canvas.width=W;canvas.height=H;
+  if(!loadState()){
+    [{x:W*.50,y:H*.375,z:0,label:'Ideias',desc:'Brainstorming e pensamentos criativos a explorar.'},
+     {x:W*.375,y:H*.625,z:80,label:'Tarefas',desc:'Ações concretas e compromissos a realizar.'},
+     {x:W*.625,y:H*.625,z:160,label:'Metas',desc:'Objetivos de longo prazo e visão de futuro.'}]
+    .forEach(d=>{idCounter++;blocks.push({id:idCounter,label:d.label,desc:d.desc,x:d.x,y:d.y,z:d.z,w:90,h:56,zScale:1});});
     connections.push({from:1,to:2},{from:2,to:3});
   }
-  updateStatus(); draw();
-}, 120);
+  updateStatus();draw();
+},120);
 </script>
 </body>
 </html>
