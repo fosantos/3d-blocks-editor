@@ -351,7 +351,6 @@ function resize() { W=wrap.clientWidth; H=wrap.clientHeight; canvas.width=W; can
 const ro = new ResizeObserver(resize); ro.observe(wrap);
 
 const MAX=15, PERSP=600, ZOOM=1.7, Z_MAX=400;
-const DEFAULT_W=90, DEFAULT_H=56;
 const DEFAULT_W = 90, DEFAULT_H = 56;
 
 const PALETTE=[
@@ -517,7 +516,6 @@ function corners(b){
   ];
   return {f, bk: f.map(p => ({...p, z: p.z + 40}))};
 }
-function getBlockBounds(b){ const hw=b.w/2,hh=b.h/2; return { left:b.x-hw, right:b.x+hw, top:b.y-hh, bottom:b.y+hh }; }
 function fInfo(b){ const {f}=corners(b),pf=f.map(p=>project(p.x,p.y,p.z)); const cx=pf.reduce((s,p)=>s+p.px,0)/4,cy=pf.reduce((s,p)=>s+p.py,0)/4; return{pf,cx,cy,sc:pf[0].scale,minX:Math.min(...pf.map(p=>p.px)),maxX:Math.max(...pf.map(p=>p.px)),minY:Math.min(...pf.map(p=>p.py)),maxY:Math.max(...pf.map(p=>p.py))}; }
 function iconPos(b){ const{maxX,minY,sc}=fInfo(b),r=Math.max(7,8*sc); return{x:maxX-r-2,y:minY+r+2,r}; }
 
