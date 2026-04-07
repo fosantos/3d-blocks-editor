@@ -444,7 +444,7 @@ let hovered=null, editingBlock=null, descBlock=null;
 let idCounter=0, toastTimer=null;
 
 // ── Persistence ───────────────────────────────────────────────
-const STORAGE_KEY='3d-blocks-editor-state';
+const STORAGE_KEY='neurodrift-state';
 function saveState(){
   try{ localStorage.setItem(STORAGE_KEY,JSON.stringify({blocks:blocks.map(b=>({...b})),connections:[...connections],idCounter})); }catch(e){}
 }
@@ -530,7 +530,7 @@ function downloadExportJSON(){
   const blob = new Blob([json], {type:'application/json'});
   const url  = URL.createObjectURL(blob);
   const a    = document.createElement('a');
-  a.href = url; a.download = `3d-blocks-${date}.json`;
+  a.href = url; a.download = `neurodrift-${date}.json`;
   a.click(); URL.revokeObjectURL(url);
   showToast('ficheiro descarregado ✓');
 }
