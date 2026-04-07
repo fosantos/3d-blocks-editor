@@ -351,6 +351,8 @@ function resize() { W=wrap.clientWidth; H=wrap.clientHeight; canvas.width=W; can
 const ro = new ResizeObserver(resize); ro.observe(wrap);
 
 const MAX=15, PERSP=600, ZOOM=1.7, Z_MAX=400;
+const DEFAULT_W=90, DEFAULT_H=56;
+const DEFAULT_W = 90, DEFAULT_H = 56;
 
 const PALETTE=[
   [91,143,255],[80,220,170],[180,120,255],
@@ -494,7 +496,7 @@ function confirmImport(){
 
   // Apply
   closeEditor(true); closeDescPanel();
-  blocks      = payload.blocks.map(b=>({w:90,h:56,zScale:1,...b}));
+  blocks      = payload.blocks.map(b=>({w:DEFAULT_W,h:DEFAULT_H,zScale:1,...b}));
   connections = Array.isArray(payload.connections) ? payload.connections : [];
   idCounter   = payload.idCounter || blocks.reduce((m,b)=>Math.max(m,b.id||0),0);
   selected=null; pendingConn=null; mode='none'; descBlock=null;
@@ -505,7 +507,17 @@ function confirmImport(){
 
 // ── Projection ────────────────────────────────────────────────
 function project(x,y,z){ const s=PERSP/(PERSP+z),sc=s*ZOOM; return{px:W/2+(x-W/2)*sc,py:H/2+(y-H/2)*sc,scale:sc}; }
-function corners(b){ const hw=b.w/2,hh=b.h/2; const f=[{x:b.x-hw,y:b.y-hh,z:b.z},{x:b.x+hw,y:b.y-hh,z:b.z},{x:b.x+hw,y:b.y+hh,z:b.z},{x:b.x-hw,y:b.y+hh,z:b.z}]; return{f,bk:f.map(p=>({...p,z:p.z+40}))}; }
+function corners(b){
+  const {left, right, top, bottom} = getBlockBounds(b);
+  const f = [
+    {x: left, y: top, z: b.z},
+    {x: right, y: top, z: b.z},
+    {x: right, y: bottom, z: b.z},
+    {x: left, y: bottom, z: b.z}
+  ];
+  return {f, bk: f.map(p => ({...p, z: p.z + 40}))};
+}
+function getBlockBounds(b){ const hw=b.w/2,hh=b.h/2; return { left:b.x-hw, right:b.x+hw, top:b.y-hh, bottom:b.y+hh }; }
 function fInfo(b){ const {f}=corners(b),pf=f.map(p=>project(p.x,p.y,p.z)); const cx=pf.reduce((s,p)=>s+p.px,0)/4,cy=pf.reduce((s,p)=>s+p.py,0)/4; return{pf,cx,cy,sc:pf[0].scale,minX:Math.min(...pf.map(p=>p.px)),maxX:Math.max(...pf.map(p=>p.px)),minY:Math.min(...pf.map(p=>p.py)),maxY:Math.max(...pf.map(p=>p.py))}; }
 function iconPos(b){ const{maxX,minY,sc}=fInfo(b),r=Math.max(7,8*sc); return{x:maxX-r-2,y:minY+r+2,r}; }
 
@@ -709,38 +721,46 @@ document.getElementById('desc-textarea').addEventListener('keydown',e=>{if(e.key
 function startAdd(){ closeEditor(true);closeDescPanel();if(blocks.length>=MAX){updateStatus();return;}mode='add';setActiveBtn('btn-add');updateStatus(); }
 function startDelete(){ closeEditor(true);closeDescPanel();mode='delete';setActiveBtn('btn-delete');updateStatus(); }
 function resetMode(){ closeEditor(true);closeDescPanel();mode='none';selected=null;pendingConn=null;setActiveBtn(null);draw();updateStatus(); }
+
+function getBlockBounds(b){
+  const halfW = b.w / 2;
+  const halfH = b.h / 2;
+  return {
+    left: b.x - halfW,
+    right: b.x + halfW,
+    top: b.y - halfH,
+    bottom: b.y + halfH
+  };
+}
+
 function realignBlocks(){
   if(blocks.length === 0) return;
 
-  // Calcular bounding box de todos os blocos
   let minX = Infinity, maxX = -Infinity;
   let minY = Infinity, maxY = -Infinity;
 
   for(const b of blocks){
-    const left = b.x - b.w/2;
-    const right = b.x + b.w/2;
-    const top = b.y - b.h/2;
-    const bottom = b.y + b.h/2;
-
+    const {left, right, top, bottom} = getBlockBounds(b);
     minX = Math.min(minX, left);
     maxX = Math.max(maxX, right);
     minY = Math.min(minY, top);
     maxY = Math.max(maxY, bottom);
   }
 
-  // Centro atual da coleção
   const collectionCenterX = (minX + maxX) / 2;
   const collectionCenterY = (minY + maxY) / 2;
 
-  // Centro do canvas
   const targetCenterX = W / 2;
   const targetCenterY = H / 2;
 
-  // Translação necessária
   const offsetX = targetCenterX - collectionCenterX;
   const offsetY = targetCenterY - collectionCenterY;
 
-  // Aplicar translação a todos os blocos
+  if (offsetX === 0 && offsetY === 0) {
+    showToast('blocos já estão centralizados');
+    return;
+  }
+
   for(const b of blocks){
     b.x += offsetX;
     b.y += offsetY;
@@ -769,7 +789,7 @@ document.getElementById('new-label').addEventListener('keydown',e=>{if(e.key==='
 
 function createBlock(_,__,cid,lbl){
   const centerX=W?W/2:300,centerY=H?H/2:300;idCounter++;
-  const b={id:idCounter,label:lbl&&lbl.length?lbl:`B${idCounter}`,desc:'',x:centerX,y:centerY,z:0,w:90,h:56,zScale:1};
+  const b={id:idCounter,label:lbl&&lbl.length?lbl:`B${idCounter}`,desc:'',x:centerX,y:centerY,z:0,w:DEFAULT_W,h:DEFAULT_H,zScale:1};
   blocks.push(b);
   if(cid){const to=parseInt(cid);if(!connections.find(c=>(c.from===b.id&&c.to===to)||(c.from===to&&c.to===b.id)))connections.push({from:b.id,to});}
   selected=b;mode='none';setActiveBtn(null);updateStatus();triggerSpawn(b.id);saveState();
@@ -787,7 +807,7 @@ setTimeout(()=>{
     [{x:W*.50,y:H*.375,z:0,label:'Ideias',desc:'Brainstorming e pensamentos criativos a explorar.'},
      {x:W*.375,y:H*.625,z:80,label:'Tarefas',desc:'Ações concretas e compromissos a realizar.'},
      {x:W*.625,y:H*.625,z:160,label:'Metas',desc:'Objetivos de longo prazo e visão de futuro.'}]
-    .forEach(d=>{idCounter++;blocks.push({id:idCounter,label:d.label,desc:d.desc,x:d.x,y:d.y,z:d.z,w:90,h:56,zScale:1});});
+    .forEach(d=>{idCounter++;blocks.push({id:idCounter,label:d.label,desc:d.desc,x:d.x,y:d.y,z:d.z,w:DEFAULT_W,h:DEFAULT_H,zScale:1});});
     connections.push({from:1,to:2},{from:2,to:3});
   }
   updateStatus();draw();
