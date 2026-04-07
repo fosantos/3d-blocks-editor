@@ -411,7 +411,7 @@ let W, H;
 function resize() { W=wrap.clientWidth; H=wrap.clientHeight; canvas.width=W; canvas.height=H; draw(); }
 const ro = new ResizeObserver(resize); ro.observe(wrap);
 
-const MAX=15, PERSP=600, ZOOM=1.7, Z_MAX=400;
+const MAX=15, PERSP=600, ZOOM=2.0, Z_MAX=400;
 const DEFAULT_W = 90, DEFAULT_H = 56;
 
 const PALETTE=[
