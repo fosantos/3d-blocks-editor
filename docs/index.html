@@ -141,6 +141,36 @@ html, body { height: 100%; }
 .modal-btn.confirm { border-color:rgba(91,143,255,0.5); color:var(--accent); font-weight:600; background:rgba(91,143,255,0.08); }
 .modal-btn.confirm:hover { background:rgba(91,143,255,0.18); border-color:var(--accent); }
 
+/* ── About modal ────────────────────────────────────────────── */
+#about-overlay {
+  display:none; position:absolute; inset:0; background:rgba(3,5,15,0.82);
+  backdrop-filter:blur(5px); -webkit-backdrop-filter:blur(5px);
+  z-index:100; align-items:center; justify-content:center;
+}
+#about-overlay.show { display:flex; }
+
+#about-modal {
+  background:rgba(7,11,25,0.99); border:0.5px solid var(--border);
+  border-radius:13px; padding:24px; width:380px; color:var(--text);
+  box-shadow:0 24px 64px rgba(0,0,0,0.7), 0 0 0 0.5px rgba(80,120,240,0.1);
+  animation:modalIn 0.2s cubic-bezier(0.34,1.4,0.64,1);
+  max-height: 80vh; overflow-y: auto;
+}
+#about-modal h3 {
+  font-size:14px; font-weight:600; color:var(--accent); margin-bottom:20px;
+  letter-spacing:0.08em; text-transform:uppercase; display:flex; align-items:center; gap:8px;
+}
+#about-content {
+  font-size:13px; line-height:1.85; color:var(--text);
+  letter-spacing:0.03em;
+}
+#about-content p { margin-bottom:16px; }
+#about-content p:last-child { margin-bottom:0; }
+.about-credit {
+  margin-top:20px; padding-top:16px; border-top:0.5px solid var(--border);
+  font-size:11px; color:var(--text-dim); letter-spacing:0.05em;
+}
+
 /* ── Import/Export modal especial ──────────────────────────── */
 #io-modal-overlay {
   display:none; position:absolute; inset:0; background:rgba(3,5,15,0.82);
@@ -237,6 +267,13 @@ html, body { height: 100%; }
           <line x1="8" y1="4" x2="4" y2="8"/>
         </svg>
         Realinhar
+      </button>
+      <button class="tb-btn" id="btn-about" onclick="showAbout()">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="6" cy="6" r="4"/>
+          <path d="M6 5v2M6 10v-1M4 7c0-1.5 1-2.5 2-2.5s2 1 2 2.5"/>
+        </svg>
+        Sobre
       </button>
 
       <div class="tb-divider"></div>
@@ -335,7 +372,31 @@ html, body { height: 100%; }
       </div>
     </div>
 
+    <!-- About modal -->
+    <div id="about-overlay">
+      <div id="about-modal">
+        <h3>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M7 11c-3.314 0-6-2.686-6-6s2.686-6 6-6c.716 0 1.387.143 2 .397M7 11v-3M7 11l.5-3.5M7 11l-.5-3.5"/>
+            <circle cx="7" cy="7" r="3"/>
+          </svg>
+          Neurodrift
+        </h3>
+        <div id="about-content">
+          <p>A maioria das ferramentas de produtividade foi criada para mentes que pensam em linha reta. Listas, prazos, hierarquias — sistemas desenhados para um tipo de foco e função executiva que muitos de nós simplesmente não temos.</p>
+          <p><strong>Neurodrift</strong> foi criada de forma diferente. E não apenas para pessoas com TDAH — foi criada por pessoas com TDAH.</p>
+          <p>Sabemos o que é ter dez ideias ao mesmo tempo e não conseguir agarrar nenhuma. Conhecemos a frustração de abrir uma lista de tarefas e sentir que ela nos olha de volta com julgamento.</p>
+          <p>Por isso construímos algo diferente.</p>
+          <p>Neurodrift é um ambiente de pensamento espacial — uma tela tridimensional onde os teus pensamentos, compromissos e objetivos ganham a forma de blocos flutuantes, conectados não por estrutura rígida, mas por significado. Organizas-os da forma como a tua mente realmente funciona: por clusters, por espaço, por relação entre si.</p>
+          <p>Sem hierarquias obrigatórias. Sem pressão para ter a caixa de entrada em zero. Sem uma única forma "certa" de organizar.</p>
+          <p>Apenas os teus pensamentos, com forma e espaço para existir.</p>
+          <p class="about-credit">Feito por mentes que veem tudo ao mesmo tempo — para mentes que precisam de um lugar onde pousar.</p>
+        </div>
+      </div>
+    </div>
+
   </div>
+
 </div>
 
 <script>
@@ -418,6 +479,19 @@ function closeIOModal(){
   document.getElementById('io-import-box').classList.remove('error');
   document.getElementById('io-import-error').textContent='';
 }
+
+function showAbout(){
+  document.getElementById('about-overlay').classList.add('show');
+}
+
+function hideAbout(){
+  document.getElementById('about-overlay').classList.remove('show');
+}
+
+// Close about modal when clicking outside the modal
+document.getElementById('about-overlay').addEventListener('click', function(e){
+  if(e.target === this) hideAbout();
+});
 
 function switchIOTab(tab){
   document.getElementById('tab-export').classList.toggle('active', tab==='export');
