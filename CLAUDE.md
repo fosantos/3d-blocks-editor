@@ -4,11 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Single-file 3D block editor (`3d_blocks_editor_v6.html`) — an interactive canvas for creating, connecting, and arranging 3D-perspective blocks that represent architecture components. No build system, no dependencies — pure HTML + CSS + vanilla JS with Canvas 2D rendering.
+Single-file 3D block editor (`index.html`) — an interactive canvas for creating, connecting, and arranging 3D-perspective blocks that represent architecture components. No build system, no dependencies — pure HTML + CSS + vanilla JS with Canvas 2D rendering.
 
 ## Quick Start
 
-Open `3d_blocks_editor_v6.html` directly in any browser. No server needed.
+Open `index.html` directly in any browser. No server needed.
 
 ## Architecture
 

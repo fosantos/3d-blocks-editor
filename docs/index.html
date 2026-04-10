@@ -624,6 +624,14 @@ function confirmImport(){
 }
 
 // ── Projection ────────────────────────────────────────────────
+function getPF(b) {
+  const ss=spawnScale(b), cx0=b.x, cy0=b.y;
+  const {f} = corners(b);
+  return f.map(p => {
+    const pj = project(p.x, p.y, p.z);
+    return { px: cx0 + (pj.px - cx0) * ss, py: cy0 + (pj.py - cy0) * ss };
+  });
+}
 function project(x,y,z){ const s=PERSP/(PERSP+z),sc=s*ZOOM; return{px:W/2+(x-W/2)*sc,py:H/2+(y-H/2)*sc,scale:sc}; }
 function corners(b){
   const {left, right, top, bottom} = getBlockBounds(b);
@@ -644,8 +652,6 @@ function showToast(msg){ toastEl.textContent=msg; toastEl.style.display='block';
 // ── Draw ──────────────────────────────────────────────────────
 function draw(){
   ctx.clearRect(0,0,W,H);
-  ctx.fillStyle='rgba(50,80,180,0.13)';
-  for(let x=0;x<W;x+=32) for(let y=0;y<H;y+=32){ ctx.beginPath();ctx.arc(x,y,.9,0,Math.PI*2);ctx.fill(); }
 
   for(const c of connections){
     const a=blocks.find(b=>b.id===c.from),b2=blocks.find(b=>b.id===c.to); if(!a||!b2) continue;
@@ -664,6 +670,21 @@ function draw(){
     const pa=project(pendingConn.x,pendingConn.y,pendingConn.z+20),pb=project(hovered.x,hovered.y,hovered.z+20);
     ctx.beginPath();ctx.moveTo(pa.px,pa.py);ctx.lineTo(pb.px,pb.py);ctx.strokeStyle='rgba(120,170,255,0.25)';ctx.lineWidth=1;ctx.setLineDash([4,8]);ctx.stroke();ctx.setLineDash([]);
   }
+
+  // Masking connections inside blocks
+  ctx.save();
+  ctx.globalCompositeOperation = 'destination-out';
+  for(const b of blocks){
+    const pf=getPF(b);
+    ctx.beginPath(); ctx.moveTo(pf[0].px,pf[0].py);
+    pf.forEach((p,i)=>{if(i>0)ctx.lineTo(p.px,p.py);});
+    ctx.closePath(); ctx.fill();
+  }
+  ctx.restore();
+
+  ctx.fillStyle='rgba(50,80,180,0.13)';
+  for(let x=0;x<W;x+=32) for(let y=0;y<H;y+=32){ ctx.beginPath();ctx.arc(x,y,.9,0,Math.PI*2);ctx.fill(); }
+
   const sorted=[...blocks].sort((a,b)=>(b.z+20)-(a.z+20));
   for(const b of sorted) drawBlock(b);
 
@@ -689,7 +710,7 @@ function draw(){
 function drawBlock(b){
   const ss=spawnScale(b),cx0=b.x,cy0=b.y,[r,g,bl]=blockRGB(b);
   const {f,bk}=corners(b);
-  const pf=f.map(p=>{ const pj=project(p.x,p.y,p.z); return{px:cx0+(pj.px-cx0)*ss,py:cy0+(pj.py-cy0)*ss,scale:pj.scale}; });
+  const pf=getPF(b);
   const pb=bk.map(p=>{ const pj=project(p.x,p.y,p.z); return{px:cx0+(pj.px-cx0)*ss,py:cy0+(pj.py-cy0)*ss}; });
   const isSel=selected&&selected.id===b.id,isPend=pendingConn&&pendingConn.id===b.id;
   const isEdit=editingBlock&&editingBlock.id===b.id,isDesc=descBlock&&descBlock.id===b.id;
