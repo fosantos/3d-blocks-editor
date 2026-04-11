@@ -624,14 +624,6 @@ function confirmImport(){
 }
 
 // ── Projection ────────────────────────────────────────────────
-function getPF(b) {
-  const ss=spawnScale(b), cx0=b.x, cy0=b.y;
-  const {f} = corners(b);
-  return f.map(p => {
-    const pj = project(p.x, p.y, p.z);
-    return { px: cx0 + (pj.px - cx0) * ss, py: cy0 + (pj.py - cy0) * ss };
-  });
-}
 function project(x,y,z){ const s=PERSP/(PERSP+z),sc=s*ZOOM; return{px:W/2+(x-W/2)*sc,py:H/2+(y-H/2)*sc,scale:sc}; }
 function corners(b){
   const {left, right, top, bottom} = getBlockBounds(b);
@@ -652,39 +644,45 @@ function showToast(msg){ toastEl.textContent=msg; toastEl.style.display='block';
 // ── Draw ──────────────────────────────────────────────────────
 function draw(){
   ctx.clearRect(0,0,W,H);
-
-  for(const c of connections){
-    const a=blocks.find(b=>b.id===c.from),b2=blocks.find(b=>b.id===c.to); if(!a||!b2) continue;
-    const pa=project(a.x,a.y,a.z+20),pb=project(b2.x,b2.y,b2.z+20);
-    const grad=ctx.createLinearGradient(pa.px,pa.py,pb.px,pb.py);
-    const[ra,ga,ba]=blockRGB(a),[rb,gb,bb]=blockRGB(b2);
-    grad.addColorStop(0,`rgba(${ra},${ga},${ba},0.65)`); grad.addColorStop(1,`rgba(${rb},${gb},${bb},0.65)`);
-    ctx.beginPath();ctx.moveTo(pa.px,pa.py);ctx.lineTo(pb.px,pb.py);ctx.strokeStyle=grad;ctx.lineWidth=1.25;ctx.setLineDash([]);ctx.stroke();
-    const mx=(pa.px+pb.px)/2,my=(pa.py+pb.py)/2;
-    ctx.beginPath();ctx.arc(mx,my,2.5,0,Math.PI*2);
-    const dg=ctx.createLinearGradient(pa.px,pa.py,pb.px,pb.py);
-    dg.addColorStop(0,`rgba(${ra},${ga},${ba},0.7)`);dg.addColorStop(1,`rgba(${rb},${gb},${bb},0.7)`);
-    ctx.fillStyle=dg;ctx.fill();
-  }
-  if(pendingConn&&hovered&&hovered.id!==pendingConn.id&&mode==='none'){
-    const pa=project(pendingConn.x,pendingConn.y,pendingConn.z+20),pb=project(hovered.x,hovered.y,hovered.z+20);
-    ctx.beginPath();ctx.moveTo(pa.px,pa.py);ctx.lineTo(pb.px,pb.py);ctx.strokeStyle='rgba(120,170,255,0.25)';ctx.lineWidth=1;ctx.setLineDash([4,8]);ctx.stroke();ctx.setLineDash([]);
-  }
-
-  // Masking connections inside blocks
-  ctx.save();
-  ctx.globalCompositeOperation = 'destination-out';
-  for(const b of blocks){
-    const pf=getPF(b);
-    ctx.beginPath(); ctx.moveTo(pf[0].px,pf[0].py);
-    pf.forEach((p,i)=>{if(i>0)ctx.lineTo(p.px,p.py);});
-    ctx.closePath(); ctx.fill();
-  }
-  ctx.restore();
-
   ctx.fillStyle='rgba(50,80,180,0.13)';
   for(let x=0;x<W;x+=32) for(let y=0;y<H;y+=32){ ctx.beginPath();ctx.arc(x,y,.9,0,Math.PI*2);ctx.fill(); }
 
+  const getI = (b, dx, dy, dz) => {
+    const w = b.w||DEFAULT_W, h = b.h||DEFAULT_H;
+    const tx = dx === 0 ? Infinity : Math.abs((w/2) / dx);
+    const ty = dy === 0 ? Infinity : Math.abs((h/2) / dy);
+    const tz = dz === 0 ? Infinity : Math.abs(20 / dz);
+    const t = Math.min(tx, ty, tz);
+    return { x: b.x + dx*t, y: b.y + dy*t, z: (b.z+20) + dz*t, t };
+  };
+
+  for(const c of connections){
+    const a=blocks.find(b=>b.id===c.from),b2=blocks.find(b=>b.id===c.to); if(!a||!b2) continue;
+    const dx = b2.x - a.x, dy = b2.y - a.y, dz = b2.z - a.z;
+    const i1 = getI(a, dx, dy, dz), i2 = getI(b2, -dx, -dy, -dz);
+    
+    if (i1.t + i2.t < 1) {
+      const pa = project(i1.x, i1.y, i1.z), pb = project(i2.x, i2.y, i2.z);
+      const grad=ctx.createLinearGradient(pa.px,pa.py,pb.px,pb.py);
+      const[ra,ga,ba]=blockRGB(a),[rb,gb,bb]=blockRGB(b2);
+      grad.addColorStop(0,`rgba(${ra},${ga},${ba},0.65)`); grad.addColorStop(1,`rgba(${rb},${gb},${bb},0.65)`);
+      ctx.beginPath();ctx.moveTo(pa.px,pa.py);ctx.lineTo(pb.px,pb.py);ctx.strokeStyle=grad;ctx.lineWidth=1.25;ctx.setLineDash([]);ctx.stroke();
+      const mx=(pa.px+pb.px)/2,my=(pa.py+pb.py)/2;
+      ctx.beginPath();ctx.arc(mx,my,2.5,0,Math.PI*2);
+      const dg=ctx.createLinearGradient(pa.px,pa.py,pb.px,pb.py);
+      dg.addColorStop(0,`rgba(${ra},${ga},${ba},0.7)`);dg.addColorStop(1,`rgba(${rb},${gb},${bb},0.7)`);
+      ctx.fillStyle=dg;ctx.fill();
+    }
+  }
+  if(pendingConn&&hovered&&hovered.id!==pendingConn.id&&mode==='none'){
+    const a=pendingConn, b2=hovered;
+    const dx = b2.x - a.x, dy = b2.y - a.y, dz = b2.z - a.z;
+    const i1 = getI(a, dx, dy, dz), i2 = getI(b2, -dx, -dy, -dz);
+    if (i1.t + i2.t < 1) {
+      const pa=project(i1.x, i1.y, i1.z),pb=project(i2.x, i2.y, i2.z);
+      ctx.beginPath();ctx.moveTo(pa.px,pa.py);ctx.lineTo(pb.px,pb.py);ctx.strokeStyle='rgba(120,170,255,0.25)';ctx.lineWidth=1;ctx.setLineDash([4,8]);ctx.stroke();ctx.setLineDash([]);
+    }
+  }
   const sorted=[...blocks].sort((a,b)=>(b.z+20)-(a.z+20));
   for(const b of sorted) drawBlock(b);
 
@@ -710,25 +708,46 @@ function draw(){
 function drawBlock(b){
   const ss=spawnScale(b),cx0=b.x,cy0=b.y,[r,g,bl]=blockRGB(b);
   const {f,bk}=corners(b);
-  const pf=getPF(b);
+  const pf=f.map(p=>{ const pj=project(p.x,p.y,p.z); return{px:cx0+(pj.px-cx0)*ss,py:cy0+(pj.py-cy0)*ss,scale:pj.scale}; });
   const pb=bk.map(p=>{ const pj=project(p.x,p.y,p.z); return{px:cx0+(pj.px-cx0)*ss,py:cy0+(pj.py-cy0)*ss}; });
   const isSel=selected&&selected.id===b.id,isPend=pendingConn&&pendingConn.id===b.id;
   const isEdit=editingBlock&&editingBlock.id===b.id,isDesc=descBlock&&descBlock.id===b.id;
   const isHov=hovered&&hovered.id===b.id;
   const isConn=selected&&selected.id!==b.id&&connections.find(c=>(c.from===selected.id&&c.to===b.id)||(c.from===b.id&&c.to===selected.id));
   const alpha=isSel||isEdit||isDesc||isPend?1:isHov?.85:.55, sw=isSel||isEdit||isDesc||isPend?1.4:.8;
+
+  const BG = '#060810';
+
+  const drawFace = (pts, fAlpha, sAlpha) => {
+    ctx.beginPath(); ctx.moveTo(pts[0].px, pts[0].py);
+    for(let i=1; i<pts.length; i++) ctx.lineTo(pts[i].px, pts[i].py);
+    ctx.closePath();
+    ctx.fillStyle = BG; ctx.fill(); // Opaque background
+    ctx.fillStyle = `rgba(${r},${g},${bl},${fAlpha})`; ctx.fill();
+    if(sAlpha > 0) {
+      ctx.strokeStyle = `rgba(${r},${g},${bl},${sAlpha})`;
+      ctx.lineWidth = sw * 0.6; ctx.stroke();
+    }
+  };
+
+  // 1. Back
+  drawFace(pb, 0.01, alpha * 0.2);
+  
+  // 2. Sides
   [[pf[0],pf[3],pb[3],pb[0]],[pf[1],pf[2],pb[2],pb[1]],[pf[0],pf[1],pb[1],pb[0]],[pf[3],pf[2],pb[2],pb[3]]].forEach(s=>{
-    ctx.beginPath();ctx.moveTo(s[0].px,s[0].py);for(let i=1;i<s.length;i++)ctx.lineTo(s[i].px,s[i].py);ctx.closePath();
-    ctx.fillStyle=`rgba(${r},${g},${bl},0.03)`;ctx.fill();
-    ctx.strokeStyle=`rgba(${r},${g},${bl},${alpha*.28})`;ctx.lineWidth=sw*.6;ctx.stroke();
+    drawFace(s, 0.03, alpha * 0.28);
   });
-  ctx.beginPath();ctx.moveTo(pb[0].px,pb[0].py);pb.forEach((p,i)=>{if(i>0)ctx.lineTo(p.px,p.py);});ctx.closePath();
-  ctx.fillStyle=`rgba(${r},${g},${bl},0.01)`;ctx.fill();ctx.strokeStyle=`rgba(${r},${g},${bl},${alpha*.2})`;ctx.lineWidth=sw*.6;ctx.stroke();
-  ctx.beginPath();ctx.moveTo(pf[0].px,pf[0].py);pf.forEach((p,i)=>{if(i>0)ctx.lineTo(p.px,p.py);});ctx.closePath();
-  ctx.fillStyle=`rgba(${r},${g},${bl},${.04+Math.max(0,1-b.z/Z_MAX)*.04})`;ctx.fill();
+
+  // 3. Front
+  ctx.beginPath(); ctx.moveTo(pf[0].px,pf[0].py);
+  pf.forEach((p,i)=>{if(i>0)ctx.lineTo(p.px,p.py);});
+  ctx.closePath();
+  ctx.fillStyle = BG; ctx.fill();
+  ctx.fillStyle = `rgba(${r},${g},${bl},${.04+Math.max(0,1-b.z/Z_MAX)*.04})`; ctx.fill();
   if(isPend||isSel){ctx.shadowColor=`rgba(${r},${g},${bl},${isPend?.8:.5})`;ctx.shadowBlur=isPend?22:16;}
   ctx.strokeStyle=isSel||isPend?`rgba(${r},${g},${bl},1)`:isConn?`rgba(${r},${g},${bl},0.6)`:`rgba(${r},${g},${bl},${alpha})`;
-  ctx.lineWidth=sw;ctx.stroke();ctx.shadowBlur=0;
+  ctx.lineWidth=sw; ctx.stroke(); ctx.shadowBlur=0;
+
   if(!isEdit){
     const{cx,cy,sc}=fInfo(b),fs=Math.round(13*sc*ss),lh=fs*1.3;
     ctx.fillStyle=`rgba(255,255,255,${alpha})`;ctx.font=`600 ${fs}px 'IBM Plex Mono',monospace`;ctx.textAlign='center';ctx.textBaseline='middle';
