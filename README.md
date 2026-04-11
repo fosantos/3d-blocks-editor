@@ -7,7 +7,7 @@ Editor interativo de blocos em perspectiva 3D para organizar ideias, tarefas e m
 - **Adicionar bloco:** Clique no botão "Novo bloco" e clique no canvas para posicionar
 - **Conectar blocos:** Clique num bloco (fica selecionado), depois clique noutro para conectar
 - **Editar nome:** Duplo clique no bloco
-- **Mover:** Arraste os blocos
+- **Mover:** Arraste os blocos ou arraste o fundo para mover todo o gráfico
 - **Profundidade (Z):** Use a roda do mouse sobre um bloco selecionado
 - **Mover com teclado:** Setas direcionais (← ↑ → ↓)
 - **Ajustar Z:** Teclas `+` e `-`
