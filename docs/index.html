@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Neurodrift</title>
+<title>Mindnotes</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -283,7 +283,7 @@ html, body { height: 100%; }
 
     <!-- Main toolbar -->
     <div id="toolbar-v" role="toolbar" aria-label="Controles principais">
-      <div class="tb-brand"><div class="tb-brand-dot"></div>NEURODRIFT</div>
+      <div class="tb-brand"><div class="tb-brand-dot"></div>MINDNOTES</div>
 
       <span class="tb-label">blocos</span>
       <button class="tb-btn" id="btn-add" onclick="startAdd()" aria-label="Adicionar novo bloco">
@@ -318,7 +318,7 @@ html, body { height: 100%; }
         </svg>
         Refazer
       </button>
-      <button class="tb-btn" id="btn-about" onclick="showAbout()" aria-label="Ver informações sobre Neurodrift">
+      <button class="tb-btn" id="btn-about" onclick="showAbout()" aria-label="Ver informações sobre Mindnotes">
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <circle cx="6" cy="6" r="5"/>
           <line x1="6" y1="5.5" x2="6" y2="8.5"/>
@@ -433,16 +433,16 @@ html, body { height: 100%; }
               <line x1="7" y1="6.5" x2="7" y2="10"/>
               <circle cx="7" cy="4.5" r="0.6" fill="currentColor" stroke="none"/>
             </svg>
-            Neurodrift
+            Mindnotes
           </h3>
           <button id="about-close-btn" onclick="hideAbout()" aria-label="Fechar modal (Esc)">×</button>
         </div>
         <div id="about-content">
           <p>A maioria das ferramentas de produtividade foi criada para mentes que pensam em linha reta. Listas, prazos, hierarquias — sistemas desenhados para um tipo de foco e função executiva que muitos de nós simplesmente não temos.</p>
-          <p><strong>Neurodrift</strong> foi criada de forma diferente. E não apenas para pessoas com TDAH — foi criada por pessoas com TDAH.</p>
+          <p><strong>Mindnotes</strong> foi criada de forma diferente. E não apenas para pessoas com TDAH — foi criada por pessoas com TDAH.</p>
           <p>Sabemos o que é ter dez ideias ao mesmo tempo e não conseguir agarrar nenhuma. Conhecemos a frustração de abrir uma lista de tarefas e sentir que ela nos olha de volta com julgamento.</p>
           <p>Por isso construímos algo diferente.</p>
-          <p>Neurodrift é um ambiente de pensamento espacial — uma tela tridimensional onde os teus pensamentos, compromissos e objetivos ganham a forma de blocos flutuantes, conectados não por estrutura rígida, mas por significado. Organizas-os da forma como a tua mente realmente funciona: por clusters, por espaço, por relação entre si.</p>
+          <p>Mindnotes é um ambiente de pensamento espacial — uma tela tridimensional onde os teus pensamentos, compromissos e objetivos ganham a forma de blocos flutuantes, conectados não por estrutura rígida, mas por significado. Organizas-os da forma como a tua mente realmente funciona: por clusters, por espaço, por relação entre si.</p>
           <p>Sem hierarquias obrigatórias. Sem pressão para ter a caixa de entrada em zero. Sem uma única forma "certa" de organizar.</p>
           <p>Apenas os teus pensamentos, com forma e espaço para existir.</p>
           <p class="about-credit">Feito por mentes que veem tudo ao mesmo tempo — para mentes que precisam de um lugar onde pousar.</p>
@@ -566,7 +566,7 @@ function redo() {
 
 // ── Persistence ───────────────────────────────────────────────
 // ✅ MELHORIA: Inverter ordem — saveState() só persiste após sucesso localStorage
-const STORAGE_KEY='neurodrift-state';
+const STORAGE_KEY='mindnotes-state';
 function saveState(){
   try{
     const json = JSON.stringify({blocks:blocks.map(b=>({...b})),connections:[...connections],idCounter});
@@ -679,7 +679,7 @@ function downloadExportJSON(){
   const blob = new Blob([json], {type:'application/json'});
   const url  = URL.createObjectURL(blob);
   const a    = document.createElement('a');
-  a.href = url; a.download = `neurodrift-${date}.json`;
+  a.href = url; a.download = `mindnotes-${date}.json`;
   a.click(); URL.revokeObjectURL(url);
   showToast('ficheiro descarregado ✓');
 }
