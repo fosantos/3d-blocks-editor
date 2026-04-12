@@ -104,8 +104,10 @@ html, body { height: 100%; }
   font-size:12px; font-weight:500; padding:7px 10px; border-radius:7px; cursor:pointer;
   font-family:var(--font); white-space:nowrap; letter-spacing:0.04em; width:100%;
   display:flex; align-items:center; gap:8px; transition:all .15s;
+  outline: 2px solid transparent; outline-offset: 2px;
 }
 .tb-btn:hover    { border-color:rgba(91,143,255,0.45); color:#e0ecff; background:rgba(91,143,255,0.07); }
+.tb-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .tb-btn.active   { border-color:var(--accent); color:var(--accent); background:rgba(91,143,255,0.1); }
 .tb-btn.danger:hover { border-color:rgba(255,90,110,0.55); color:var(--danger); background:rgba(255,90,110,0.06); }
 .tb-btn.success:hover { border-color:rgba(80,220,170,0.55); color:rgba(80,220,170,0.9); background:rgba(80,220,170,0.06); }
@@ -136,8 +138,9 @@ html, body { height: 100%; }
 #modal select, #modal input[type=text] { width:100%; background:rgba(0,4,18,0.9); border:0.5px solid rgba(80,120,240,0.28); color:var(--text); font-size:12px; padding:8px 10px; border-radius:7px; font-family:var(--font); outline:none; transition:border-color .15s, box-shadow .15s; }
 #modal input[type=text]:focus, #modal select:focus { border-color:var(--accent); box-shadow:0 0 0 2px rgba(91,143,255,0.12); }
 .modal-row { display:flex; gap:8px; margin-top:20px; }
-.modal-btn { flex:1; background:transparent; border:0.5px solid rgba(80,120,240,0.25); color:var(--text-dim); font-size:12px; font-weight:500; padding:9px; border-radius:7px; cursor:pointer; font-family:var(--font); letter-spacing:0.04em; transition:all .15s; }
+.modal-btn { flex:1; background:transparent; border:0.5px solid rgba(80,120,240,0.25); color:var(--text-dim); font-size:12px; font-weight:500; padding:9px; border-radius:7px; cursor:pointer; font-family:var(--font); letter-spacing:0.04em; transition:all .15s; outline: 2px solid transparent; outline-offset: 2px; }
 .modal-btn:hover  { background:rgba(255,255,255,0.04); border-color:rgba(150,170,220,0.4); color:var(--text); }
+.modal-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .modal-btn.confirm { border-color:rgba(91,143,255,0.5); color:var(--accent); font-weight:600; background:rgba(91,143,255,0.08); }
 .modal-btn.confirm:hover { background:rgba(91,143,255,0.18); border-color:var(--accent); }
 
@@ -182,11 +185,15 @@ html, body { height: 100%; }
   display: flex; align-items: center; justify-content: center;
   transition: all .15s;
   flex-shrink: 0;
+  outline: 2px solid transparent; outline-offset: 2px;
 }
 #about-close-btn:hover {
   border-color: rgba(91,143,255,0.5);
   color: var(--accent);
   background: rgba(91,143,255,0.08);
+}
+#about-close-btn:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px;
 }
 #about-content {
   font-size:13px; line-height:1.85; color:var(--text);
@@ -217,8 +224,9 @@ html, body { height: 100%; }
 #io-modal-subtitle { font-size:10px; color:var(--text-dim); margin-bottom:16px; letter-spacing:0.04em; }
 
 #io-tabs { display:flex; gap:6px; margin-bottom:14px; }
-.io-tab { flex:1; background:transparent; border:0.5px solid rgba(80,120,240,0.2); color:var(--text-dim); font-size:11px; font-weight:500; padding:7px; border-radius:7px; cursor:pointer; font-family:var(--font); letter-spacing:0.05em; transition:all .15s; }
+.io-tab { flex:1; background:transparent; border:0.5px solid rgba(80,120,240,0.2); color:var(--text-dim); font-size:11px; font-weight:500; padding:7px; border-radius:7px; cursor:pointer; font-family:var(--font); letter-spacing:0.05em; transition:all .15s; outline: 2px solid transparent; outline-offset: 2px; }
 .io-tab:hover  { border-color:rgba(91,143,255,0.4); color:var(--text); }
+.io-tab:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .io-tab.active { border-color:var(--accent); color:var(--accent); background:rgba(91,143,255,0.1); }
 
 #io-export-pane, #io-import-pane { display:none; flex-direction:column; gap:10px; }
@@ -243,8 +251,10 @@ html, body { height: 100%; }
   color:var(--text-dim); font-size:11px; font-weight:500; padding:8px;
   border-radius:7px; cursor:pointer; font-family:var(--font); letter-spacing:0.04em;
   display:flex; align-items:center; justify-content:center; gap:6px; transition:all .15s;
+  outline: 2px solid transparent; outline-offset: 2px;
 }
 .io-btn:hover   { background:rgba(255,255,255,0.04); border-color:rgba(150,170,220,0.4); color:var(--text); }
+.io-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .io-btn.primary { border-color:rgba(91,143,255,0.5); color:var(--accent); font-weight:600; background:rgba(91,143,255,0.08); }
 .io-btn.primary:hover { background:rgba(91,143,255,0.18); border-color:var(--accent); }
 .io-btn.green   { border-color:rgba(80,220,170,0.4); color:rgba(80,220,170,0.85); background:rgba(80,220,170,0.06); }
@@ -257,60 +267,59 @@ html, body { height: 100%; }
 <div id="root">
   <div id="canvas-wrap">
     <canvas id="canvas"></canvas>
-    <textarea id="inline-editor" maxlength="100"></textarea>
+    <textarea id="inline-editor" maxlength="100" aria-label="Editor de etiqueta de bloco"></textarea>
 
-    <div id="desc-panel">
+    <div id="desc-panel" role="region" aria-label="Painel de descrição do bloco">
       <div id="desc-panel-title">
         <span id="desc-block-name"></span>
-        <button id="desc-edit-btn" onclick="toggleDescEdit()">editar</button>
+        <button id="desc-edit-btn" onclick="toggleDescEdit()" aria-label="Editar descrição">editar</button>
       </div>
       <div id="desc-text" class="empty">sem descrição</div>
-      <textarea id="desc-textarea" rows="4" maxlength="1500" placeholder="Escreve uma descrição…"></textarea>
-      <button id="desc-save-btn" onclick="saveDesc()">guardar</button>
+      <textarea id="desc-textarea" rows="4" maxlength="1500" placeholder="Escreve uma descrição…" aria-label="Campo de edição de descrição"></textarea>
+      <button id="desc-save-btn" onclick="saveDesc()" aria-label="Guardar descrição">guardar</button>
     </div>
 
-    <div id="toast"></div>
+    <div id="toast" role="status" aria-live="polite"></div>
 
     <!-- Main toolbar -->
-    <div id="toolbar-v">
+    <div id="toolbar-v" role="toolbar" aria-label="Controles principais">
       <div class="tb-brand"><div class="tb-brand-dot"></div>NEURODRIFT</div>
 
       <span class="tb-label">blocos</span>
-      <button class="tb-btn" id="btn-add" onclick="startAdd()">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
+      <button class="tb-btn" id="btn-add" onclick="startAdd()" aria-label="Adicionar novo bloco">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
         Novo bloco
       </button>
-      <button class="tb-btn danger" id="btn-delete" onclick="startDelete()">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,2.5 10.5,2.5"/><path d="M3.5,2.5v-.75h5v.75"/><path d="M3.5,2.5l.5,7.5h4l.5-7.5"/></svg>
+      <button class="tb-btn danger" id="btn-delete" onclick="startDelete()" aria-label="Deletar bloco selecionado">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="1.5,2.5 10.5,2.5"/><path d="M3.5,2.5v-.75h5v.75"/><path d="M3.5,2.5l.5,7.5h4l.5-7.5"/></svg>
         Deletar
       </button>
-      <button class="tb-btn" onclick="resetMode()">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="1" y1="1" x2="11" y2="11"/><line x1="11" y1="1" x2="1" y2="11"/></svg>
+      <button class="tb-btn" onclick="resetMode()" aria-label="Cancelar modo atual">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><line x1="1" y1="1" x2="11" y2="11"/><line x1="11" y1="1" x2="1" y2="11"/></svg>
         Cancelar
       </button>
-      <button class="tb-btn" onclick="realignBlocks()">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <button class="tb-btn" onclick="realignBlocks()" aria-label="Realinhar blocos ao centro">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <rect x="2" y="2" width="8" height="8" rx="1"/>
           <line x1="4" y1="4" x2="8" y2="8"/>
           <line x1="8" y1="4" x2="4" y2="8"/>
         </svg>
         Realinhar
       </button>
-      <button class="tb-btn" id="btn-undo" onclick="undo()" title="Ctrl+Z">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <button class="tb-btn" id="btn-undo" onclick="undo()" title="Ctrl+Z" aria-label="Desfazer última ação">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M2 5H7.5a3 3 0 010 6H5"/><path d="M2 5L4.5 2.5M2 5L4.5 7.5"/>
         </svg>
         Desfazer
       </button>
-      <button class="tb-btn" id="btn-redo" onclick="redo()" title="Ctrl+Shift+Z">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <button class="tb-btn" id="btn-redo" onclick="redo()" title="Ctrl+Shift+Z" aria-label="Refazer última ação desfeita">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M10 5H4.5a3 3 0 000 6H7"/><path d="M10 5L7.5 2.5M10 5L7.5 7.5"/>
         </svg>
         Refazer
       </button>
-      <button class="tb-btn" id="btn-about" onclick="showAbout()">
-        <!-- FIX: ícone "i" correto — círculo + ponto + linha vertical -->
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <button class="tb-btn" id="btn-about" onclick="showAbout()" aria-label="Ver informações sobre Neurodrift">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <circle cx="6" cy="6" r="5"/>
           <line x1="6" y1="5.5" x2="6" y2="8.5"/>
           <circle cx="6" cy="3.5" r="0.5" fill="currentColor" stroke="none"/>
@@ -321,15 +330,15 @@ html, body { height: 100%; }
       <div class="tb-divider"></div>
       <span class="tb-label">dados</span>
 
-      <button class="tb-btn success" onclick="openIOModal('export')">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <button class="tb-btn success" onclick="openIOModal('export')" aria-label="Exportar blocos como JSON">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M6 1v7M3.5 5.5L6 8l2.5-2.5"/>
           <path d="M1.5 9.5v1h9v-1"/>
         </svg>
         Exportar
       </button>
-      <button class="tb-btn" onclick="openIOModal('import')">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <button class="tb-btn" onclick="openIOModal('import')" aria-label="Importar blocos de JSON">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M6 8V1M3.5 3.5L6 1l2.5 2.5"/>
           <path d="M1.5 9.5v1h9v-1"/>
         </svg>
@@ -344,92 +353,89 @@ html, body { height: 100%; }
     </div>
 
     <!-- Novo bloco modal -->
-    <div id="modal-overlay">
+    <div id="modal-overlay" role="dialog" aria-labelledby="modal-title" aria-modal="true">
       <div id="modal">
-        <h3>// novo bloco</h3>
-        <label>Nome do bloco</label>
+        <h3 id="modal-title">// novo bloco</h3>
+        <label for="new-label">Nome do bloco</label>
         <input type="text" id="new-label" placeholder="ex: Ideias, Tarefas, Metas…" maxlength="20" />
-        <label>Conectar a (opcional)</label>
+        <label for="connect-select">Conectar a (opcional)</label>
         <select id="connect-select"><option value="">— sem conexão —</option></select>
         <div class="modal-row">
-          <button class="modal-btn" onclick="closeModal()">cancelar</button>
-          <button class="modal-btn confirm" onclick="confirmCreate()">criar →</button>
+          <button class="modal-btn" onclick="closeModal()" aria-label="Cancelar criação de bloco">cancelar</button>
+          <button class="modal-btn confirm" onclick="confirmCreate()" aria-label="Confirmar criação de bloco">criar →</button>
         </div>
       </div>
     </div>
 
     <!-- Export / Import modal -->
-    <div id="io-modal-overlay">
+    <div id="io-modal-overlay" role="dialog" aria-labelledby="io-modal-title" aria-modal="true">
       <div id="io-modal">
-        <h3>
-          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" id="io-modal-icon">
+        <h3 id="io-modal-title">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" id="io-modal-icon" aria-hidden="true">
             <path d="M6.5 1v8M3.5 6L6.5 9l3-3"/><path d="M1.5 11h10"/>
           </svg>
-          <span id="io-modal-title">exportar</span>
+          <span>exportar</span>
         </h3>
         <div id="io-modal-subtitle">Partilha ou faz backup do teu espaço de blocos</div>
 
-        <div id="io-tabs">
-          <button class="io-tab active" id="tab-export" onclick="switchIOTab('export')">↓ Exportar</button>
-          <button class="io-tab"        id="tab-import" onclick="switchIOTab('import')">↑ Importar</button>
+        <div id="io-tabs" role="tablist">
+          <button class="io-tab active" id="tab-export" onclick="switchIOTab('export')" role="tab" aria-selected="true" aria-controls="io-export-pane">↓ Exportar</button>
+          <button class="io-tab" id="tab-import" onclick="switchIOTab('import')" role="tab" aria-selected="false" aria-controls="io-import-pane">↑ Importar</button>
         </div>
 
         <!-- Export pane -->
-        <div id="io-export-pane" class="visible">
+        <div id="io-export-pane" class="visible" role="tabpanel" aria-labelledby="tab-export">
           <div class="io-meta" id="io-export-meta"></div>
-          <textarea class="io-json-box" id="io-export-box" readonly></textarea>
+          <textarea class="io-json-box" id="io-export-box" readonly aria-label="JSON exportado"></textarea>
           <div class="io-btn-row">
-            <button class="io-btn primary" onclick="copyExportJSON()">
-              <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="7" height="7" rx="1.5"/><path d="M3 3V2a1 1 0 011-1h5a1 1 0 011 1v5a1 1 0 01-1 1h-1"/></svg>
+            <button class="io-btn primary" onclick="copyExportJSON()" aria-label="Copiar JSON para clipboard">
+              <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="3" width="7" height="7" rx="1.5"/><path d="M3 3V2a1 1 0 011-1h5a1 1 0 011 1v5a1 1 0 01-1 1h-1"/></svg>
               Copiar JSON
             </button>
-            <button class="io-btn" onclick="downloadExportJSON()">
-              <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 1v6M3 5l2.5 2.5L8 5"/><path d="M1 9.5h9"/></svg>
+            <button class="io-btn" onclick="downloadExportJSON()" aria-label="Descarregar JSON como arquivo">
+              <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.5 1v6M3 5l2.5 2.5L8 5"/><path d="M1 9.5h9"/></svg>
               Download
             </button>
           </div>
-          <button class="io-btn" style="width:100%" onclick="closeIOModal()">fechar</button>
+          <button class="io-btn" style="width:100%" onclick="closeIOModal()" aria-label="Fechar modal de exportação">fechar</button>
         </div>
 
         <!-- Import pane -->
-        <div id="io-import-pane">
+        <div id="io-import-pane" role="tabpanel" aria-labelledby="tab-import">
           <div class="io-meta">Cola o JSON exportado abaixo. O estado atual será <strong>substituído</strong>.</div>
-          <textarea class="io-json-box" id="io-import-box" placeholder='{"blocks":[...],"connections":[...]}'></textarea>
-          <div id="io-import-error"></div>
+          <textarea class="io-json-box" id="io-import-box" placeholder='{"blocks":[...],"connections":[...]}' aria-label="Campo para colar JSON a importar"></textarea>
+          <div id="io-import-error" role="alert"></div>
           <div class="io-btn-row">
-            <button class="io-btn" onclick="triggerFileImport()">
-              <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 7v2a1 1 0 01-1 1h-6a1 1 0 01-1-1V7"/><path d="M5.5 1v6M3 4l2.5-2.5L8 4"/></svg>
+            <button class="io-btn" onclick="triggerFileImport()" aria-label="Abrir arquivo JSON">
+              <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 7v2a1 1 0 01-1 1h-6a1 1 0 01-1-1V7"/><path d="M5.5 1v6M3 4l2.5-2.5L8 4"/></svg>
               Abrir ficheiro
             </button>
-            <button class="io-btn green" onclick="confirmImport()">
-              <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><polyline points="1.5,5.5 4.5,8.5 9.5,2.5"/></svg>
+            <button class="io-btn green" onclick="confirmImport()" aria-label="Carregar e importar JSON">
+              <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><polyline points="1.5,5.5 4.5,8.5 9.5,2.5"/></svg>
               Carregar
             </button>
           </div>
-          <button class="io-btn" style="width:100%;margin-top:2px" onclick="closeIOModal()">fechar</button>
+          <button class="io-btn" style="width:100%;margin-top:2px" onclick="closeIOModal()" aria-label="Fechar modal de importação">fechar</button>
         </div>
 
         <!-- Hidden file input -->
-        <input type="file" id="file-input" accept=".json,application/json" style="display:none" onchange="handleFileImport(event)" />
+        <input type="file" id="file-input" accept=".json,application/json" style="display:none" onchange="handleFileImport(event)" aria-label="Seletor de arquivo JSON" />
       </div>
     </div>
 
     <!-- About modal -->
-    <div id="about-overlay">
+    <div id="about-overlay" role="dialog" aria-labelledby="about-modal-title" aria-modal="true">
       <div id="about-modal">
-        <!-- FIX: header separado com botão × explícito -->
         <div id="about-modal-header">
-          <h3>
-            <!-- FIX: ícone "i" correto, consistente com o botão da toolbar -->
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <h3 id="about-modal-title">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <circle cx="7" cy="7" r="5.5"/>
               <line x1="7" y1="6.5" x2="7" y2="10"/>
               <circle cx="7" cy="4.5" r="0.6" fill="currentColor" stroke="none"/>
             </svg>
             Neurodrift
           </h3>
-          <!-- FIX: botão de fecho visível com tooltip a indicar Esc -->
-          <button id="about-close-btn" onclick="hideAbout()" title="Fechar (Esc)">×</button>
+          <button id="about-close-btn" onclick="hideAbout()" aria-label="Fechar modal (Esc)">×</button>
         </div>
         <div id="about-content">
           <p>A maioria das ferramentas de produtividade foi criada para mentes que pensam em linha reta. Listas, prazos, hierarquias — sistemas desenhados para um tipo de foco e função executiva que muitos de nós simplesmente não temos.</p>
@@ -457,18 +463,33 @@ const descPanel = document.getElementById('desc-panel');
 const toastEl   = document.getElementById('toast');
 
 let W, H;
-function resize() { W=wrap.clientWidth; H=wrap.clientHeight; canvas.width=W; canvas.height=H; draw(); }
-const ro = new ResizeObserver(resize); ro.observe(wrap);
+function resize() { 
+  W = Math.max(wrap.clientWidth, 320); 
+  H = Math.max(wrap.clientHeight, 240); 
+  canvas.width = W; 
+  canvas.height = H; 
+  draw(); 
+}
+const ro = new ResizeObserver(resize); 
+ro.observe(wrap);
+
+// ✅ MELHORIA: Desregistar ResizeObserver para evitar memory leak
+window.addEventListener('beforeunload', () => { ro.disconnect(); });
 
 const MAX=15, PERSP=600, ZOOM=2.5, Z_MAX=400;
 const DEFAULT_W = 90, DEFAULT_H = 56;
 
+// ✅ MELHORIA: Cache de cores para blockRGB
+const colorCache = new Map();
 function blockRGB(b){
+  if(colorCache.has(b.id)) return colorCache.get(b.id);
   const hue = ((b.id - 1) * 137.508) % 360;
   const s = 70, l = 68;
   const a = s * Math.min(l, 100 - l) / 100;
   const f = n => { const k=(n+hue/30)%12; return Math.round((l/100 - a/100*Math.max(-1,Math.min(k-3,Math.min(9-k,1))))*255); };
-  return [f(0), f(8), f(4)];
+  const rgb = [f(0), f(8), f(4)];
+  colorCache.set(b.id, rgb);
+  return rgb;
 }
 
 // ── Spawn anim ────────────────────────────────────────────────
@@ -544,12 +565,17 @@ function redo() {
 }
 
 // ── Persistence ───────────────────────────────────────────────
-// Override saveState to capture history before persisting
-
+// ✅ MELHORIA: Inverter ordem — saveState() só persiste após sucesso localStorage
 const STORAGE_KEY='neurodrift-state';
 function saveState(){
-  snapshot();
-  try{ localStorage.setItem(STORAGE_KEY,JSON.stringify({blocks:blocks.map(b=>({...b})),connections:[...connections],idCounter})); }catch(e){}
+  try{
+    const json = JSON.stringify({blocks:blocks.map(b=>({...b})),connections:[...connections],idCounter});
+    localStorage.setItem(STORAGE_KEY, json);
+    snapshot();  // Só após sucesso
+  }catch(e){
+    console.warn('Falha ao persistir estado:', e);
+    // Undo/redo permanece funcional mesmo se localStorage falhar
+  }
 }
 function loadState(){
   try{
@@ -591,25 +617,37 @@ function hideAbout(){
   document.getElementById('about-overlay').classList.remove('show');
 }
 
-// FIX: fechar ao clicar fora do modal (overlay click)
+// ✅ MELHORIA: Fechar ao clicar fora do modal (overlay click)
 document.getElementById('about-overlay').addEventListener('click', function(e){
   if(e.target === this) hideAbout();
 });
 
-// FIX: fechar com Escape — listener dedicado, registado antes do keydown principal
+// ✅ MELHORIA: Unificar handlers de Escape em listener centralizado
 document.addEventListener('keydown', function(e){
-  if(e.key === 'Escape' && document.getElementById('about-overlay').classList.contains('show')){
-    e.stopImmediatePropagation();
+  if(e.key !== 'Escape') return;
+  
+  if(document.getElementById('about-overlay').classList.contains('show')){
+    e.preventDefault();
     hideAbout();
   }
-}, true); // capture=true garante prioridade sobre outros listeners
+  else if(document.getElementById('io-modal-overlay').classList.contains('show')){
+    e.preventDefault();
+    closeIOModal();
+  }
+  else if(document.getElementById('modal-overlay').classList.contains('show')){
+    e.preventDefault();
+    closeModal();
+  }
+}, true);
 
 function switchIOTab(tab){
   document.getElementById('tab-export').classList.toggle('active', tab==='export');
+  document.getElementById('tab-export').setAttribute('aria-selected', tab==='export');
   document.getElementById('tab-import').classList.toggle('active', tab==='import');
+  document.getElementById('tab-import').setAttribute('aria-selected', tab==='import');
   document.getElementById('io-export-pane').classList.toggle('visible', tab==='export');
   document.getElementById('io-import-pane').classList.toggle('visible', tab==='import');
-  document.getElementById('io-modal-title').textContent = tab==='export' ? 'exportar' : 'importar';
+  document.querySelector('#io-modal-title span').textContent = tab==='export' ? 'exportar' : 'importar';
   if(tab==='export') refreshExportPane();
 }
 
@@ -627,7 +665,7 @@ function copyExportJSON(){
     showToast('JSON copiado ✓');
     const btn = document.querySelector('#io-export-pane .io-btn.primary');
     const orig = btn.innerHTML;
-    btn.innerHTML = '<svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><polyline points="1.5,5.5 4.5,8.5 9.5,2.5"/></svg> Copiado!';
+    btn.innerHTML = '<svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><polyline points="1.5,5.5 4.5,8.5 9.5,2.5"/></svg> Copiado!';
     setTimeout(()=>btn.innerHTML=orig, 1600);
   }).catch(()=>{
     box.select(); document.execCommand('copy'); showToast('JSON copiado ✓');
@@ -662,6 +700,7 @@ function handleFileImport(e){
   reader.readAsText(file);
 }
 
+// ✅ MELHORIA: Validação completa de estrutura no import
 function confirmImport(){
   const raw = document.getElementById('io-import-box').value.trim();
   const errEl = document.getElementById('io-import-error');
@@ -678,7 +717,16 @@ function confirmImport(){
     errEl.textContent='Formato inválido — campo "blocks" em falta.'; box.classList.add('error'); return;
   }
 
-  // Apply — FIX: sanitizar z no import para evitar divisão por zero na projeção
+  // ✅ MELHORIA: Validar estrutura completa de cada bloco
+  if(!payload.blocks.every(b => 
+    typeof b.x === 'number' && 
+    typeof b.y === 'number' && 
+    typeof b.id === 'number' &&
+    typeof b.label === 'string'
+  )){
+    errEl.textContent='Formato inválido — blocos faltam campos obrigatórios.'; box.classList.add('error'); return;
+  }
+
   closeEditor(true); closeDescPanel();
   blocks      = payload.blocks.map(b=>({w:DEFAULT_W,h:DEFAULT_H,zScale:1,...b,z:Math.max(0,Math.min(Z_MAX,b.z??0))}));
   const blockIds = new Set(blocks.map(b => b.id));
@@ -788,7 +836,7 @@ function drawBlock(b){
     ctx.beginPath(); ctx.moveTo(pts[0].px, pts[0].py);
     for(let i=1; i<pts.length; i++) ctx.lineTo(pts[i].px, pts[i].py);
     ctx.closePath();
-    ctx.fillStyle = BG; ctx.fill(); // Opaque background
+    ctx.fillStyle = BG; ctx.fill();
     ctx.fillStyle = `rgba(${r},${g},${bl},${fAlpha})`; ctx.fill();
     if(sAlpha > 0) {
       ctx.strokeStyle = `rgba(${r},${g},${bl},${sAlpha})`;
@@ -796,15 +844,9 @@ function drawBlock(b){
     }
   };
 
-  // 1. Back
   drawFace(pb, 0.01, alpha * 0.2);
-  
-  // 2. Sides
-  [[pf[0],pf[3],pb[3],pb[0]],[pf[1],pf[2],pb[2],pb[1]],[pf[0],pf[1],pb[1],pb[0]],[pf[3],pf[2],pb[2],pb[3]]].forEach(s=>{
-    drawFace(s, 0.03, alpha * 0.28);
-  });
+  [[pf[0],pf[3],pb[3],pb[0]],[pf[1],pf[2],pb[2],pb[1]],[pf[0],pf[1],pb[1],pb[0]],[pf[3],pf[2],pb[2],pb[3]]].forEach(s=>{ drawFace(s, 0.03, alpha * 0.28); });
 
-  // 3. Front
   ctx.beginPath(); ctx.moveTo(pf[0].px,pf[0].py);
   pf.forEach((p,i)=>{if(i>0)ctx.lineTo(p.px,p.py);});
   ctx.closePath();
@@ -833,7 +875,6 @@ function drawBlock(b){
   if(mode==='delete'){const{cx,cy,sc}=fInfo(b);ctx.fillStyle='rgba(255,80,100,0.85)';ctx.font=`${Math.round(13*sc)}px sans-serif`;ctx.textAlign='center';ctx.fillText('×',cx-32*sc,cy-15*sc);}
 }
 
-// ── Connection toggle ─────────────────────────────────────────
 function toggleConn(a,b2){
   const from=a.id,to=b2.id,ex=connections.find(c=>(c.from===from&&c.to===to)||(c.from===to&&c.to===from));
   if(ex){connections=connections.filter(c=>!((c.from===from&&c.to===to)||(c.from===to&&c.to===from)));showToast(`${a.label} ↔ ${b2.label} desligados`);}
@@ -841,7 +882,6 @@ function toggleConn(a,b2){
   saveState();
 }
 
-// ── Hit tests ─────────────────────────────────────────────────
 function hitTest(mx,my){ const sorted=[...blocks].sort((a,b)=>a.z-b.z); for(const b of sorted){const{f}=corners(b),pf=f.map(p=>project(p.x,p.y,p.z));if(pip(mx,my,pf.map(p=>({x:p.px,y:p.py})))) return b;} return null; }
 function hitIcon(mx,my){ for(const b of blocks){const{maxX,minY,sc}=fInfo(b),r=Math.max(7,8*sc);if(Math.hypot(mx-(maxX-r-2),my-(minY+r+2))<=r+4) return b;} return null; }
 function pip(px,py,poly){ let inside=false; for(let i=0,j=poly.length-1;i<poly.length;j=i++){const xi=poly[i].x,yi=poly[i].y,xj=poly[j].x,yj=poly[j].y;if(((yi>py)!==(yj>py))&&(px<(xj-xi)*(py-yi)/(yj-yi)+xi))inside=!inside;} return inside; }
@@ -886,7 +926,6 @@ function pip(px,py,poly){ let inside=false; for(let i=0,j=poly.length-1;i<poly.l
   canvas.addEventListener('touchend', e=>{
     e.preventDefault();
     const isClick=!touchMoved;
-    // Double-tap to edit label
     const now=Date.now();
     if(isClick&&touchBlock&&mode==='none'){
       if(now-lastTap<350&&tapBlock&&tapBlock.id===touchBlock.id){
@@ -955,20 +994,19 @@ canvas.addEventListener('wheel',e=>{
   if(!b) return; b.z=Math.max(0,Math.min(Z_MAX,b.z+e.deltaY*(e.deltaY<0?.6:.25)));
   if(descBlock&&descBlock.id===b.id)repositionDesc();debouncedSaveZ();draw();
 },{passive:false});
+
 document.addEventListener('keydown',e=>{
   if(editingBlock||document.activeElement===document.getElementById('desc-textarea')) return;
   if(document.getElementById('about-overlay').classList.contains('show')) return;
-  // Undo / Redo
   if((e.ctrlKey||e.metaKey) && e.key==='z' && !e.shiftKey){ e.preventDefault(); undo(); return; }
   if((e.ctrlKey||e.metaKey) && (e.key==='y' || (e.key==='z' && e.shiftKey))){ e.preventDefault(); redo(); return; }
-  if(e.key==='Escape'){pendingConn=null;draw();return;}
   if(!selected) return;
   const m={'ArrowLeft':[-10,0],'ArrowRight':[10,0],'ArrowUp':[0,-10],'ArrowDown':[0,10]};
   if(m[e.key]){
-    e.preventDefault(); // FIX: evitar scroll da página com as setas
+    e.preventDefault();
     selected.x+=m[e.key][0];selected.y+=m[e.key][1];
     if(descBlock)repositionDesc();
-    saveState(); // FIX: persistir posição após movimento por teclado
+    saveState();
     draw();return;
   }
   if(e.key==='+'||e.key==='='){selected.z=Math.max(0,selected.z-20);saveState();draw();}
@@ -1035,7 +1073,6 @@ function getBlockBounds(b){
 function realignBlocks(){
   if(blocks.length === 0) return;
   
-  // Recalcular W e H para garantir que usamos o tamanho atual da tela
   W = wrap.clientWidth;
   H = wrap.clientHeight;
 
@@ -1075,11 +1112,12 @@ function closeModal(){ document.getElementById('modal-overlay').classList.remove
 function confirmCreate(){ const raw=document.getElementById('new-label').value.trim(),cid=document.getElementById('connect-select').value;createBlock(pX,pY,cid||null,raw);closeModal(); }
 document.getElementById('new-label').addEventListener('keydown',e=>{if(e.key==='Enter')confirmCreate();if(e.key==='Escape')closeModal();e.stopPropagation();});
 
+// ✅ MELHORIA: Proteger createBlock contra W=0 (overflow em dispositivos pequenos)
 function createBlock(px, py, cid, lbl){
-  // Inverter projeção: screen → world (z=0, sc = ZOOM * PERSP/(PERSP+0))
-  const sc0 = ZOOM * PERSP / PERSP; // = ZOOM = 2.5
-  const centerX = (px != null) ? W/2 + (px - W/2) / sc0 : (W ? W/2 : 300);
-  const centerY = (py != null) ? H/2 + (py - H/2) / sc0 : (H ? H/2 : 300);idCounter++;
+  const sc0 = ZOOM * PERSP / PERSP;
+  const centerX = (px != null && W > 0) ? W/2 + (px - W/2) / sc0 : (W && W > 0 ? W/2 : 300);
+  const centerY = (py != null && H > 0) ? H/2 + (py - H/2) / sc0 : (H && H > 0 ? H/2 : 300);
+  idCounter++;
   const b={id:idCounter,label:lbl&&lbl.length?lbl:`B${idCounter}`,desc:'',x:centerX,y:centerY,z:0,w:DEFAULT_W,h:DEFAULT_H,zScale:1};
   blocks.push(b);
   if(cid){const to=parseInt(cid);if(!connections.find(c=>(c.from===b.id&&c.to===to)||(c.from===to&&c.to===b.id)))connections.push({from:b.id,to});}
@@ -1088,7 +1126,9 @@ function createBlock(px, py, cid, lbl){
 function deleteBlock(b){
   connections=connections.filter(c=>c.from!==b.id&&c.to!==b.id);blocks=blocks.filter(bl=>bl.id!==b.id);
   if(selected&&selected.id===b.id)selected=null;if(pendingConn&&pendingConn.id===b.id)pendingConn=null;
-  if(descBlock&&descBlock.id===b.id)closeDescPanel();draw();updateStatus();saveState();
+  if(descBlock&&descBlock.id===b.id)closeDescPanel();
+  colorCache.delete(b.id);  // ✅ MELHORIA: Limpar cache de cores ao deletar bloco
+  draw();updateStatus();saveState();
 }
 
 // ── Init ──────────────────────────────────────────────────────
@@ -1100,7 +1140,7 @@ setTimeout(()=>{
     .forEach(d=>{idCounter++;blocks.push({id:idCounter,label:d.label,desc:d.desc,x:d.x,y:d.y,z:d.z,w:DEFAULT_W,h:DEFAULT_H,zScale:1});});
     connections.push({from:1,to:2},{from:2,to:3});
   }
-  snapshot(); // seed initial history entry
+  snapshot();
   updateStatus();draw();
 },120);
 </script>
