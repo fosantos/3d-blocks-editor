@@ -267,16 +267,16 @@ html, body { height: 100%; }
 <div id="root">
   <div id="canvas-wrap">
     <canvas id="canvas"></canvas>
-    <textarea id="inline-editor" maxlength="100" aria-label="Editor de etiqueta de bloco"></textarea>
+    <textarea id="inline-editor" maxlength="100" aria-label="Block label editor"></textarea>
 
-    <div id="desc-panel" role="region" aria-label="Painel de descrição do bloco">
+    <div id="desc-panel" role="region" aria-label="Block description panel">
       <div id="desc-panel-title">
         <span id="desc-block-name"></span>
-        <button id="desc-edit-btn" onclick="toggleDescEdit()" aria-label="Editar descrição">editar</button>
+        <button id="desc-edit-btn" onclick="toggleDescEdit()" aria-label="Edit description">edit</button>
       </div>
-      <div id="desc-text" class="empty">sem descrição</div>
-      <textarea id="desc-textarea" rows="4" maxlength="1500" placeholder="Escreve uma descrição…" aria-label="Campo de edição de descrição"></textarea>
-      <button id="desc-save-btn" onclick="saveDesc()" aria-label="Guardar descrição">guardar</button>
+      <div id="desc-text" class="empty">no description</div>
+      <textarea id="desc-textarea" rows="4" maxlength="1500" placeholder="Write a description…" aria-label="Description edit field"></textarea>
+      <button id="desc-save-btn" onclick="saveDesc()" aria-label="Save description">save</button>
     </div>
 
     <div id="toast" role="status" aria-live="polite"></div>
@@ -285,84 +285,84 @@ html, body { height: 100%; }
     <div id="toolbar-v" role="toolbar" aria-label="Controles principais">
       <div class="tb-brand"><div class="tb-brand-dot"></div>FLOATMIND</div>
 
-      <span class="tb-label">blocos</span>
-      <button class="tb-btn" id="btn-add" onclick="startAdd()" aria-label="Adicionar novo bloco">
+      <span class="tb-label" id="lbl-blocks">blocks</span>
+      <button class="tb-btn" id="btn-add" onclick="startAdd()" aria-label="Add new block">
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
-        Novo bloco
+        <span id="txt-btn-add">New block</span>
       </button>
-      <button class="tb-btn danger" id="btn-delete" onclick="startDelete()" aria-label="Deletar bloco selecionado">
+      <button class="tb-btn danger" id="btn-delete" onclick="startDelete()" aria-label="Delete selected block">
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="1.5,2.5 10.5,2.5"/><path d="M3.5,2.5v-.75h5v.75"/><path d="M3.5,2.5l.5,7.5h4l.5-7.5"/></svg>
-        Deletar
+        <span id="txt-btn-delete">Delete</span>
       </button>
-      <button class="tb-btn" onclick="resetMode()" aria-label="Cancelar modo atual">
+      <button class="tb-btn" onclick="resetMode()" aria-label="Cancel current mode">
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><line x1="1" y1="1" x2="11" y2="11"/><line x1="11" y1="1" x2="1" y2="11"/></svg>
-        Cancelar
+        <span id="txt-btn-cancel">Cancel</span>
       </button>
-      <button class="tb-btn" onclick="realignBlocks()" aria-label="Realinhar blocos ao centro">
+      <button class="tb-btn" onclick="realignBlocks()" aria-label="Realign blocks to center">
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <rect x="2" y="2" width="8" height="8" rx="1"/>
           <line x1="4" y1="4" x2="8" y2="8"/>
           <line x1="8" y1="4" x2="4" y2="8"/>
         </svg>
-        Realinhar
+        <span id="txt-btn-realign">Realign</span>
       </button>
-      <button class="tb-btn" id="btn-undo" onclick="undo()" title="Ctrl+Z" aria-label="Desfazer última ação">
+      <button class="tb-btn" id="btn-undo" onclick="undo()" title="Ctrl+Z" aria-label="Undo last action">
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M2 5H7.5a3 3 0 010 6H5"/><path d="M2 5L4.5 2.5M2 5L4.5 7.5"/>
         </svg>
-        Desfazer
+        <span id="txt-btn-undo">Undo</span>
       </button>
-      <button class="tb-btn" id="btn-redo" onclick="redo()" title="Ctrl+Shift+Z" aria-label="Refazer última ação desfeita">
+      <button class="tb-btn" id="btn-redo" onclick="redo()" title="Ctrl+Shift+Z" aria-label="Redo last undone action">
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M10 5H4.5a3 3 0 000 6H7"/><path d="M10 5L7.5 2.5M10 5L7.5 7.5"/>
         </svg>
-        Refazer
+        <span id="txt-btn-redo">Redo</span>
       </button>
-      <button class="tb-btn" id="btn-about" onclick="showAbout()" aria-label="Ver informações sobre Floatmind">
+      <button class="tb-btn" id="btn-about" onclick="showAbout()" aria-label="View Floatmind info">
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <circle cx="6" cy="6" r="5"/>
           <line x1="6" y1="5.5" x2="6" y2="8.5"/>
           <circle cx="6" cy="3.5" r="0.5" fill="currentColor" stroke="none"/>
         </svg>
-        Sobre
+        <span id="txt-btn-about">About</span>
       </button>
 
       <div class="tb-divider"></div>
-      <span class="tb-label">dados</span>
+      <span class="tb-label" id="lbl-data">data</span>
 
-      <button class="tb-btn success" onclick="openIOModal('export')" aria-label="Exportar blocos como JSON">
+      <button class="tb-btn success" onclick="openIOModal('export')" aria-label="Export blocks as JSON">
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M6 1v7M3.5 5.5L6 8l2.5-2.5"/>
           <path d="M1.5 9.5v1h9v-1"/>
         </svg>
-        Exportar
+        <span id="txt-btn-export">Export</span>
       </button>
-      <button class="tb-btn" onclick="openIOModal('import')" aria-label="Importar blocos de JSON">
+      <button class="tb-btn" onclick="openIOModal('import')" aria-label="Import blocks from JSON">
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M6 8V1M3.5 3.5L6 1l2.5 2.5"/>
           <path d="M1.5 9.5v1h9v-1"/>
         </svg>
-        Importar
+        <span id="txt-btn-import">Import</span>
       </button>
 
       <span class="tb-status" id="status">0 / 15</span>
     </div>
 
     <div id="status-bar">
-      <span id="hint">arrasta o fundo para mover tudo · clica num bloco, depois noutro para conectar · duplo clique: editar</span>
+      <span id="hint">drag background to pan · click a block, then another to connect · double-click: edit</span>
     </div>
 
     <!-- Novo bloco modal -->
     <div id="modal-overlay" role="dialog" aria-labelledby="modal-title" aria-modal="true">
       <div id="modal">
-        <h3 id="modal-title">// novo bloco</h3>
-        <label for="new-label">Nome do bloco</label>
-        <input type="text" id="new-label" placeholder="ex: Ideias, Tarefas, Metas…" maxlength="20" />
-        <label for="connect-select">Conectar a (opcional)</label>
-        <select id="connect-select"><option value="">— sem conexão —</option></select>
+        <h3 id="modal-title">// new block</h3>
+        <label for="new-label" id="lbl-new-label">Block name</label>
+        <input type="text" id="new-label" placeholder="e.g. Ideas, Tasks, Goals…" maxlength="20" />
+        <label for="connect-select" id="lbl-connect">Connect to (optional)</label>
+        <select id="connect-select"><option value="" id="opt-no-conn">— no connection —</option></select>
         <div class="modal-row">
-          <button class="modal-btn" onclick="closeModal()" aria-label="Cancelar criação de bloco">cancelar</button>
-          <button class="modal-btn confirm" onclick="confirmCreate()" aria-label="Confirmar criação de bloco">criar →</button>
+          <button class="modal-btn" onclick="closeModal()" aria-label="Cancel block creation" id="btn-modal-cancel">cancel</button>
+          <button class="modal-btn confirm" onclick="confirmCreate()" aria-label="Confirm block creation" id="btn-modal-create">create →</button>
         </div>
       </div>
     </div>
@@ -374,13 +374,13 @@ html, body { height: 100%; }
           <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" id="io-modal-icon" aria-hidden="true">
             <path d="M6.5 1v8M3.5 6L6.5 9l3-3"/><path d="M1.5 11h10"/>
           </svg>
-          <span>exportar</span>
+          <span id="io-modal-title-txt">export</span>
         </h3>
-        <div id="io-modal-subtitle">Partilha ou faz backup do teu espaço de blocos</div>
+        <div id="io-modal-subtitle">Share or backup your block space</div>
 
         <div id="io-tabs" role="tablist">
-          <button class="io-tab active" id="tab-export" onclick="switchIOTab('export')" role="tab" aria-selected="true" aria-controls="io-export-pane">↓ Exportar</button>
-          <button class="io-tab" id="tab-import" onclick="switchIOTab('import')" role="tab" aria-selected="false" aria-controls="io-import-pane">↑ Importar</button>
+          <button class="io-tab active" id="tab-export" onclick="switchIOTab('export')" role="tab" aria-selected="true" aria-controls="io-export-pane"><span id="tab-export-lbl">↓ Export</span></button>
+          <button class="io-tab" id="tab-import" onclick="switchIOTab('import')" role="tab" aria-selected="false" aria-controls="io-import-pane"><span id="tab-import-lbl">↑ Import</span></button>
         </div>
 
         <!-- Export pane -->
@@ -388,38 +388,38 @@ html, body { height: 100%; }
           <div class="io-meta" id="io-export-meta"></div>
           <textarea class="io-json-box" id="io-export-box" readonly aria-label="JSON exportado"></textarea>
           <div class="io-btn-row">
-            <button class="io-btn primary" onclick="copyExportJSON()" aria-label="Copiar JSON para clipboard">
+            <button class="io-btn primary" onclick="copyExportJSON()" aria-label="Copy JSON to clipboard">
               <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="3" width="7" height="7" rx="1.5"/><path d="M3 3V2a1 1 0 011-1h5a1 1 0 011 1v5a1 1 0 01-1 1h-1"/></svg>
-              Copiar JSON
+              <span id="txt-copy-json">Copy JSON</span>
             </button>
-            <button class="io-btn" onclick="downloadExportJSON()" aria-label="Descarregar JSON como arquivo">
+            <button class="io-btn" onclick="downloadExportJSON()" aria-label="Download JSON as file">
               <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.5 1v6M3 5l2.5 2.5L8 5"/><path d="M1 9.5h9"/></svg>
-              Download
+              <span id="txt-btn-download">Download</span>
             </button>
           </div>
-          <button class="io-btn" style="width:100%" onclick="closeIOModal()" aria-label="Fechar modal de exportação">fechar</button>
+          <button class="io-btn" style="width:100%" onclick="closeIOModal()" aria-label="Close export modal" id="btn-io-close-export">close</button>
         </div>
 
         <!-- Import pane -->
         <div id="io-import-pane" role="tabpanel" aria-labelledby="tab-import">
-          <div class="io-meta">Cola o JSON exportado abaixo. O estado atual será <strong>substituído</strong>.</div>
-          <textarea class="io-json-box" id="io-import-box" placeholder='{"blocks":[...],"connections":[...]}' aria-label="Campo para colar JSON a importar"></textarea>
+          <div class="io-meta">Paste the exported JSON below. Current state will be <strong>replaced</strong>.</div>
+          <textarea class="io-json-box" id="io-import-box" placeholder='{"blocks":[...],"connections":[...]}' aria-label="Paste JSON to import"></textarea>
           <div id="io-import-error" role="alert"></div>
           <div class="io-btn-row">
-            <button class="io-btn" onclick="triggerFileImport()" aria-label="Abrir arquivo JSON">
+            <button class="io-btn" onclick="triggerFileImport()" aria-label="Open JSON file">
               <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 7v2a1 1 0 01-1 1h-6a1 1 0 01-1-1V7"/><path d="M5.5 1v6M3 4l2.5-2.5L8 4"/></svg>
-              Abrir ficheiro
+              <span id="txt-open-file">Open file</span>
             </button>
-            <button class="io-btn green" onclick="confirmImport()" aria-label="Carregar e importar JSON">
+            <button class="io-btn green" onclick="confirmImport()" aria-label="Load and import JSON">
               <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><polyline points="1.5,5.5 4.5,8.5 9.5,2.5"/></svg>
-              Carregar
+              <span id="txt-load">Load</span>
             </button>
           </div>
-          <button class="io-btn" style="width:100%;margin-top:2px" onclick="closeIOModal()" aria-label="Fechar modal de importação">fechar</button>
+          <button class="io-btn" style="width:100%;margin-top:2px" onclick="closeIOModal()" aria-label="Close import modal" id="btn-io-close-import">close</button>
         </div>
 
         <!-- Hidden file input -->
-        <input type="file" id="file-input" accept=".json,application/json" style="display:none" onchange="handleFileImport(event)" aria-label="Seletor de arquivo JSON" />
+        <input type="file" id="file-input" accept=".json,application/json" style="display:none" onchange="handleFileImport(event)" aria-label="JSON file selector" />
       </div>
     </div>
 
@@ -435,18 +435,9 @@ html, body { height: 100%; }
             </svg>
             Floatmind
           </h3>
-          <button id="about-close-btn" onclick="hideAbout()" aria-label="Fechar modal (Esc)">×</button>
+          <button id="about-close-btn" onclick="hideAbout()" aria-label="Close modal (Esc)">×</button>
         </div>
-        <div id="about-content">
-          <p>A maioria das ferramentas de produtividade foi criada para mentes que pensam em linha reta. Listas, prazos, hierarquias — sistemas desenhados para um tipo de foco e função executiva que muitos de nós simplesmente não temos.</p>
-          <p><strong>Floatmind</strong> foi criada de forma diferente. E não apenas para pessoas com TDAH — foi criada por pessoas com TDAH.</p>
-          <p>Sabemos o que é ter dez ideias ao mesmo tempo e não conseguir agarrar nenhuma. Conhecemos a frustração de abrir uma lista de tarefas e sentir que ela nos olha de volta com julgamento.</p>
-          <p>Por isso construímos algo diferente.</p>
-          <p>Floatmind é um ambiente de pensamento espacial — uma tela tridimensional onde os teus pensamentos, compromissos e objetivos ganham a forma de blocos flutuantes, conectados não por estrutura rígida, mas por significado. Organizas-os da forma como a tua mente realmente funciona: por clusters, por espaço, por relação entre si.</p>
-          <p>Sem hierarquias obrigatórias. Sem pressão para ter a caixa de entrada em zero. Sem uma única forma "certa" de organizar.</p>
-          <p>Apenas os teus pensamentos, com forma e espaço para existir.</p>
-          <p class="about-credit">Feito por mentes que veem tudo ao mesmo tempo — para mentes que precisam de um lugar onde pousar.</p>
-        </div>
+        <div id="about-content"></div>
       </div>
     </div>
 
@@ -455,12 +446,158 @@ html, body { height: 100%; }
 </div>
 
 <script>
+// ── i18n ──────────────────────────────────────────────────────
+const LANG = navigator.language.toLowerCase().startsWith('pt') ? 'pt' : 'en';
+const T = {
+  en: {
+    labelBlocks:'blocks', labelData:'data',
+    btnNewBlock:'New block', btnDelete:'Delete', btnCancel:'Cancel',
+    btnRealign:'Realign', btnUndo:'Undo', btnRedo:'Redo',
+    btnAbout:'About', btnExport:'Export', btnImport:'Import',
+    hint:'drag background to pan · click a block, then another to connect · double-click: edit',
+    descEmpty:'no description', descPlaceholder:'Write a description…',
+    descEdit:'edit', descCancel:'cancel', descSave:'save',
+    modalTitle:'// new block', modalLabelName:'Block name',
+    modalPlaceholder:'e.g. Ideas, Tasks, Goals…',
+    modalLabelConnect:'Connect to (optional)', modalNoConn:'— no connection —',
+    modalBtnCancel:'cancel', modalBtnCreate:'create →',
+    ioExport:'export', ioImport:'import',
+    ioSubtitle:'Share or backup your block space',
+    tabExport:'↓ Export', tabImport:'↑ Import',
+    ioCopyJSON:'Copy JSON', ioCopied:'Copied!', ioDownload:'Download', ioClose:'close',
+    ioImportMeta:'Paste the exported JSON below. Current state will be <strong>replaced</strong>.',
+    ioOpenFile:'Open file', ioLoad:'Load',
+    toastAlreadyCentered:'blocks already centered',
+    toastRealigned:'blocks realigned ✓',
+    toastNothingUndo:'nothing to undo', toastUndone:'undone ✓',
+    toastNothingRedo:'nothing to redo', toastRedone:'redone ✓',
+    toastJSONCopied:'JSON copied ✓', toastFileDownloaded:'file downloaded ✓',
+    toastConnCancelled:'connection selection cancelled',
+    toastImported:(n)=>`${n} block${n!==1?'s':''} imported ✓`,
+    toastDisconnected:(a,b)=>`${a} ↔ ${b} disconnected`,
+    toastConnected:(a,b)=>`${a} ↔ ${b} connected`,
+    errPasteJSON:'Paste a valid JSON above.',
+    errInvalidJSON:'Invalid JSON — check the syntax.',
+    errMissingBlocks:'Invalid format — "blocks" field missing.',
+    errMissingFields:'Invalid format — blocks missing required fields.',
+    exportMeta:(nb,nc,kb)=>`<strong>${nb}</strong> block${nb!==1?'s':''} · <strong>${nc}</strong> connection${nc!==1?'s':''} · ${kb} KB`,
+    canvasNearer:'nearer', canvasFurther:'further',
+    aboutContent:`<p>Most productivity tools were built for minds that think in straight lines. Lists, deadlines, hierarchies — systems designed for a type of focus and executive function that many of us simply don't have.</p>
+          <p><strong>Floatmind</strong> was built differently. And not just for people with ADHD — it was built by people with ADHD.</p>
+          <p>We know what it's like to have ten ideas at once and not be able to hold onto any of them. We know the frustration of opening a to-do list and feeling it stare back at you with judgment.</p>
+          <p>That's why we built something different.</p>
+          <p>Floatmind is a spatial thinking environment — a three-dimensional canvas where your thoughts, commitments and goals take shape as floating blocks, connected not by rigid structure but by meaning. You organise them the way your mind actually works: by clusters, by space, by relationship.</p>
+          <p>No mandatory hierarchies. No pressure to reach inbox zero. No single "right" way to organise.</p>
+          <p>Just your thoughts, with shape and space to exist.</p>
+          <p class="about-credit">Made by minds that see everything at once — for minds that need a place to land.</p>`,
+    initBlocks:[
+      {label:'Ideas', desc:'Brainstorming and creative thoughts to explore.'},
+      {label:'Tasks', desc:'Concrete actions and commitments to carry out.'},
+      {label:'Goals', desc:'Long-term objectives and vision for the future.'}
+    ],
+  },
+  pt: {
+    labelBlocks:'blocos', labelData:'dados',
+    btnNewBlock:'Novo bloco', btnDelete:'Deletar', btnCancel:'Cancelar',
+    btnRealign:'Realinhar', btnUndo:'Desfazer', btnRedo:'Refazer',
+    btnAbout:'Sobre', btnExport:'Exportar', btnImport:'Importar',
+    hint:'arrasta o fundo para mover tudo · clica num bloco, depois noutro para conectar · duplo clique: editar',
+    descEmpty:'sem descrição', descPlaceholder:'Escreve uma descrição…',
+    descEdit:'editar', descCancel:'cancelar', descSave:'guardar',
+    modalTitle:'// novo bloco', modalLabelName:'Nome do bloco',
+    modalPlaceholder:'ex: Ideias, Tarefas, Metas…',
+    modalLabelConnect:'Conectar a (opcional)', modalNoConn:'— sem conexão —',
+    modalBtnCancel:'cancelar', modalBtnCreate:'criar →',
+    ioExport:'exportar', ioImport:'importar',
+    ioSubtitle:'Partilha ou faz backup do teu espaço de blocos',
+    tabExport:'↓ Exportar', tabImport:'↑ Importar',
+    ioCopyJSON:'Copiar JSON', ioCopied:'Copiado!', ioDownload:'Download', ioClose:'fechar',
+    ioImportMeta:'Cola o JSON exportado abaixo. O estado atual será <strong>substituído</strong>.',
+    ioOpenFile:'Abrir ficheiro', ioLoad:'Carregar',
+    toastAlreadyCentered:'blocos já estão centralizados',
+    toastRealigned:'blocos realinhados ✓',
+    toastNothingUndo:'nada para desfazer', toastUndone:'desfeito ✓',
+    toastNothingRedo:'nada para refazer', toastRedone:'refeito ✓',
+    toastJSONCopied:'JSON copiado ✓', toastFileDownloaded:'ficheiro descarregado ✓',
+    toastConnCancelled:'seleção de conexão cancelada',
+    toastImported:(n)=>`${n} bloco${n!==1?'s':''} importado${n!==1?'s':''} ✓`,
+    toastDisconnected:(a,b)=>`${a} ↔ ${b} desligados`,
+    toastConnected:(a,b)=>`${a} ↔ ${b} ligados`,
+    errPasteJSON:'Cole um JSON válido acima.',
+    errInvalidJSON:'JSON inválido — verifica a sintaxe.',
+    errMissingBlocks:'Formato inválido — campo "blocks" em falta.',
+    errMissingFields:'Formato inválido — blocos faltam campos obrigatórios.',
+    exportMeta:(nb,nc,kb)=>`<strong>${nb}</strong> bloco${nb!==1?'s':''} · <strong>${nc}</strong> ligaç${nc!==1?'ões':'ão'} · ${kb} KB`,
+    canvasNearer:'próximo', canvasFurther:'fundo',
+    aboutContent:`<p>A maioria das ferramentas de produtividade foi criada para mentes que pensam em linha reta. Listas, prazos, hierarquias — sistemas desenhados para um tipo de foco e função executiva que muitos de nós simplesmente não temos.</p>
+          <p><strong>Floatmind</strong> foi criada de forma diferente. E não apenas para pessoas com TDAH — foi criada por pessoas com TDAH.</p>
+          <p>Sabemos o que é ter dez ideias ao mesmo tempo e não conseguir agarrar nenhuma. Conhecemos a frustração de abrir uma lista de tarefas e sentir que ela nos olha de volta com julgamento.</p>
+          <p>Por isso construímos algo diferente.</p>
+          <p>Floatmind é um ambiente de pensamento espacial — uma tela tridimensional onde os teus pensamentos, compromissos e objetivos ganham a forma de blocos flutuantes, conectados não por estrutura rígida, mas por significado. Organizas-os da forma como a tua mente realmente funciona: por clusters, por espaço, por relação entre si.</p>
+          <p>Sem hierarquias obrigatórias. Sem pressão para ter a caixa de entrada em zero. Sem uma única forma "certa" de organizar.</p>
+          <p>Apenas os teus pensamentos, com forma e espaço para existir.</p>
+          <p class="about-credit">Feito por mentes que veem tudo ao mesmo tempo — para mentes que precisam de um lugar onde pousar.</p>`,
+    initBlocks:[
+      {label:'Ideias', desc:'Brainstorming e pensamentos criativos a explorar.'},
+      {label:'Tarefas', desc:'Ações concretas e compromissos a realizar.'},
+      {label:'Metas', desc:'Objetivos de longo prazo e visão de futuro.'}
+    ],
+  }
+};
+const L = T[LANG];
+
+function applyTranslations() {
+  document.documentElement.lang = LANG;
+  // Toolbar
+  const s = (id, txt) => { const el=document.getElementById(id); if(el) el.textContent=txt; };
+  s('lbl-blocks', L.labelBlocks);
+  s('lbl-data', L.labelData);
+  s('txt-btn-add', L.btnNewBlock);
+  s('txt-btn-delete', L.btnDelete);
+  s('txt-btn-cancel', L.btnCancel);
+  s('txt-btn-realign', L.btnRealign);
+  s('txt-btn-undo', L.btnUndo);
+  s('txt-btn-redo', L.btnRedo);
+  s('txt-btn-about', L.btnAbout);
+  s('txt-btn-export', L.btnExport);
+  s('txt-btn-import', L.btnImport);
+  // Hint
+  s('hint', L.hint);
+  // Desc panel
+  document.getElementById('desc-textarea').placeholder = L.descPlaceholder;
+  s('desc-save-btn', L.descSave);
+  // New block modal
+  s('modal-title', L.modalTitle);
+  s('lbl-new-label', L.modalLabelName);
+  document.getElementById('new-label').placeholder = L.modalPlaceholder;
+  s('lbl-connect', L.modalLabelConnect);
+  s('opt-no-conn', L.modalNoConn);
+  s('btn-modal-cancel', L.modalBtnCancel);
+  s('btn-modal-create', L.modalBtnCreate);
+  // IO modal
+  s('io-modal-title-txt', L.ioExport);
+  s('io-modal-subtitle', L.ioSubtitle);
+  s('tab-export-lbl', L.tabExport);
+  s('tab-import-lbl', L.tabImport);
+  s('txt-copy-json', L.ioCopyJSON);
+  s('btn-io-close-export', L.ioClose);
+  document.querySelector('#io-import-pane .io-meta').innerHTML = L.ioImportMeta;
+  s('txt-open-file', L.ioOpenFile);
+  s('txt-load', L.ioLoad);
+  s('txt-btn-download', L.ioDownload);
+  s('btn-io-close-import', L.ioClose);
+  // About content
+  document.getElementById('about-content').innerHTML = L.aboutContent;
+}
+
 const canvas  = document.getElementById('canvas');
 const wrap    = document.getElementById('canvas-wrap');
 const ctx     = canvas.getContext('2d');
 const editor  = document.getElementById('inline-editor');
 const descPanel = document.getElementById('desc-panel');
 const toastEl   = document.getElementById('toast');
+
+applyTranslations();
 
 let W, H;
 function resize() { 
@@ -553,15 +690,15 @@ function applyHistory(st) {
 }
 
 function undo() {
-  if (historyIndex <= 0) { showToast('nada para desfazer'); return; }
+  if (historyIndex <= 0) { showToast(L.toastNothingUndo); return; }
   historyIndex--; applyHistory(history[historyIndex]);
-  showToast('desfeito ✓');
+  showToast(L.toastUndone);
 }
 
 function redo() {
-  if (historyIndex >= history.length - 1) { showToast('nada para refazer'); return; }
+  if (historyIndex >= history.length - 1) { showToast(L.toastNothingRedo); return; }
   historyIndex++; applyHistory(history[historyIndex]);
-  showToast('refeito ✓');
+  showToast(L.toastRedone);
 }
 
 // ── Persistence ───────────────────────────────────────────────
@@ -573,7 +710,7 @@ function saveState(){
     localStorage.setItem(STORAGE_KEY, json);
     snapshot();  // Só após sucesso
   }catch(e){
-    console.warn('Falha ao persistir estado:', e);
+    console.warn('Failed to persist state:', e);
     // Undo/redo permanece funcional mesmo se localStorage falhar
   }
 }
@@ -647,7 +784,7 @@ function switchIOTab(tab){
   document.getElementById('tab-import').setAttribute('aria-selected', tab==='import');
   document.getElementById('io-export-pane').classList.toggle('visible', tab==='export');
   document.getElementById('io-import-pane').classList.toggle('visible', tab==='import');
-  document.querySelector('#io-modal-title span').textContent = tab==='export' ? 'exportar' : 'importar';
+  document.getElementById('io-modal-title-txt').textContent = tab==='export' ? L.ioExport : L.ioImport;
   if(tab==='export') refreshExportPane();
 }
 
@@ -656,19 +793,19 @@ function refreshExportPane(){
   const json = JSON.stringify(payload, null, 2);
   document.getElementById('io-export-box').value = json;
   document.getElementById('io-export-meta').innerHTML =
-    `<strong>${blocks.length}</strong> bloco${blocks.length!==1?'s':''} · <strong>${connections.length}</strong> ligaç${connections.length!==1?'ões':'ão'} · ${(new Blob([json]).size/1024).toFixed(1)} KB`;
+    L.exportMeta(blocks.length, connections.length, (new Blob([json]).size/1024).toFixed(1));
 }
 
 function copyExportJSON(){
   const box = document.getElementById('io-export-box');
   navigator.clipboard.writeText(box.value).then(()=>{
-    showToast('JSON copiado ✓');
+    showToast(L.toastJSONCopied);
     const btn = document.querySelector('#io-export-pane .io-btn.primary');
     const orig = btn.innerHTML;
-    btn.innerHTML = '<svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><polyline points="1.5,5.5 4.5,8.5 9.5,2.5"/></svg> Copiado!';
+    btn.innerHTML = '<svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><polyline points="1.5,5.5 4.5,8.5 9.5,2.5"/></svg> ' + L.ioCopied;
     setTimeout(()=>btn.innerHTML=orig, 1600);
   }).catch(()=>{
-    box.select(); document.execCommand('copy'); showToast('JSON copiado ✓');
+    box.select(); document.execCommand('copy'); showToast(L.toastJSONCopied);
   });
 }
 
@@ -681,7 +818,7 @@ function downloadExportJSON(){
   const a    = document.createElement('a');
   a.href = url; a.download = `floatmind-${date}.json`;
   a.click(); URL.revokeObjectURL(url);
-  showToast('ficheiro descarregado ✓');
+  showToast(L.toastFileDownloaded);
 }
 
 function triggerFileImport(){
@@ -707,14 +844,14 @@ function confirmImport(){
   const box   = document.getElementById('io-import-box');
   errEl.textContent=''; box.classList.remove('error');
 
-  if(!raw){ errEl.textContent='Cole um JSON válido acima.'; box.classList.add('error'); return; }
+  if(!raw){ errEl.textContent=L.errPasteJSON; box.classList.add('error'); return; }
 
   let payload;
   try{ payload = JSON.parse(raw); }
-  catch(e){ errEl.textContent='JSON inválido — verifica a sintaxe.'; box.classList.add('error'); return; }
+  catch(e){ errEl.textContent=L.errInvalidJSON; box.classList.add('error'); return; }
 
   if(!Array.isArray(payload.blocks)){
-    errEl.textContent='Formato inválido — campo "blocks" em falta.'; box.classList.add('error'); return;
+    errEl.textContent=L.errMissingBlocks; box.classList.add('error'); return;
   }
 
   // ✅ MELHORIA: Validar estrutura completa de cada bloco
@@ -724,7 +861,7 @@ function confirmImport(){
     typeof b.id === 'number' &&
     typeof b.label === 'string'
   )){
-    errEl.textContent='Formato inválido — blocos faltam campos obrigatórios.'; box.classList.add('error'); return;
+    errEl.textContent=L.errMissingFields; box.classList.add('error'); return;
   }
 
   closeEditor(true); closeDescPanel();
@@ -735,7 +872,7 @@ function confirmImport(){
   selected=null; pendingConn=null; mode='none'; descBlock=null;
   saveState(); setActiveBtn(null); updateStatus(); draw();
   closeIOModal();
-  showToast(`${blocks.length} bloco${blocks.length!==1?'s':''} importado${blocks.length!==1?'s':''} ✓`);
+  showToast(L.toastImported(blocks.length));
 }
 
 // ── Projection ────────────────────────────────────────────────
@@ -813,7 +950,7 @@ function draw(){
     ctx.fill();ctx.shadowBlur=0;
   }
   ctx.fillStyle='rgba(91,143,255,0.35)';ctx.font=`500 10px 'IBM Plex Mono',monospace`;ctx.textAlign='right';
-  ctx.fillText('próximo',rx-8,36);ctx.fillText('fundo',rx-8,40+rh+13);
+  ctx.fillText(L.canvasNearer,rx-8,36);ctx.fillText(L.canvasFurther,rx-8,40+rh+13);
   const vig=ctx.createRadialGradient(W/2,H/2,H*.3,W/2,H/2,H*.9);
   vig.addColorStop(0,'rgba(6,8,16,0)');vig.addColorStop(1,'rgba(6,8,16,0.35)');
   ctx.fillStyle=vig;ctx.fillRect(0,0,W,H);
@@ -877,8 +1014,8 @@ function drawBlock(b){
 
 function toggleConn(a,b2){
   const from=a.id,to=b2.id,ex=connections.find(c=>(c.from===from&&c.to===to)||(c.from===to&&c.to===from));
-  if(ex){connections=connections.filter(c=>!((c.from===from&&c.to===to)||(c.from===to&&c.to===from)));showToast(`${a.label} ↔ ${b2.label} desligados`);}
-  else{connections.push({from,to});showToast(`${a.label} ↔ ${b2.label} ligados`);}
+  if(ex){connections=connections.filter(c=>!((c.from===from&&c.to===to)||(c.from===to&&c.to===from)));showToast(L.toastDisconnected(a.label,b2.label));}
+  else{connections.push({from,to});showToast(L.toastConnected(a.label,b2.label));}
   saveState();
 }
 
@@ -933,7 +1070,7 @@ function pip(px,py,poly){ let inside=false; for(let i=0,j=poly.length-1;i<poly.l
         lastTap=0; tapBlock=null;
       } else {
         lastTap=now; tapBlock=touchBlock;
-        if(pendingConn){ if(pendingConn.id===touchBlock.id){pendingConn=null;showToast('seleção de conexão cancelada');}else{toggleConn(pendingConn,touchBlock);pendingConn=null;selected=touchBlock;} }
+        if(pendingConn){ if(pendingConn.id===touchBlock.id){pendingConn=null;showToast(L.toastConnCancelled);}else{toggleConn(pendingConn,touchBlock);pendingConn=null;selected=touchBlock;} }
         else{ pendingConn=touchBlock; selected=touchBlock; }
       }
     }
@@ -975,7 +1112,7 @@ canvas.addEventListener('mouseup',e=>{
   const isClick=Math.hypot(mx-mouseDownX,my-mouseDownY)<5;
   if(isClick&&mouseDownBlock&&mode==='none'){
     const b=mouseDownBlock;
-    if(pendingConn){if(pendingConn.id===b.id){pendingConn=null;showToast('seleção de conexão cancelada');}else{toggleConn(pendingConn,b);pendingConn=null;selected=b;}}
+    if(pendingConn){if(pendingConn.id===b.id){pendingConn=null;showToast(L.toastConnCancelled);}else{toggleConn(pendingConn,b);pendingConn=null;selected=b;}}
     else{pendingConn=b;selected=b;}
   }
   if(!isClick||!mouseDownBlock){if(!mouseDownBlock)pendingConn=null;}
@@ -1041,13 +1178,13 @@ function repositionDesc(){
 }
 function setDescRead(b){
   const dt=document.getElementById('desc-text'),ta=document.getElementById('desc-textarea'),sb=document.getElementById('desc-save-btn'),eb=document.getElementById('desc-edit-btn');
-  const c=b&&b.desc&&b.desc.trim();dt.textContent=c||'sem descrição';dt.className=c?'':'empty';
-  dt.style.display='block';ta.style.display='none';sb.style.display='none';eb.textContent='editar';
+  const c=b&&b.desc&&b.desc.trim();dt.textContent=c||L.descEmpty;dt.className=c?'':'empty';
+  dt.style.display='block';ta.style.display='none';sb.style.display='none';eb.textContent=L.descEdit;
 }
 function toggleDescEdit(){
   if(!descBlock) return;
   const dt=document.getElementById('desc-text'),ta=document.getElementById('desc-textarea'),sb=document.getElementById('desc-save-btn'),eb=document.getElementById('desc-edit-btn');
-  if(ta.style.display==='none'){ta.value=descBlock.desc||'';dt.style.display='none';ta.style.display='block';sb.style.display='block';eb.textContent='cancelar';ta.focus();}
+  if(ta.style.display==='none'){ta.value=descBlock.desc||'';dt.style.display='none';ta.style.display='block';sb.style.display='block';eb.textContent=L.descCancel;ta.focus();}
   else setDescRead(descBlock);
 }
 function saveDesc(){if(!descBlock) return;descBlock.desc=document.getElementById('desc-textarea').value.trim();setDescRead(descBlock);draw();saveState();}
@@ -1087,13 +1224,13 @@ function realignBlocks(){
   const dy = H/2 - (minY + maxY)/2;
 
   if (Math.abs(dx) < 0.1 && Math.abs(dy) < 0.1) {
-    showToast('blocos já estão centralizados');
+    showToast(L.toastAlreadyCentered);
     return;
   }
 
   blocks.forEach(b => { b.x += dx; b.y += dy; });
   saveState(); draw();
-  showToast('blocos realinhados ✓');
+  showToast(L.toastRealigned);
 }
 function setActiveBtn(id){ ['btn-add','btn-delete'].forEach(b=>document.getElementById(b)?.classList.remove('active'));if(id)document.getElementById(id)?.classList.add('active'); }
 function updateStatus(){ document.getElementById('status').textContent=`${blocks.length} / ${MAX}${mode!=='none'?' · '+mode:''}`; }
@@ -1102,7 +1239,7 @@ function updateStatus(){ document.getElementById('status').textContent=`${blocks
 let pX,pY;
 function openModal(x,y){
   pX=x;pY=y;
-  const sel=document.getElementById('connect-select');sel.innerHTML='<option value="">— sem conexão —</option>';
+  const sel=document.getElementById('connect-select');sel.innerHTML='<option value="" id="opt-no-conn">— no connection —</option>';
   blocks.forEach(b=>{const o=document.createElement('option');o.value=b.id;o.textContent=b.label;sel.appendChild(o);});
   document.getElementById('new-label').value='';
   document.getElementById('modal-overlay').classList.add('show');
@@ -1134,9 +1271,9 @@ function deleteBlock(b){
 // ── Init ──────────────────────────────────────────────────────
 setTimeout(()=>{
   W=wrap.clientWidth;H=wrap.clientHeight;canvas.width=W;canvas.height=H;
-  if(!loadState()){    [{x:W*.50,y:H*.375,z:0,label:'Ideias',desc:'Brainstorming e pensamentos criativos a explorar.'},
-     {x:W*.375,y:H*.625,z:80,label:'Tarefas',desc:'Ações concretas e compromissos a realizar.'},
-     {x:W*.625,y:H*.625,z:160,label:'Metas',desc:'Objetivos de longo prazo e visão de futuro.'}]
+  if(!loadState()){    [{x:W*.50,y:H*.375,z:0,...L.initBlocks[0]},
+     {x:W*.375,y:H*.625,z:80,...L.initBlocks[1]},
+     {x:W*.625,y:H*.625,z:160,...L.initBlocks[2]}]
     .forEach(d=>{idCounter++;blocks.push({id:idCounter,label:d.label,desc:d.desc,x:d.x,y:d.y,z:d.z,w:DEFAULT_W,h:DEFAULT_H,zScale:1});});
     connections.push({from:1,to:2},{from:2,to:3});
   }
