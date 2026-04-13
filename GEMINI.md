@@ -1,6 +1,6 @@
-# Mindnotes (3D Blocks Editor)
+# Floatmind (3D Blocks Editor)
 
-Mindnotes is a minimalist, single-file 3D block editor designed for organizing ideas, tasks, and goals in a spatial, connected environment. It uses a pseudo-3D perspective on a 2D canvas to visualize relationships between components.
+Floatmind is a minimalist, single-file 3D block editor designed for organizing ideas, tasks, and goals in a spatial, connected environment. It uses a pseudo-3D perspective on a 2D canvas to visualize relationships between components.
 
 ## Project Overview
 
