@@ -56,9 +56,11 @@ html, body { height: 100%; }
 }
 
 #desc-panel {
-  display: none; position: absolute; z-index: 60; width: 260px;
+  display: none; position: absolute; z-index: 60;
+  width: calc(260px * var(--desc-scale, 1));
+  padding: 18px;
   background: rgba(7, 11, 25, 0.97); border: 0.5px solid var(--border);
-  border-radius: 11px; padding: 18px;
+  border-radius: 11px;
   backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
   box-shadow: 0 12px 40px rgba(0,0,0,0.55), 0 0 0 0.5px rgba(80,120,240,0.08);
   animation: panelIn 0.18s cubic-bezier(0.34,1.4,0.64,1);
@@ -67,13 +69,13 @@ html, body { height: 100%; }
   from { opacity:0; transform:scale(0.94) translateY(-6px); }
   to   { opacity:1; transform:scale(1)    translateY(0);    }
 }
-#desc-panel-title { font-size:12px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; letter-spacing:0.08em; text-transform:uppercase; }
-#desc-block-name  { color:var(--text-dim); max-width:160px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+#desc-panel-title { font-size:12px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; letter-spacing:0.08em; text-transform:uppercase; gap: 8px; }
+#desc-block-name  { color:var(--text-dim); flex: 1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 #desc-edit-btn    { background:transparent; border:0.5px solid rgba(80,120,240,0.28); color:var(--text-dim); font-size:11px; font-weight:500; padding:4px 10px; border-radius:4px; cursor:pointer; font-family:var(--font); letter-spacing:0.05em; transition:all .15s; }
 #desc-edit-btn:hover { border-color:var(--accent); color:var(--accent); background:rgba(91,143,255,0.08); }
-#desc-text        { font-size:14px; color:var(--text); line-height:1.75; min-height:50px; word-break:break-word; white-space:pre-wrap; font-family:var(--font); }
+#desc-text        { font-size:14px; color:var(--text); line-height:1.75; min-height:calc(50px * var(--desc-scale, 1)); word-break:break-word; white-space:pre-wrap; font-family:var(--font); }
 #desc-text.empty  { color:rgba(130,155,210,0.25); font-style:italic; }
-#desc-textarea    { display:none; width:100%; background:rgba(0,4,18,0.9); border:0.5px solid rgba(80,120,240,0.35); border-radius:7px; color:var(--text); font-size:14px; font-family:var(--font); padding:10px 12px; outline:none; resize:none; line-height:1.75; min-height:86px; transition:border-color .15s, box-shadow .15s; }
+#desc-textarea    { display:none; width:100%; background:rgba(0,4,18,0.9); border:0.5px solid rgba(80,120,240,0.35); border-radius:7px; color:var(--text); font-size:14px; font-family:var(--font); padding:10px 12px; outline:none; resize:none; line-height:1.75; min-height:calc(86px * var(--desc-scale, 1)); transition:border-color .15s, box-shadow .15s; }
 #desc-textarea:focus { border-color:var(--accent); box-shadow:0 0 0 2px rgba(91,143,255,0.12); }
 #desc-save-btn    { display:none; margin-top:10px; width:100%; background:rgba(91,143,255,0.1); border:0.5px solid rgba(91,143,255,0.4); color:var(--accent); font-size:13px; font-weight:600; padding:10px; border-radius:7px; cursor:pointer; font-family:var(--font); letter-spacing:0.05em; transition:all .15s; }
 #desc-save-btn:hover { background:rgba(91,143,255,0.2); border-color:var(--accent); }
@@ -613,7 +615,7 @@ ro.observe(wrap);
 // ✅ MELHORIA: Desregistar ResizeObserver para evitar memory leak
 window.addEventListener('beforeunload', () => { ro.disconnect(); });
 
-const MAX=15, PERSP=600, ZOOM=2.5, Z_MAX=400;
+const MAX=15, PERSP=600, ZOOM=2.5, Z_MAX=400, BLOCK_Z = 60, HALF_Z = BLOCK_Z / 2;
 const DEFAULT_W = 90, DEFAULT_H = 56;
 
 // ✅ MELHORIA: Cache de cores para blockRGB
@@ -663,7 +665,20 @@ let selected=null, pendingConn=null, mode='none';
 let dragBlock=null, dragOX=0, dragOY=0, dragMoved=false;
 let isPanning=false, panLastX=0, panLastY=0;
 let hovered=null, editingBlock=null, descBlock=null;
+let descScale = parseFloat(localStorage.getItem('floatmind-desc-scale')) || 1.0;
+if (descScale) descPanel.style.setProperty('--desc-scale', descScale);
 let idCounter=0, toastTimer=null;
+
+function changeDescWidth(delta) {
+  descScale = Math.max(0.6, Math.min(2.5, descScale + (delta > 0 ? 0.1 : -0.1)));
+  descPanel.style.setProperty('--desc-scale', descScale);
+  localStorage.setItem('floatmind-desc-scale', descScale);
+  repositionDesc();
+}
+descPanel.addEventListener('wheel', e => {
+  e.preventDefault();
+  changeDescWidth(e.deltaY > 0 ? 1 : -1);
+}, {passive: false});
 
 // ── Undo / Redo ───────────────────────────────────────────────
 const HISTORY_MAX = 30;
@@ -885,7 +900,7 @@ function corners(b){
     {x: right, y: bottom, z: b.z},
     {x: left, y: bottom, z: b.z}
   ];
-  return {f, bk: f.map(p => ({...p, z: p.z + 40}))};
+  return {f, bk: f.map(p => ({...p, z: p.z + BLOCK_Z}))};
 }
 function fInfo(b){ const {f}=corners(b),pf=f.map(p=>project(p.x,p.y,p.z)); const cx=pf.reduce((s,p)=>s+p.px,0)/4,cy=pf.reduce((s,p)=>s+p.py,0)/4; return{pf,cx,cy,sc:pf[0].scale,minX:Math.min(...pf.map(p=>p.px)),maxX:Math.max(...pf.map(p=>p.px)),minY:Math.min(...pf.map(p=>p.py)),maxY:Math.max(...pf.map(p=>p.py))}; }
 function iconPos(b){ const{maxX,minY,sc}=fInfo(b),r=Math.max(7,8*sc); return{x:maxX-r-2,y:minY+r+2,r}; }
@@ -902,9 +917,9 @@ function draw(){
     const w = b.w||DEFAULT_W, h = b.h||DEFAULT_H;
     const tx = dx === 0 ? Infinity : Math.abs((w/2) / dx);
     const ty = dy === 0 ? Infinity : Math.abs((h/2) / dy);
-    const tz = dz === 0 ? Infinity : Math.abs(20 / dz);
+    const tz = dz === 0 ? Infinity : Math.abs(HALF_Z / dz);
     const t = Math.min(tx, ty, tz);
-    return { x: b.x + dx*t, y: b.y + dy*t, z: (b.z+20) + dz*t, t };
+    return { x: b.x + dx*t, y: b.y + dy*t, z: (b.z+HALF_Z) + dz*t, t };
   };
 
   for(const c of connections){
@@ -934,7 +949,7 @@ function draw(){
       ctx.beginPath();ctx.moveTo(pa.px,pa.py);ctx.lineTo(pb.px,pb.py);ctx.strokeStyle='rgba(120,170,255,0.25)';ctx.lineWidth=1;ctx.setLineDash([4,8]);ctx.stroke();ctx.setLineDash([]);
     }
   }
-  const sorted=[...blocks].sort((a,b)=>(b.z+20)-(a.z+20));
+  const sorted=[...blocks].sort((a,b)=>(b.z+HALF_Z)-(a.z+HALF_Z));
   for(const b of sorted) drawBlock(b);
 
   const rh=H-80,rx=W-20;
@@ -1137,6 +1152,13 @@ document.addEventListener('keydown',e=>{
   if(document.getElementById('about-overlay').classList.contains('show')) return;
   if((e.ctrlKey||e.metaKey) && e.key==='z' && !e.shiftKey){ e.preventDefault(); undo(); return; }
   if((e.ctrlKey||e.metaKey) && (e.key==='y' || (e.key==='z' && e.shiftKey))){ e.preventDefault(); redo(); return; }
+  
+  if(descBlock && (e.key==='ArrowLeft'||e.key==='ArrowRight')) {
+    e.preventDefault();
+    changeDescWidth(e.key==='ArrowLeft' ? -40 : 40);
+    return;
+  }
+
   if(!selected) return;
   const m={'ArrowLeft':[-10,0],'ArrowRight':[10,0],'ArrowUp':[0,-10],'ArrowDown':[0,10]};
   if(m[e.key]){

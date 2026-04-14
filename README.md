@@ -1,4 +1,4 @@
-# 3D Blocks Editor
+# Floatmind
 
 Editor interativo de blocos em perspectiva 3D para organizar ideias, tarefas e metas — inspirado no "Second Brain".
 
