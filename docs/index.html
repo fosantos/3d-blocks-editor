@@ -1246,17 +1246,17 @@ function draw(){
         grad.addColorStop(1,`rgba(${rb},${gb},${bb},1)`);
         ctx.strokeStyle=grad; ctx.lineWidth=2.2; ctx.setLineDash([]); ctx.stroke();
       } else {
-        grad.addColorStop(0,`rgba(${ra},${ga},${ba},0.65)`);
-        grad.addColorStop(1,`rgba(${rb},${gb},${bb},0.65)`);
+        grad.addColorStop(0,`rgba(${ra},${ga},${ba},0.8)`);
+        grad.addColorStop(1,`rgba(${rb},${gb},${bb},0.8)`);
         ctx.beginPath();ctx.moveTo(pa.px,pa.py);ctx.lineTo(pb.px,pb.py);
-        ctx.strokeStyle=grad;ctx.lineWidth=1.25;ctx.setLineDash([]);ctx.stroke();
+        ctx.strokeStyle=grad;ctx.lineWidth=1.5;ctx.setLineDash([]);ctx.stroke();
       }
 
       const mx=(pa.px+pb.px)/2,my=(pa.py+pb.py)/2;
       ctx.beginPath();ctx.arc(mx,my,isHighlighted?3.5:2.5,0,Math.PI*2);
       const dg=ctx.createLinearGradient(pa.px,pa.py,pb.px,pb.py);
-      dg.addColorStop(0,`rgba(${ra},${ga},${ba},${isHighlighted?1:0.7})`);
-      dg.addColorStop(1,`rgba(${rb},${gb},${bb},${isHighlighted?1:0.7})`);
+      dg.addColorStop(0,`rgba(${ra},${ga},${ba},${isHighlighted?1:0.8})`);
+      dg.addColorStop(1,`rgba(${rb},${gb},${bb},${isHighlighted?1:0.8})`);
       ctx.fillStyle=dg;
       if(isHighlighted){ ctx.shadowColor=`rgba(255,255,255,0.3)`; ctx.shadowBlur=6; }
       ctx.fill(); ctx.shadowBlur=0;
@@ -1305,8 +1305,8 @@ function drawBlock(b, connectedIds = new Set()){
   // ITEM 4 — connected highlight
   const isConnected = connectedIds.has(b.id);
   const isConn=selected&&selected.id!==b.id&&connections.find(c=>(c.from===selected.id&&c.to===b.id)||(c.from===b.id&&c.to===selected.id));
-  const alpha=isSel||isEdit||isDesc||isPend?1:isHov?.85:isConnected?.9:.55;
-  const sw=isSel||isEdit||isDesc||isPend?1.4:isConnected?1.2:.8;
+  const alpha=isSel||isEdit||isDesc||isPend?1:isHov?.85:isConnected?.9:.7;
+  const sw=isSel||isEdit||isDesc||isPend?1.4:isConnected?1.2:1.0;
 
   const BG = '#060810';
 
@@ -1339,7 +1339,7 @@ function drawBlock(b, connectedIds = new Set()){
   }
 
   if(isPend||isSel){ctx.shadowColor=`rgba(${r},${g},${bl},${isPend?.8:.5})`;ctx.shadowBlur=isPend?22:16;}
-  ctx.strokeStyle=isSel||isPend?`rgba(${r},${g},${bl},1)`:isConnected?`rgba(${r},${g},${bl},0.85)`:isConn?`rgba(${r},${g},${bl},0.6)`:`rgba(${r},${g},${bl},${alpha})`;
+  ctx.strokeStyle=isSel||isPend?`rgba(${r},${g},${bl},1)`:isConnected?`rgba(${r},${g},${bl},0.85)`:isConn?`rgba(${r},${g},${bl},0.75)`:`rgba(${r},${g},${bl},${alpha})`;
   ctx.lineWidth=isConnected&&!isSel?1.6:sw; ctx.stroke(); ctx.shadowBlur=0;
 
   if(!isEdit){
