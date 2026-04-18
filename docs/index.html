@@ -139,7 +139,7 @@ html, body { height: 100%; }
   overflow-y: auto;
   max-height: calc(100vh - 24px);
 }
-.tb-brand { font-size:10px; font-weight:600; color:var(--text-dim); letter-spacing:0.1em; text-transform:uppercase; padding-bottom:8px; display:flex; align-items:center; gap:7px; border-bottom:0.5px solid var(--border); }
+.tb-brand { font-size:10px; font-weight:600; color:var(--text); letter-spacing:0.1em; text-transform:uppercase; padding-bottom:8px; display:flex; align-items:center; gap:7px; border-bottom:0.5px solid var(--border); }
 .tb-brand-dot { width:6px; height:6px; border-radius:50%; background:var(--accent); box-shadow:0 0 6px var(--accent); flex-shrink:0; }
 .tb-divider   { height:0.5px; background:var(--border); margin:2px 0; }
 .tb-label     { font-size:9px; color:rgba(91,143,255,0.3); letter-spacing:0.12em; text-transform:uppercase; padding:4px 0 2px; }
@@ -1305,8 +1305,8 @@ function drawBlock(b, connectedIds = new Set()){
   // ITEM 4 — connected highlight
   const isConnected = connectedIds.has(b.id);
   const isConn=selected&&selected.id!==b.id&&connections.find(c=>(c.from===selected.id&&c.to===b.id)||(c.from===b.id&&c.to===selected.id));
-  const alpha=isSel||isEdit||isDesc||isPend?1:isHov?.85:isConnected?.9:.7;
-  const sw=isSel||isEdit||isDesc||isPend?1.4:isConnected?1.2:1.0;
+  const alpha=isSel||isEdit||isDesc||isPend||isHov?1:isConnected?.9:.7;
+  const sw=isSel||isEdit||isDesc||isPend||isHov?1.4:isConnected?1.2:1.0;
 
   const BG = '#060810';
 
@@ -1332,15 +1332,15 @@ function drawBlock(b, connectedIds = new Set()){
   ctx.fillStyle = `rgba(${r},${g},${bl},${.04+Math.max(0,1-b.z/Z_MAX)*.04})`; ctx.fill();
 
   // ITEM 4 — extra outer glow for connected blocks
-  if(isConnected && !isSel && !isPend) {
+  if(isConnected && !isSel && !isPend && !isHov) {
     const pulse = 0.5 + 0.5 * Math.sin(pulseTime / 500);
     ctx.shadowColor=`rgba(${r},${g},${bl},${0.3 + pulse * 0.25})`;
     ctx.shadowBlur = 14 + pulse * 6;
   }
 
-  if(isPend||isSel){ctx.shadowColor=`rgba(${r},${g},${bl},${isPend?.8:.5})`;ctx.shadowBlur=isPend?22:16;}
-  ctx.strokeStyle=isSel||isPend?`rgba(${r},${g},${bl},1)`:isConnected?`rgba(${r},${g},${bl},0.85)`:isConn?`rgba(${r},${g},${bl},0.75)`:`rgba(${r},${g},${bl},${alpha})`;
-  ctx.lineWidth=isConnected&&!isSel?1.6:sw; ctx.stroke(); ctx.shadowBlur=0;
+  if(isPend||isSel||isHov){ctx.shadowColor=`rgba(${r},${g},${bl},${isPend?.8:.5})`;ctx.shadowBlur=isPend?22:16;}
+  ctx.strokeStyle=isSel||isPend||isHov?`rgba(${r},${g},${bl},1)`:isConnected?`rgba(${r},${g},${bl},0.85)`:isConn?`rgba(${r},${g},${bl},0.75)`:`rgba(${r},${g},${bl},${alpha})`;
+  ctx.lineWidth=isConnected&&!isSel&&!isHov?1.6:sw; ctx.stroke(); ctx.shadowBlur=0;
 
   if(!isEdit){
     const{cx,cy,sc}=fInfo(b),fs=Math.round(13*sc*ss),lh=fs*1.3;
