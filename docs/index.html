@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html data-theme="dark">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,7 +12,7 @@
 
 html, body { height: 100%; }
 
-:root {
+:root, [data-theme="dark"] {
   --bg: #060810;
   --surface: rgba(8, 13, 28, 0.94);
   --border: rgba(80, 120, 240, 0.18);
@@ -23,6 +23,37 @@ html, body { height: 100%; }
   --danger: rgba(255, 90, 110, 0.85);
   --font: 'IBM Plex Mono', 'Courier New', monospace;
   --radius: 10px;
+  /* Canvas colors (used by JS) */
+  --canvas-bg: #060810;
+  --canvas-dot: rgba(50,80,180,0.13);
+  --canvas-block-bg: #060810;
+  --canvas-vignette-color: 6,8,16;
+  --canvas-text-color: 255,255,255;
+  --canvas-conn-preview: rgba(120,170,255,0.25);
+  --canvas-zoom-bar: rgba(91,143,255,0.35);
+  --canvas-zoom-rule: rgba(91,143,255,{a});
+}
+
+[data-theme="light"] {
+  --bg: #f0f2f8;
+  --surface: rgba(240, 243, 252, 0.96);
+  --border: rgba(80, 120, 240, 0.20);
+  --border-hi: rgba(60, 100, 220, 0.55);
+  --text: #1a2340;
+  --text-dim: rgba(60, 90, 160, 0.55);
+  --accent: #3060e0;
+  --danger: rgba(210, 50, 70, 0.85);
+  --font: 'IBM Plex Mono', 'Courier New', monospace;
+  --radius: 10px;
+  /* Canvas colors (used by JS) */
+  --canvas-bg: #eef0f8;
+  --canvas-dot: rgba(80,110,210,0.18);
+  --canvas-block-bg: #eef0f8;
+  --canvas-vignette-color: 220,224,240;
+  --canvas-text-color: 20,30,60;
+  --canvas-conn-preview: rgba(80,110,220,0.25);
+  --canvas-zoom-bar: rgba(50,90,210,0.45);
+  --canvas-zoom-rule: rgba(50,90,210,{a});
 }
 
 #root {
@@ -447,6 +478,103 @@ html, body { height: 100%; }
   box-shadow: 0 0 28px rgba(91,143,255,0.2);
   color: #fff;
 }
+
+/* ── Light mode overrides ──────────────────────────────────────────────── */
+[data-theme="light"] #inline-editor {
+  background: rgba(245, 247, 255, 0.98);
+  border-color: rgba(50, 100, 220, 0.75);
+  color: #1a2340;
+  box-shadow: 0 0 24px rgba(50,100,220,0.15), inset 0 1px 0 rgba(255,255,255,0.6);
+}
+[data-theme="light"] #desc-panel {
+  background: rgba(245, 247, 255, 0.98);
+  box-shadow: 0 12px 40px rgba(0,0,40,0.12), 0 0 0 0.5px rgba(80,120,240,0.10);
+}
+[data-theme="light"] #desc-text.empty { color: rgba(80,110,180,0.35); }
+[data-theme="light"] #desc-textarea {
+  background: rgba(235, 238, 252, 0.9);
+  color: var(--text);
+}
+[data-theme="light"] #desc-edit-btn:hover { background: rgba(50,100,220,0.08); }
+[data-theme="light"] #desc-save-btn { background: rgba(50,100,220,0.10); border-color: rgba(50,100,220,0.4); }
+[data-theme="light"] #desc-save-btn:hover { background: rgba(50,100,220,0.20); }
+[data-theme="light"] #toast {
+  background: rgba(245, 247, 255, 0.98);
+  box-shadow: 0 4px 16px rgba(0,0,40,0.10);
+}
+[data-theme="light"] #toolbar-v {
+  box-shadow: 0 8px 32px rgba(0,0,40,0.12), 0 0 0 0.5px rgba(80,120,240,0.08);
+}
+[data-theme="light"] .tb-label { color: rgba(50,90,210,0.4); }
+[data-theme="light"] .tb-status { color: rgba(50,90,210,0.65); }
+[data-theme="light"] .tb-btn:hover { color: #1a2340; background: rgba(50,100,220,0.07); }
+[data-theme="light"] .tb-btn.active { background: rgba(50,100,220,0.10); }
+[data-theme="light"] #modal-overlay { background: rgba(200,210,240,0.65); }
+[data-theme="light"] #modal {
+  background: rgba(245, 247, 255, 0.99);
+  box-shadow: 0 24px 64px rgba(0,0,40,0.15), 0 0 0 0.5px rgba(80,120,240,0.12);
+}
+[data-theme="light"] #modal select,
+[data-theme="light"] #modal input[type=text] {
+  background: rgba(230, 234, 252, 0.9);
+  color: var(--text);
+}
+[data-theme="light"] .modal-btn:hover { background: rgba(0,0,0,0.04); color: var(--text); }
+[data-theme="light"] .modal-btn.confirm { background: rgba(50,100,220,0.08); }
+[data-theme="light"] .modal-btn.confirm:hover { background: rgba(50,100,220,0.18); }
+[data-theme="light"] #about-overlay,
+[data-theme="light"] #io-modal-overlay { background: rgba(200,210,240,0.65); }
+[data-theme="light"] #about-modal,
+[data-theme="light"] #io-modal {
+  background: rgba(245, 247, 255, 0.99);
+  box-shadow: 0 24px 64px rgba(0,0,40,0.15);
+}
+[data-theme="light"] #about-close-btn { border-color: rgba(80,120,240,0.22); }
+[data-theme="light"] #about-close-btn:hover { background: rgba(50,100,220,0.08); }
+[data-theme="light"] .io-tab:hover { color: var(--text); }
+[data-theme="light"] .io-tab.active { background: rgba(50,100,220,0.10); }
+[data-theme="light"] .io-json-box { background: rgba(230, 234, 252, 0.9); color: var(--text); }
+[data-theme="light"] .io-json-box.error { border-color: rgba(210,50,70,0.6); }
+[data-theme="light"] .io-btn:hover { background: rgba(0,0,0,0.04); color: var(--text); }
+[data-theme="light"] .io-btn.primary:hover { background: rgba(50,100,220,0.18); }
+[data-theme="light"] .io-btn.green { color: rgba(30,140,100,0.9); background: rgba(30,140,100,0.06); border-color: rgba(30,140,100,0.4); }
+[data-theme="light"] .io-btn.green:hover { background: rgba(30,140,100,0.14); border-color: rgba(30,140,100,0.7); }
+[data-theme="light"] #onboarding-overlay { background: rgba(200,210,240,0.70); }
+[data-theme="light"] #onboarding-card {
+  background: rgba(245, 247, 255, 0.99);
+  border-color: rgba(80,120,240,0.28);
+  box-shadow: 0 32px 80px rgba(0,0,40,0.18);
+}
+[data-theme="light"] #onboarding-title { color: #1a2340; }
+[data-theme="light"] #onboarding-sub { color: rgba(60,90,160,0.65); }
+[data-theme="light"] .onb-step-icon { background: rgba(50,100,220,0.08); border-color: rgba(50,100,220,0.22); color: rgba(50,100,220,0.8); }
+[data-theme="light"] .onb-step-label { color: rgba(30,50,100,0.9); }
+[data-theme="light"] #onboarding-btn {
+  background: rgba(50,100,220,0.10);
+  border-color: rgba(50,100,220,0.5);
+  color: rgba(30,80,200,0.95);
+  box-shadow: 0 0 20px rgba(50,100,220,0.08);
+}
+[data-theme="light"] #onboarding-btn:hover {
+  background: rgba(50,100,220,0.20);
+  border-color: var(--accent);
+  box-shadow: 0 0 28px rgba(50,100,220,0.18);
+  color: #1a2340;
+}
+[data-theme="light"] #mode-banner.mode-add {
+  background: rgba(50,100,220,0.10);
+  border-color: rgba(50,100,220,0.55);
+  color: rgba(30,70,180,0.95);
+  box-shadow: 0 0 18px rgba(50,100,220,0.12), 0 2px 8px rgba(0,0,40,0.10);
+}
+[data-theme="light"] #mode-banner.mode-delete {
+  background: rgba(210,50,70,0.08);
+  border-color: rgba(210,50,70,0.5);
+  color: rgba(180,30,50,0.95);
+  box-shadow: 0 0 18px rgba(210,50,70,0.10), 0 2px 8px rgba(0,0,40,0.10);
+}
+[data-theme="light"] #status-bar { color: rgba(60,90,160,0.45); }
+
 </style>
 </head>
 <body>
@@ -472,7 +600,14 @@ html, body { height: 100%; }
 
     <!-- Main toolbar -->
     <div id="toolbar-v" role="toolbar" aria-label="Controles principais">
-      <div class="tb-brand"><div class="tb-brand-dot"></div>FLOATMIND</div>
+      <div class="tb-brand">
+        <div class="tb-brand-dot"></div>
+        FLOATMIND
+        <button id="btn-theme" onclick="toggleTheme()" aria-label="Toggle light/dark mode" style="margin-left:auto;background:transparent;border:0.5px solid rgba(80,120,240,0.25);color:var(--text-dim);padding:2px 5px;border-radius:5px;cursor:pointer;font-family:var(--font);display:flex;align-items:center;transition:all .15s;flex-shrink:0;">
+          <svg id="theme-icon-dark" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg id="theme-icon-light" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        </button>
+      </div>
 
       <span class="tb-label" id="lbl-blocks">blocks</span>
       <button class="tb-btn" id="btn-add" onclick="startAdd()" aria-label="Add new block">
@@ -882,17 +1017,34 @@ function spawnScale(b){
   return p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;
 }
 
-let dotGridCache = null, dotGridW = 0, dotGridH = 0;
+let dotGridCache = null, dotGridW = 0, dotGridH = 0, dotGridTheme = '';
 function getDotGrid(w, h) {
-  if (dotGridCache && dotGridW === w && dotGridH === h) return dotGridCache;
+  const theme = document.documentElement.getAttribute('data-theme') || 'dark';
+  if (dotGridCache && dotGridW === w && dotGridH === h && dotGridTheme === theme) return dotGridCache;
   const oc = new OffscreenCanvas(w, h);
   const oc2d = oc.getContext('2d');
-  oc2d.fillStyle = 'rgba(50,80,180,0.13)';
+  oc2d.fillStyle = theme === 'light' ? 'rgba(80,110,210,0.18)' : 'rgba(50,80,180,0.13)';
   for (let x = 0; x < w; x += 32) for (let y = 0; y < h; y += 32) {
     oc2d.beginPath(); oc2d.arc(x, y, .9, 0, Math.PI * 2); oc2d.fill();
   }
-  dotGridCache = oc; dotGridW = w; dotGridH = h;
+  dotGridCache = oc; dotGridW = w; dotGridH = h; dotGridTheme = theme;
   return oc;
+}
+
+function getTheme() { return document.documentElement.getAttribute('data-theme') || 'dark'; }
+function isLight() { return getTheme() === 'light'; }
+
+function toggleTheme() {
+  const html = document.documentElement;
+  const current = html.getAttribute('data-theme') || 'dark';
+  const next = current === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  // update icons
+  document.getElementById('theme-icon-dark').style.display = next === 'dark' ? 'block' : 'none';
+  document.getElementById('theme-icon-light').style.display = next === 'light' ? 'block' : 'none';
+  // invalidate dot grid cache so it redraws with new colors
+  dotGridCache = null;
+  draw();
 }
 let blocks=[], connections=[];
 let selected=null, pendingConn=null, mode='none';
@@ -1268,7 +1420,7 @@ function draw(){
     const i1 = getI(a, dx, dy, dz), i2 = getI(b2, -dx, -dy, -dz);
     if (i1.t + i2.t < 1) {
       const pa=project(i1.x, i1.y, i1.z),pb=project(i2.x, i2.y, i2.z);
-      ctx.beginPath();ctx.moveTo(pa.px,pa.py);ctx.lineTo(pb.px,pb.py);ctx.strokeStyle='rgba(120,170,255,0.25)';ctx.lineWidth=1;ctx.setLineDash([4,8]);ctx.stroke();ctx.setLineDash([]);
+      ctx.beginPath();ctx.moveTo(pa.px,pa.py);ctx.lineTo(pb.px,pb.py);ctx.strokeStyle=isLight()?'rgba(50,90,200,0.30)':'rgba(120,170,255,0.25)';ctx.lineWidth=1;ctx.setLineDash([4,8]);ctx.stroke();ctx.setLineDash([]);
     }
   }
   const sorted=[...blocks].sort((a,b)=>(b.z+HALF_Z)-(a.z+HALF_Z));
@@ -1278,7 +1430,7 @@ function draw(){
   const rg=ctx.createLinearGradient(0,40,0,40+rh);
   rg.addColorStop(0,'rgba(91,143,255,0.45)'); rg.addColorStop(1,'rgba(91,143,255,0.08)');
   ctx.strokeStyle=rg;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(rx,40);ctx.lineTo(rx,40+rh);ctx.stroke();
-  for(let i=0;i<=10;i++){ const ry=40+(i/10)*rh;ctx.beginPath();ctx.moveTo(rx-3,ry);ctx.lineTo(rx+3,ry);ctx.strokeStyle=`rgba(91,143,255,${i===0||i===10?.5:.18})`;ctx.stroke(); }
+  for(let i=0;i<=10;i++){ const ry=40+(i/10)*rh;ctx.beginPath();ctx.moveTo(rx-3,ry);ctx.lineTo(rx+3,ry);ctx.strokeStyle=isLight()?`rgba(50,90,210,${i===0||i===10?.6:.22})`:`rgba(91,143,255,${i===0||i===10?.5:.18})`;ctx.stroke(); }
   for(const b of blocks){
     const ry=40+(b.z/Z_MAX)*rh,[r,g,bl]=blockRGB(b),isSel=selected&&selected.id===b.id;
     ctx.beginPath();ctx.arc(rx,ry,isSel?5:3.5,0,Math.PI*2);
@@ -1286,10 +1438,11 @@ function draw(){
     if(isSel){ctx.shadowColor=`rgba(${r},${g},${bl},0.7)`;ctx.shadowBlur=8;}
     ctx.fill();ctx.shadowBlur=0;
   }
-  ctx.fillStyle='rgba(91,143,255,0.35)';ctx.font=`500 10px 'IBM Plex Mono',monospace`;ctx.textAlign='right';
+  ctx.fillStyle=isLight()?'rgba(50,90,210,0.45)':'rgba(91,143,255,0.35)';ctx.font=`500 10px 'IBM Plex Mono',monospace`;ctx.textAlign='right';
   ctx.fillText(L.canvasNearer,rx-8,36);ctx.fillText(L.canvasFurther,rx-8,40+rh+13);
   const vig=ctx.createRadialGradient(W/2,H/2,H*.3,W/2,H/2,H*.9);
-  vig.addColorStop(0,'rgba(6,8,16,0)');vig.addColorStop(1,'rgba(6,8,16,0.35)');
+  const _vc=isLight()?'220,224,240':'6,8,16';
+  vig.addColorStop(0,`rgba(${_vc},0)`);vig.addColorStop(1,`rgba(${_vc},0.35)`);
   ctx.fillStyle=vig;ctx.fillRect(0,0,W,H);
 }
 
@@ -1305,10 +1458,11 @@ function drawBlock(b, connectedIds = new Set()){
   // ITEM 4 — connected highlight
   const isConnected = connectedIds.has(b.id);
   const isConn=selected&&selected.id!==b.id&&connections.find(c=>(c.from===selected.id&&c.to===b.id)||(c.from===b.id&&c.to===selected.id));
-  const alpha=isSel||isEdit||isDesc||isPend||isHov?1:isConnected?.9:.7;
+  const _aBase=isLight()?(isConnected?1:.88):(isConnected?.9:.7);
+  const alpha=isSel||isEdit||isDesc||isPend||isHov?1:_aBase;
   const sw=isSel||isEdit||isDesc||isPend||isHov?1.4:isConnected?1.2:1.0;
 
-  const BG = '#060810';
+  const BG = isLight() ? '#eef0f8' : '#060810';
 
   const drawFace = (pts, fAlpha, sAlpha) => {
     ctx.beginPath(); ctx.moveTo(pts[0].px, pts[0].py);
@@ -1322,29 +1476,31 @@ function drawBlock(b, connectedIds = new Set()){
     }
   };
 
-  drawFace(pb, 0.01, alpha * 0.2);
-  [[pf[0],pf[3],pb[3],pb[0]],[pf[1],pf[2],pb[2],pb[1]],[pf[0],pf[1],pb[1],pb[0]],[pf[3],pf[2],pb[2],pb[3]]].forEach(s=>{ drawFace(s, 0.03, alpha * 0.28); });
+  drawFace(pb, isLight()?0.06:0.01, alpha * (isLight()?0.55:0.2));
+  [[pf[0],pf[3],pb[3],pb[0]],[pf[1],pf[2],pb[2],pb[1]],[pf[0],pf[1],pb[1],pb[0]],[pf[3],pf[2],pb[2],pb[3]]].forEach(s=>{ drawFace(s, isLight()?0.08:0.03, alpha * (isLight()?0.65:0.28)); });
 
   ctx.beginPath(); ctx.moveTo(pf[0].px,pf[0].py);
   pf.forEach((p,i)=>{if(i>0)ctx.lineTo(p.px,p.py);});
   ctx.closePath();
   ctx.fillStyle = BG; ctx.fill();
-  ctx.fillStyle = `rgba(${r},${g},${bl},${.04+Math.max(0,1-b.z/Z_MAX)*.04})`; ctx.fill();
+  const _fTint=isLight()?(0.10+Math.max(0,1-b.z/Z_MAX)*0.08):(0.04+Math.max(0,1-b.z/Z_MAX)*0.04);
+  ctx.fillStyle = `rgba(${r},${g},${bl},${_fTint})`; ctx.fill();
 
   // ITEM 4 — extra outer glow for connected blocks
   if(isConnected && !isSel && !isPend && !isHov) {
     const pulse = 0.5 + 0.5 * Math.sin(pulseTime / 500);
-    ctx.shadowColor=`rgba(${r},${g},${bl},${0.3 + pulse * 0.25})`;
+    ctx.shadowColor=`rgba(${r},${g},${bl},${isLight()?0.6+pulse*0.3:0.3+pulse*0.25})`;
     ctx.shadowBlur = 14 + pulse * 6;
   }
 
-  if(isPend||isSel||isHov){ctx.shadowColor=`rgba(${r},${g},${bl},${isPend?.8:.5})`;ctx.shadowBlur=isPend?22:16;}
-  ctx.strokeStyle=isSel||isPend||isHov?`rgba(${r},${g},${bl},1)`:isConnected?`rgba(${r},${g},${bl},0.85)`:isConn?`rgba(${r},${g},${bl},0.75)`:`rgba(${r},${g},${bl},${alpha})`;
+  if(isPend||isSel||isHov){ctx.shadowColor=`rgba(${r},${g},${bl},${isPend?(isLight()?.95:.8):(isLight()?.75:.5)})`;ctx.shadowBlur=isPend?22:16;}
+  const _sa=(v)=>isLight()?Math.min(1,v*1.45):v;
+  ctx.strokeStyle=isSel||isPend||isHov?`rgba(${r},${g},${bl},1)`:isConnected?`rgba(${r},${g},${bl},${_sa(0.85)})`:isConn?`rgba(${r},${g},${bl},${_sa(0.75)})`:`rgba(${r},${g},${bl},${_sa(alpha)})`;
   ctx.lineWidth=isConnected&&!isSel&&!isHov?1.6:sw; ctx.stroke(); ctx.shadowBlur=0;
 
   if(!isEdit){
     const{cx,cy,sc}=fInfo(b),fs=Math.round(13*sc*ss),lh=fs*1.3;
-    ctx.fillStyle=`rgba(255,255,255,${alpha})`;ctx.font=`600 ${fs}px 'IBM Plex Mono',monospace`;ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillStyle=isLight()?`rgba(20,30,60,${alpha})`:`rgba(255,255,255,${alpha})`;ctx.font=`600 ${fs}px 'IBM Plex Mono',monospace`;ctx.textAlign='center';ctx.textBaseline='middle';
     const lines=b.label.split('\n'),sy=cy-((lines.length-1)*lh)/2;
     lines.forEach((l,i)=>ctx.fillText(l,cx,sy+i*lh));
     ctx.fillStyle=`rgba(${r},${g},${bl},${alpha*.5})`;ctx.font=`${Math.round(10*sc*ss)}px 'IBM Plex Mono',monospace`;
@@ -1354,8 +1510,8 @@ function drawBlock(b, connectedIds = new Set()){
   const hasDesc=b.desc&&b.desc.trim().length>0,isDescOpen=descBlock&&descBlock.id===b.id;
   ctx.beginPath();ctx.arc(ixS,iyS,irS,0,Math.PI*2);
   ctx.fillStyle=isDescOpen?`rgba(${r},${g},${bl},0.9)`:hasDesc?`rgba(${r},${g},${bl},0.22)`:`rgba(${r},${g},${bl},0.06)`;
-  ctx.fill();ctx.strokeStyle=`rgba(${r},${g},${bl},${alpha*.5})`;ctx.lineWidth=.5;ctx.stroke();
-  ctx.fillStyle=isDescOpen?'#000':`rgba(255,255,255,${alpha*.75})`;
+  ctx.fill();ctx.strokeStyle=`rgba(${r},${g},${bl},${isLight()?Math.min(1,alpha*.9):alpha*.5})`;ctx.lineWidth=isLight()?.8:.5;ctx.stroke();
+  ctx.fillStyle=isDescOpen?(isLight()?'#fff':'#000'):`rgba(${isLight()?'20,30,60':'255,255,255'},${alpha*.75})`;
   ctx.font=`500 ${Math.round(irS*1.1)}px 'IBM Plex Mono',monospace`;ctx.textAlign='center';ctx.textBaseline='middle';
   ctx.fillText('i',ixS,iyS+.5);
   if(mode==='delete'){const{cx,cy,sc}=fInfo(b);ctx.fillStyle='rgba(255,80,100,0.85)';ctx.font=`${Math.round(13*sc)}px sans-serif`;ctx.textAlign='center';ctx.fillText('×',cx-32*sc,cy-15*sc);}
