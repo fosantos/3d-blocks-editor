@@ -14,8 +14,8 @@ Floatmind is a minimalist, single-file 3D block editor designed for organizing i
 
 - **Projection System:** `project()`, `corners()`, and `fInfo()` handle the conversion from 3D coordinates (X, Y, Z) to 2D screen coordinates using a fixed focal length.
 - **Rendering Pipeline:** A single `draw()` function clears the canvas and re-renders all elements (grid, connections, and blocks) in Z-depth order (back-to-front).
-- **Interaction Logic:** Handles mouse/touch events for dragging blocks, adjusting Z-depth (scroll wheel), selecting blocks, and creating connections.
-- **UI Overlay:** CSS-based toolbar, description panel, and modal for importing/exporting data.
+- **Interaction Logic:** Handles mouse/touch events for dragging blocks, adjusting Z-depth (scroll wheel, contextual-panel slider), selecting blocks, and creating connections.
+- **UI Overlay (Excalidraw-style floating islands):** Top-left island (main menu dropdown, realign, undo, redo); left-center vertical tool rail (add/delete/cancel modes); top-center contextual panel that appears while a block is selected (name/rename, Z-depth slider, connect-to dropdown, delete); bottom-left island (block counter, help/shortcuts popover). Plus block description panel and import/export modal.
 
 ## Development & Usage
 
@@ -23,13 +23,13 @@ Floatmind is a minimalist, single-file 3D block editor designed for organizing i
 Simply open `docs/index.html` in any modern web browser. No local server is required.
 
 ### Key Commands (UI/Keyboard)
-- **Add Block:** "Novo bloco" button in the toolbar.
-- **Connect Blocks:** Click a selected block, then click another.
-- **Adjust Depth:** Mouse wheel over a block or `+`/`-` keys.
+- **Add Block:** "+" button in the left tool rail.
+- **Connect Blocks:** Click a selected block, then another — or the "connect to…" dropdown in the contextual panel.
+- **Adjust Depth:** Mouse wheel over a block, contextual-panel slider, or `+`/`-` keys.
 - **Move Block:** Drag with mouse or use Arrow keys.
-- **Edit Label:** Double-click a block.
+- **Edit Label:** Double-click a block (or ✎ in the contextual panel).
 - **Remove Block:** `Delete` or `Backspace` keys.
-- **Export/Import:** Use the sidebar buttons to handle JSON data.
+- **Export/Import:** Via the main menu (☰ island).
 
 ### Constraints & Conventions
 - **Max Blocks:** 15 (defined by `MAX = 15` in JS).

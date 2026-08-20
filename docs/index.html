@@ -160,21 +160,91 @@ html, body { height: 100%; }
   box-shadow: 0 0 18px rgba(255,80,100,0.12), 0 2px 8px rgba(0,0,0,0.3);
 }
 
-/* ── Toolbar ─────────────────────────────────────────────────── */
-#toolbar-v {
-  position:absolute; top:12px; left:12px; display:flex; flex-direction:column;
-  gap:6px; padding:12px; background:var(--surface); border:0.5px solid var(--border);
-  border-radius:var(--radius); z-index:20; width:152px;
-  backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
-  box-shadow:0 8px 32px rgba(0,0,0,0.45), 0 0 0 0.5px rgba(80,120,240,0.06);
-  overflow-y: auto;
-  max-height: calc(100vh - 24px);
+/* ── Floating islands (Excalidraw-style layout) ──────────────── */
+#menu-island, #tools-island, #help-island, #main-menu, #ctx-panel, #help-popover {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 12px;
+  backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.45), 0 0 0 0.5px rgba(80,120,240,0.06);
+  z-index: 20;
 }
-.tb-brand { font-size:10px; font-weight:600; color:var(--text); letter-spacing:0.1em; text-transform:uppercase; padding-bottom:8px; display:flex; align-items:center; gap:7px; border-bottom:0.5px solid var(--border); }
+
+/* Top-left island: menu · realign · undo · redo */
+#menu-island {
+  position: absolute; top: 12px; left: 12px;
+  display: flex; align-items: center; gap: 2px; padding: 4px;
+}
+/* Left-center island: add · delete · cancel */
+#tools-island {
+  position: absolute; top: 50%; left: 12px; transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: 2px; padding: 4px;
+}
+.isl-btn {
+  background: transparent; border: 0; color: var(--text-dim);
+  width: 34px; height: 34px; border-radius: 8px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .15s; outline: 2px solid transparent; outline-offset: 2px;
+}
+.isl-btn:hover { background: rgba(91,143,255,0.10); color: var(--text); }
+.isl-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.isl-div { width: 0.5px; height: 20px; background: var(--border); margin: 0 4px; flex-shrink: 0; }
+#tools-island .tb-btn {
+  width: 40px; height: 40px; padding: 0; justify-content: center;
+  border-color: transparent; border-radius: 9px;
+}
+#tools-island .tb-btn:hover { border-color: transparent; }
+#tools-island .tb-btn.active { border-color: transparent; }
+
+/* Main menu dropdown */
+#main-menu { display: none; position: absolute; top: 58px; left: 12px; width: 196px; padding: 6px; z-index: 40; }
+#main-menu.show { display: block; animation: panelIn 0.18s cubic-bezier(0.34,1.4,0.64,1); }
+.menu-brand { font-size:10px; font-weight:600; color:var(--text); letter-spacing:0.1em; text-transform:uppercase; display:flex; align-items:center; gap:7px; padding:8px 10px 10px; border-bottom:0.5px solid var(--border); margin-bottom:6px; }
 .tb-brand-dot { width:6px; height:6px; border-radius:50%; background:var(--accent); box-shadow:0 0 6px var(--accent); flex-shrink:0; }
-.tb-divider   { height:0.5px; background:var(--border); margin:2px 0; }
-.tb-label     { font-size:9px; color:rgba(91,143,255,0.3); letter-spacing:0.12em; text-transform:uppercase; padding:4px 0 2px; }
-.tb-status    { font-size:10px; color:rgba(91,143,255,0.55); letter-spacing:0.05em; padding:2px 0; }
+.menu-item {
+  width:100%; display:flex; align-items:center; gap:10px; background:transparent; border:0;
+  color:var(--text-dim); font-size:12px; font-weight:500; padding:8px 10px; border-radius:7px;
+  cursor:pointer; font-family:var(--font); letter-spacing:0.04em; transition:all .12s; text-align:left;
+  outline: 2px solid transparent; outline-offset: 2px;
+}
+.menu-item:hover { background: rgba(91,143,255,0.08); color: var(--text); }
+.menu-item:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.menu-div { height: 0.5px; background: var(--border); margin: 6px 4px; }
+
+/* Contextual panel (selected block properties) */
+#ctx-panel { display:none; position:absolute; top:12px; left:50%; transform:translateX(-50%); width:272px; padding:12px 14px; z-index:25; }
+#ctx-panel.show { display:block; animation: ctxIn 0.18s cubic-bezier(0.34,1.4,0.64,1); }
+@keyframes ctxIn {
+  from { opacity:0; transform:translateX(-50%) translateY(-8px) scale(0.96); }
+  to   { opacity:1; transform:translateX(-50%) translateY(0)    scale(1);    }
+}
+.ctx-title { display:flex; align-items:center; gap:8px; margin-bottom:10px; }
+#ctx-dot { width:8px; height:8px; border-radius:50%; background:var(--accent); flex-shrink:0; }
+#ctx-name { flex:1; font-size:12px; font-weight:600; color:var(--text); letter-spacing:0.03em; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+#ctx-rename { background:transparent; border:0.5px solid rgba(80,120,240,0.28); color:var(--text-dim); width:24px; height:24px; border-radius:6px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .15s; flex-shrink:0; outline:2px solid transparent; outline-offset:2px; }
+#ctx-rename:hover { border-color:var(--accent); color:var(--accent); background:rgba(91,143,255,0.08); }
+#ctx-rename:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+.ctx-row { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+.ctx-lbl { font-size:9px; color:var(--text-dim); letter-spacing:0.12em; text-transform:uppercase; width:64px; flex-shrink:0; }
+#ctx-z { flex:1; accent-color:var(--accent); cursor:pointer; }
+#ctx-z-val { font-size:10px; color:var(--text-dim); width:24px; text-align:right; flex-shrink:0; }
+#ctx-connect { width:100%; background:rgba(0,4,18,0.9); border:0.5px solid rgba(80,120,240,0.28); color:var(--text); font-size:11px; padding:7px 8px; border-radius:7px; font-family:var(--font); outline:none; margin-bottom:8px; cursor:pointer; transition:border-color .15s; }
+#ctx-connect:focus { border-color: var(--accent); }
+#ctx-delete { width:100%; background:transparent; border:0.5px solid rgba(255,90,110,0.35); color:var(--danger); font-size:11px; font-weight:600; padding:7px; border-radius:7px; cursor:pointer; font-family:var(--font); letter-spacing:0.04em; display:flex; align-items:center; justify-content:center; gap:6px; transition:all .15s; outline:2px solid transparent; outline-offset:2px; }
+#ctx-delete:hover { background:rgba(255,90,110,0.08); border-color:rgba(255,90,110,0.6); }
+#ctx-delete:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+
+/* Bottom-left island: status · help */
+#help-island { position:absolute; bottom:12px; left:12px; display:flex; align-items:center; padding:4px 8px; font-size:10px; color:var(--text-dim); letter-spacing:0.05em; }
+#help-island .isl-div { height:14px; margin:0 4px; }
+#btn-help { width:28px; height:28px; }
+#help-popover { display:none; position:absolute; bottom:56px; left:12px; width:320px; max-width:calc(100vw - 24px); max-height:62vh; overflow-y:auto; padding:14px 16px; z-index:40; }
+#help-popover.show { display:block; animation: panelIn 0.18s cubic-bezier(0.34,1.4,0.64,1); }
+#help-popover h4 { font-size:10px; font-weight:600; color:var(--accent); letter-spacing:0.12em; text-transform:uppercase; margin-bottom:10px; }
+.hp-row { display:flex; justify-content:space-between; gap:14px; font-size:11px; padding:4px 0; }
+.hp-k { color:var(--text); white-space:nowrap; }
+.hp-d { color:var(--text-dim); text-align:right; line-height:1.5; }
+
 .tb-btn {
   background:transparent; border:0.5px solid rgba(80,120,240,0.18); color:var(--text-dim);
   font-size:12px; font-weight:500; padding:7px 10px; border-radius:7px; cursor:pointer;
@@ -196,8 +266,6 @@ html, body { height: 100%; }
   cursor: not-allowed;
   pointer-events: none;
 }
-
-#status-bar { position:absolute; bottom:12px; left:12px; right:12px; font-size:10px; color:var(--text-dim); pointer-events:none; z-index:20; letter-spacing:0.04em; line-height:1.6; }
 
 /* ── Import/Export modal ────────────────────────────────────── */
 #modal-overlay {
@@ -502,11 +570,12 @@ html, body { height: 100%; }
   background: rgba(245, 247, 255, 0.98);
   box-shadow: 0 4px 16px rgba(0,0,40,0.10);
 }
-[data-theme="light"] #toolbar-v {
+[data-theme="light"] #menu-island, [data-theme="light"] #tools-island,
+[data-theme="light"] #help-island, [data-theme="light"] #main-menu,
+[data-theme="light"] #ctx-panel, [data-theme="light"] #help-popover {
   box-shadow: 0 8px 32px rgba(0,0,40,0.12), 0 0 0 0.5px rgba(80,120,240,0.08);
 }
-[data-theme="light"] .tb-label { color: rgba(50,90,210,0.4); }
-[data-theme="light"] .tb-status { color: rgba(50,90,210,0.65); }
+[data-theme="light"] #ctx-connect { background: rgba(230, 234, 252, 0.9); }
 [data-theme="light"] .tb-btn:hover { color: #1a2340; background: rgba(50,100,220,0.07); }
 [data-theme="light"] .tb-btn.active { background: rgba(50,100,220,0.10); }
 [data-theme="light"] #modal-overlay { background: rgba(200,210,240,0.65); }
@@ -573,7 +642,6 @@ html, body { height: 100%; }
   color: rgba(180,30,50,0.95);
   box-shadow: 0 0 18px rgba(210,50,70,0.10), 0 2px 8px rgba(0,0,40,0.10);
 }
-[data-theme="light"] #status-bar { color: rgba(60,90,160,0.45); }
 
 </style>
 </head>
@@ -598,83 +666,90 @@ html, body { height: 100%; }
 
     <div id="toast" role="status" aria-live="polite"></div>
 
-    <!-- Main toolbar -->
-    <div id="toolbar-v" role="toolbar" aria-label="Controles principais">
-      <div class="tb-brand">
-        <div class="tb-brand-dot"></div>
-        FLOATMIND
-        <button id="btn-theme" onclick="toggleTheme()" aria-label="Toggle light/dark mode" style="margin-left:auto;background:transparent;border:0.5px solid rgba(80,120,240,0.25);color:var(--text-dim);padding:2px 5px;border-radius:5px;cursor:pointer;font-family:var(--font);display:flex;align-items:center;transition:all .15s;flex-shrink:0;">
-          <svg id="theme-icon-dark" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-          <svg id="theme-icon-light" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-        </button>
-      </div>
+    <!-- Top-left island: menu · realign · undo · redo -->
+    <div id="menu-island" role="toolbar" aria-label="Main controls">
+      <button id="btn-menu" class="isl-btn" onclick="toggleMenu(event)" aria-label="Open menu" aria-haspopup="menu" aria-expanded="false">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><line x1="2" y1="3.5" x2="12" y2="3.5"/><line x1="2" y1="7" x2="12" y2="7"/><line x1="2" y1="10.5" x2="12" y2="10.5"/></svg>
+      </button>
+      <div class="isl-div"></div>
+      <button class="isl-btn" id="btn-realign" onclick="realignBlocks()" aria-label="Realign blocks to center">
+        <svg width="13" height="13" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><rect x="2" y="2" width="8" height="8" rx="1"/><line x1="4" y1="4" x2="8" y2="8"/><line x1="8" y1="4" x2="4" y2="8"/></svg>
+      </button>
+      <button class="isl-btn" id="btn-undo" onclick="undo()" title="Ctrl+Z" aria-label="Undo last action">
+        <svg width="13" height="13" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 5H7.5a3 3 0 010 6H5"/><path d="M2 5L4.5 2.5M2 5L4.5 7.5"/></svg>
+      </button>
+      <button class="isl-btn" id="btn-redo" onclick="redo()" title="Ctrl+Shift+Z" aria-label="Redo last undone action">
+        <svg width="13" height="13" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 5H4.5a3 3 0 000 6H7"/><path d="M10 5L7.5 2.5M10 5L7.5 7.5"/></svg>
+      </button>
+    </div>
 
-      <span class="tb-label" id="lbl-blocks">blocks</span>
+    <!-- Main menu dropdown -->
+    <div id="main-menu" role="menu" aria-label="Main menu">
+      <div class="menu-brand"><div class="tb-brand-dot"></div>FLOATMIND</div>
+      <button class="menu-item" role="menuitem" onclick="openIOModal('export'); closeMenu()" aria-label="Export blocks as JSON">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 1v7M3.5 5.5L6 8l2.5-2.5"/><path d="M1.5 9.5v1h9v-1"/></svg>
+        <span id="txt-menu-export">Export</span>
+      </button>
+      <button class="menu-item" role="menuitem" onclick="openIOModal('import'); closeMenu()" aria-label="Import blocks from JSON">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8V1M3.5 3.5L6 1l2.5 2.5"/><path d="M1.5 9.5v1h9v-1"/></svg>
+        <span id="txt-menu-import">Import</span>
+      </button>
+      <button class="menu-item" role="menuitem" id="btn-about" onclick="showAbout(); closeMenu()" aria-label="View Floatmind info">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="6" cy="6" r="5"/><line x1="6" y1="5.5" x2="6" y2="8.5"/><circle cx="6" cy="3.5" r="0.5" fill="currentColor" stroke="none"/></svg>
+        <span id="txt-menu-about">About</span>
+      </button>
+      <div class="menu-div"></div>
+      <button class="menu-item" role="menuitem" onclick="toggleTheme()" aria-label="Toggle light/dark mode">
+        <svg id="theme-icon-dark" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg id="theme-icon-light" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        <span id="txt-menu-theme">theme</span>
+      </button>
+    </div>
+
+    <!-- Left-center island: add · delete · cancel -->
+    <div id="tools-island" role="toolbar" aria-label="Block tools">
       <button class="tb-btn" id="btn-add" onclick="startAdd()" aria-label="Add new block">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
-        <span id="txt-btn-add">New block</span>
+        <svg width="14" height="14" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
       </button>
       <button class="tb-btn danger" id="btn-delete" onclick="startDelete()" aria-label="Delete selected block">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="1.5,2.5 10.5,2.5"/><path d="M3.5,2.5v-.75h5v.75"/><path d="M3.5,2.5l.5,7.5h4l.5-7.5"/></svg>
-        <span id="txt-btn-delete">Delete</span>
+        <svg width="13" height="13" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="1.5,2.5 10.5,2.5"/><path d="M3.5,2.5v-.75h5v.75"/><path d="M3.5,2.5l.5,7.5h4l.5-7.5"/></svg>
       </button>
-      <button class="tb-btn" onclick="resetMode()" aria-label="Cancel current mode">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><line x1="1" y1="1" x2="11" y2="11"/><line x1="11" y1="1" x2="1" y2="11"/></svg>
-        <span id="txt-btn-cancel">Cancel</span>
+      <button class="tb-btn" id="btn-cancel" onclick="resetMode()" aria-label="Cancel current mode">
+        <svg width="13" height="13" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><line x1="1" y1="1" x2="11" y2="11"/><line x1="11" y1="1" x2="1" y2="11"/></svg>
       </button>
-      <button class="tb-btn" onclick="realignBlocks()" aria-label="Realign blocks to center">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <rect x="2" y="2" width="8" height="8" rx="1"/>
-          <line x1="4" y1="4" x2="8" y2="8"/>
-          <line x1="8" y1="4" x2="4" y2="8"/>
-        </svg>
-        <span id="txt-btn-realign">Realign</span>
-      </button>
-      <button class="tb-btn" id="btn-undo" onclick="undo()" title="Ctrl+Z" aria-label="Undo last action">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M2 5H7.5a3 3 0 010 6H5"/><path d="M2 5L4.5 2.5M2 5L4.5 7.5"/>
-        </svg>
-        <span id="txt-btn-undo">Undo</span>
-      </button>
-      <button class="tb-btn" id="btn-redo" onclick="redo()" title="Ctrl+Shift+Z" aria-label="Redo last undone action">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M10 5H4.5a3 3 0 000 6H7"/><path d="M10 5L7.5 2.5M10 5L7.5 7.5"/>
-        </svg>
-        <span id="txt-btn-redo">Redo</span>
-      </button>
-      <button class="tb-btn" id="btn-about" onclick="showAbout()" aria-label="View Floatmind info">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="6" cy="6" r="5"/>
-          <line x1="6" y1="5.5" x2="6" y2="8.5"/>
-          <circle cx="6" cy="3.5" r="0.5" fill="currentColor" stroke="none"/>
-        </svg>
-        <span id="txt-btn-about">About</span>
-      </button>
-
-      <div class="tb-divider"></div>
-      <span class="tb-label" id="lbl-data">data</span>
-
-      <button class="tb-btn success" onclick="openIOModal('export')" aria-label="Export blocks as JSON">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M6 1v7M3.5 5.5L6 8l2.5-2.5"/>
-          <path d="M1.5 9.5v1h9v-1"/>
-        </svg>
-        <span id="txt-btn-export">Export</span>
-      </button>
-      <button class="tb-btn" onclick="openIOModal('import')" aria-label="Import blocks from JSON">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M6 8V1M3.5 3.5L6 1l2.5 2.5"/>
-          <path d="M1.5 9.5v1h9v-1"/>
-        </svg>
-        <span id="txt-btn-import">Import</span>
-      </button>
-
-      <span class="tb-status" id="status">0 / 15</span>
     </div>
 
-    <div id="status-bar">
-      <span id="hint">drag background to pan · click a block, then another to connect · double-click: edit</span>
+    <!-- Contextual panel: shown while a block is selected -->
+    <div id="ctx-panel" role="region" aria-label="Selected block properties">
+      <div class="ctx-title">
+        <span id="ctx-dot"></span>
+        <span id="ctx-name">—</span>
+        <button id="ctx-rename" onclick="renameSelected()" aria-label="Rename block">
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 1.5l2 2L4 10l-2.5.5L2 8z"/></svg>
+        </button>
+      </div>
+      <div class="ctx-row">
+        <span class="ctx-lbl" id="ctx-depth-lbl">depth</span>
+        <input type="range" id="ctx-z" min="0" max="400" step="5" value="0" aria-label="Block depth" />
+        <span id="ctx-z-val">z0</span>
+      </div>
+      <select id="ctx-connect"></select>
+      <button id="ctx-delete" onclick="deleteSelected()" aria-label="Delete selected block">
+        <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="1.5,2.5 10.5,2.5"/><path d="M3.5,2.5v-.75h5v.75"/><path d="M3.5,2.5l.5,7.5h4l.5-7.5"/></svg>
+        <span id="txt-ctx-delete">delete block</span>
+      </button>
     </div>
+
+    <!-- Bottom-left island: status · help -->
+    <div id="help-island">
+      <span id="status">0 / 15</span>
+      <div class="isl-div"></div>
+      <button class="isl-btn" id="btn-help" onclick="toggleHelp(event)" aria-label="Tips and shortcuts" aria-expanded="false">
+        <svg width="13" height="13" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><rect x="1.5" y="1.5" width="9" height="9" rx="1.5"/><line x1="6" y1="5" x2="6" y2="8"/><circle cx="6" cy="3.4" r="0.5" fill="currentColor" stroke="none"/></svg>
+      </button>
+    </div>
+
+    <div id="help-popover" role="dialog" aria-label="Tips and shortcuts"></div>
 
     <!-- Novo bloco modal -->
     <div id="modal-overlay" role="dialog" aria-labelledby="modal-title" aria-modal="true">
@@ -821,6 +896,21 @@ const T = {
     errMissingFields:'Invalid format — blocks missing required fields.',
     exportMeta:(nb,nc,kb)=>`<strong>${nb}</strong> block${nb!==1?'s':''} · <strong>${nc}</strong> connection${nc!==1?'s':''} · ${kb} KB`,
     canvasNearer:'nearer', canvasFurther:'further',
+    menuOpen:'open menu',
+    menuThemeLight:'theme: light', menuThemeDark:'theme: dark',
+    helpTitle:'tips & shortcuts',
+    helpRows:[
+      ['drag the background','pan the whole graph'],
+      ['click a block, then another','connect / disconnect'],
+      ['double-click a block','rename'],
+      ['scroll on a block · + / −','change depth'],
+      ['arrow keys','move selected block'],
+      ['Del / Backspace','remove selected block'],
+      ['Ctrl+Z / Ctrl+Shift+Z','undo / redo'],
+      ['Esc','cancel mode · close dialogs'],
+      ['ⓘ icon','open block notes'],
+    ],
+    ctxDepth:'depth', ctxConnect:'connect to…', ctxDelete:'delete block',
     modeBannerAdd:'+ adding block — click canvas',
     modeBannerDelete:'× delete mode — click a block',
     aboutContent:`<p>Most productivity tools were built for minds that think in straight lines. Lists, deadlines, hierarchies — systems designed for a type of focus and executive function that many of us simply don't have.</p>
@@ -880,6 +970,21 @@ const T = {
     errMissingFields:'Formato inválido — blocos faltam campos obrigatórios.',
     exportMeta:(nb,nc,kb)=>`<strong>${nb}</strong> bloco${nb!==1?'s':''} · <strong>${nc}</strong> ligaç${nc!==1?'ões':'ão'} · ${kb} KB`,
     canvasNearer:'próximo', canvasFurther:'fundo',
+    menuOpen:'abrir menu',
+    menuThemeLight:'tema: claro', menuThemeDark:'tema: escuro',
+    helpTitle:'dicas & atalhos',
+    helpRows:[
+      ['arrastar o fundo','mover todo o grafo'],
+      ['clicar num bloco, depois noutro','ligar / desligar'],
+      ['duplo clique no bloco','renomear'],
+      ['scroll num bloco · + / −','mudar profundidade'],
+      ['setas','mover bloco selecionado'],
+      ['Del / Backspace','remover bloco selecionado'],
+      ['Ctrl+Z / Ctrl+Shift+Z','desfazer / refazer'],
+      ['Esc','cancelar modo · fechar diálogos'],
+      ['ícone ⓘ','abrir notas do bloco'],
+    ],
+    ctxDepth:'profundidade', ctxConnect:'conectar a…', ctxDelete:'deletar bloco',
     modeBannerAdd:'+ a adicionar bloco — clica no canvas',
     modeBannerDelete:'× modo eliminar — clica num bloco',
     aboutContent:`<p>A maioria das ferramentas de produtividade foi criada para mentes que pensam em linha reta. Listas, prazos, hierarquias — sistemas desenhados para um tipo de foco e função executiva que muitos de nós simplesmente não temos.</p>
@@ -911,18 +1016,8 @@ const L = T[LANG];
 function applyTranslations() {
   document.documentElement.lang = LANG;
   const s = (id, txt) => { const el=document.getElementById(id); if(el) el.textContent=txt; };
-  s('lbl-blocks', L.labelBlocks);
-  s('lbl-data', L.labelData);
-  s('txt-btn-add', L.btnNewBlock);
-  s('txt-btn-delete', L.btnDelete);
-  s('txt-btn-cancel', L.btnCancel);
-  s('txt-btn-realign', L.btnRealign);
-  s('txt-btn-undo', L.btnUndo);
-  s('txt-btn-redo', L.btnRedo);
-  s('txt-btn-about', L.btnAbout);
-  s('txt-btn-export', L.btnExport);
-  s('txt-btn-import', L.btnImport);
-  s('hint', L.hint);
+  s('txt-menu-export', L.btnExport);
+  s('txt-menu-import', L.btnImport);
   document.getElementById('desc-textarea').placeholder = L.descPlaceholder;
   s('desc-save-btn', L.descSave);
   s('modal-title', L.modalTitle);
@@ -960,6 +1055,21 @@ function applyTranslations() {
         </div>
       </div>`;
   });
+  // Islands (menu / tools / contextual panel / help)
+  const setAttr = (id, attr, v) => { const el = document.getElementById(id); if(el) el.setAttribute(attr, v); };
+  setAttr('btn-menu', 'aria-label', L.menuOpen);
+  setAttr('btn-add', 'title', L.btnNewBlock);    setAttr('btn-add', 'aria-label', L.btnNewBlock);
+  setAttr('btn-delete', 'title', L.btnDelete);   setAttr('btn-delete', 'aria-label', L.btnDelete);
+  setAttr('btn-cancel', 'title', L.btnCancel);   setAttr('btn-cancel', 'aria-label', L.btnCancel);
+  setAttr('btn-realign', 'title', L.btnRealign); setAttr('btn-realign', 'aria-label', L.btnRealign);
+  setAttr('btn-help', 'aria-label', L.helpTitle);
+  s('txt-menu-about', L.btnAbout);
+  s('txt-menu-theme', (document.documentElement.getAttribute('data-theme') || 'dark') === 'light' ? L.menuThemeLight : L.menuThemeDark);
+  s('ctx-depth-lbl', L.ctxDepth);
+  s('txt-ctx-delete', L.ctxDelete);
+  const hp = document.getElementById('help-popover');
+  hp.innerHTML = '<h4>' + L.helpTitle + '</h4>' +
+    L.helpRows.map(r => '<div class="hp-row"><span class="hp-k">' + r[0] + '</span><span class="hp-d">' + r[1] + '</span></div>').join('');
 }
 
 const canvas  = document.getElementById('canvas');
@@ -969,6 +1079,12 @@ const editor  = document.getElementById('inline-editor');
 const descPanel = document.getElementById('desc-panel');
 const toastEl   = document.getElementById('toast');
 const modeBanner = document.getElementById('mode-banner'); // ITEM 2
+const mainMenuEl = document.getElementById('main-menu');
+const helpPopEl  = document.getElementById('help-popover');
+const ctxPanel   = document.getElementById('ctx-panel');
+const ctxZ       = document.getElementById('ctx-z');
+const ctxZVal    = document.getElementById('ctx-z-val');
+const ctxSel     = document.getElementById('ctx-connect');
 
 applyTranslations();
 
@@ -1042,6 +1158,9 @@ function toggleTheme() {
   // update icons
   document.getElementById('theme-icon-dark').style.display = next === 'dark' ? 'block' : 'none';
   document.getElementById('theme-icon-light').style.display = next === 'light' ? 'block' : 'none';
+  // update menu item label
+  const themeLbl = document.getElementById('txt-menu-theme');
+  if (themeLbl) themeLbl.textContent = next === 'light' ? L.menuThemeLight : L.menuThemeDark;
   // invalidate dot grid cache so it redraws with new colors
   dotGridCache = null;
   draw();
@@ -1099,6 +1218,100 @@ function updateAddBtnState() {
     btn.title = '';
   }
 }
+
+// ── Islands: main menu / help popover ─────────────────────────
+function toggleMenu(e){
+  e.stopPropagation();
+  const open = mainMenuEl.classList.toggle('show');
+  document.getElementById('btn-menu').setAttribute('aria-expanded', open);
+  if(open) closeHelp();
+}
+function closeMenu(){
+  mainMenuEl.classList.remove('show');
+  document.getElementById('btn-menu').setAttribute('aria-expanded', 'false');
+}
+function toggleHelp(e){
+  e.stopPropagation();
+  const open = helpPopEl.classList.toggle('show');
+  document.getElementById('btn-help').setAttribute('aria-expanded', open);
+  if(open) closeMenu();
+}
+function closeHelp(){
+  helpPopEl.classList.remove('show');
+  document.getElementById('btn-help').setAttribute('aria-expanded', 'false');
+}
+document.addEventListener('click', e => {
+  if(!mainMenuEl.contains(e.target)) closeMenu();
+  if(!helpPopEl.contains(e.target)) closeHelp();
+});
+
+// ── Contextual panel (selected block properties) ──────────────
+function renameSelected(){
+  closeMenu(); closeHelp();
+  if(selected) openEditor(selected);
+}
+function deleteSelected(){
+  if(!selected) return;
+  const b = selected;
+  selected = null; pendingConn = null;
+  deleteBlock(b);
+}
+
+// Synced from draw() so every state change (select, mode, undo…) is covered.
+let _ctxSig = '', _ctxSelSig = '';
+function updateContextPanel(){
+  const show = mode === 'none' && selected && !editingBlock;
+  if(!show){
+    if(ctxPanel.classList.contains('show')){ ctxPanel.classList.remove('show'); _ctxSig = ''; _ctxSelSig = ''; }
+    return;
+  }
+  const conns = getConnectedIds(selected);
+  const sig = selected.id + ':' + selected.label + ':' + Math.round(selected.z);
+  const selSig = blocks.filter(b => b.id !== selected.id)
+    .map(b => b.id + ':' + b.label + ':' + (conns.has(b.id) ? 1 : 0)).join('|');
+  if(!ctxPanel.classList.contains('show')){ ctxPanel.classList.add('show'); _ctxSig = ''; }
+  if(sig !== _ctxSig){
+    _ctxSig = sig;
+    document.getElementById('ctx-name').textContent = selected.label.replace(/\n/g, ' ');
+    const [r, g, b] = blockRGB(selected), dot = document.getElementById('ctx-dot');
+    dot.style.background = `rgb(${r},${g},${b})`;
+    dot.style.boxShadow = `0 0 8px rgba(${r},${g},${b},0.7)`;
+    ctxZ.value = selected.z;
+    ctxZVal.textContent = 'z' + Math.round(selected.z / Z_MAX * 10);
+  }
+  if(selSig !== _ctxSelSig && document.activeElement !== ctxSel){
+    _ctxSelSig = selSig;
+    rebuildCtxConnect(conns);
+  }
+}
+function rebuildCtxConnect(conns){
+  ctxSel.innerHTML = '';
+  const ph = document.createElement('option');
+  ph.value = ''; ph.disabled = true; ph.selected = true; ph.textContent = L.ctxConnect;
+  ctxSel.appendChild(ph);
+  blocks.filter(b => b.id !== selected.id).forEach(b => {
+    const o = document.createElement('option');
+    o.value = b.id;
+    o.textContent = (conns.has(b.id) ? '✓ ' : '') + b.label.replace(/\n/g, ' ');
+    ctxSel.appendChild(o);
+  });
+}
+ctxZ.addEventListener('input', () => {
+  if(!selected) return;
+  selected.z = Math.max(0, Math.min(Z_MAX, parseInt(ctxZ.value, 10) || 0));
+  if(descBlock && descBlock.id === selected.id) repositionDesc();
+  debouncedSaveZ(); draw();
+});
+ctxSel.addEventListener('change', () => {
+  if(!selected || !ctxSel.value){ ctxSel.selectedIndex = 0; return; }
+  const target = blocks.find(b => b.id === parseInt(ctxSel.value, 10));
+  ctxSel.selectedIndex = 0;
+  if(target && target.id !== selected.id){
+    toggleConn(selected, target);
+    rebuildCtxConnect(getConnectedIds(selected));
+    draw();
+  }
+});
 
 function changeDescWidth(delta) {
   descScale = Math.max(0.6, Math.min(2.5, descScale + (delta > 0 ? 0.1 : -0.1)));
@@ -1213,6 +1426,9 @@ document.getElementById('about-overlay').addEventListener('click', function(e){
 
 document.addEventListener('keydown', function(e){
   if(e.key !== 'Escape') return;
+  if(mainMenuEl.classList.contains('show') || helpPopEl.classList.contains('show')){
+    e.preventDefault(); closeMenu(); closeHelp(); return;
+  }
   if(document.getElementById('onboarding-overlay').classList.contains('show')){
     e.preventDefault(); dismissOnboarding(); return;
   }
@@ -1356,6 +1572,7 @@ function getConnectedIds(b) {
 function draw(){
   ctx.clearRect(0,0,W,H);
   ctx.drawImage(getDotGrid(W, H), 0, 0);
+  updateContextPanel();
 
   // Pulse animation for connected blocks (ITEM 4)
   pulseTime = Date.now();
@@ -1664,6 +1881,8 @@ canvas.addEventListener('wheel',e=>{
 
 document.addEventListener('keydown',e=>{
   if(editingBlock||document.activeElement===document.getElementById('desc-textarea')) return;
+  // arrows belong to the focused slider/select in the contextual panel
+  if((document.activeElement===ctxZ||document.activeElement===ctxSel)&&e.key.startsWith('Arrow')) return;
   if(document.getElementById('about-overlay').classList.contains('show')) return;
   if(document.getElementById('onboarding-overlay').classList.contains('show')) return;
   if((e.ctrlKey||e.metaKey) && e.key==='z' && !e.shiftKey){ e.preventDefault(); undo(); return; }
@@ -1732,11 +1951,11 @@ document.getElementById('desc-textarea').addEventListener('keydown',e=>{if(e.key
 function startAdd(){
   closeEditor(true); closeDescPanel();
   if(blocks.length>=MAX){ showToast(L.toastBlockLimit); return; } // ITEM 3
-  mode='add'; setActiveBtn('btn-add'); updateStatus(); updateModeBanner(); // ITEM 2
+  mode='add'; setActiveBtn('btn-add'); updateStatus(); updateModeBanner(); draw(); // ITEM 2
 }
 function startDelete(){
   closeEditor(true); closeDescPanel();
-  mode='delete'; setActiveBtn('btn-delete'); updateStatus(); updateModeBanner(); // ITEM 2
+  mode='delete'; setActiveBtn('btn-delete'); updateStatus(); updateModeBanner(); draw(); // ITEM 2
 }
 function resetMode(){
   closeEditor(true); closeDescPanel();
@@ -1825,7 +2044,7 @@ function openModal(x,y){
   document.getElementById('modal-overlay').classList.add('show');
   setTimeout(()=>document.getElementById('new-label').focus(),50);
 }
-function closeModal(){ document.getElementById('modal-overlay').classList.remove('show');mode='none';setActiveBtn(null);updateStatus();updateModeBanner(); }
+function closeModal(){ document.getElementById('modal-overlay').classList.remove('show');mode='none';setActiveBtn(null);updateStatus();updateModeBanner();draw(); }
 function confirmCreate(){ const raw=document.getElementById('new-label').value.trim(),cid=document.getElementById('connect-select').value;createBlock(pX,pY,cid||null,raw);closeModal(); }
 document.getElementById('new-label').addEventListener('keydown',e=>{if(e.key==='Enter')confirmCreate();if(e.key==='Escape')closeModal();e.stopPropagation();});
 
